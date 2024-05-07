@@ -1,11 +1,12 @@
 export declare function log(...dataArray: any[]): void;
+export declare function logUsedTime(functionName: string, duration: number): void;
 export declare function showUsedTime(functionName: string): void;
+export declare let global_removed_middle_cube_count: number;
 export declare const ANGLE_COUNT = 24;
 export declare const SIX_FACE_SHORT_NAMES: string[];
 export declare const SIX_FACE_NAME_CHARS: string[];
 export declare const FACE_NAME_ARRAY: string[];
 export declare const TWELVE_EDGE_NAME_CHARS: string[];
-export declare const CUBES: Cube[];
 export interface BooleanRepeatFunction {
     repeat: (times: number) => boolean[];
 }
@@ -24,6 +25,8 @@ export declare enum FourDirection {
     Counterclockwise90 = 3
 }
 export declare const TextDirections: number[];
+export declare const FourDirectionMaxIndex = 3;
+export declare const FourDirectionCount = 4;
 export declare enum GridLineStyle {
     Unknown = 0,
     None = 1,
@@ -57,6 +60,8 @@ export declare enum SixFace {
     Front = 4,
     Back = 5
 }
+export declare const SixFaceMaxIndex = 5;
+export declare const SixFaceCount = 6;
 export declare enum SixFaceTwentyFourAngle {
     UpOriginal = 0,
     UpClockwise90 = 1,
@@ -110,7 +115,7 @@ export declare enum TwelveEdge {
 }
 export declare const SixFaceTwentyFourAngleToTwelveEdge: TwelveEdge[][];
 export declare function convertTwelveEdgeToString(value: TwelveEdge): string;
-export declare function getSixFaceTwentyFourAngleRelationTwelveEdge(value: SixFaceTwentyFourAngle, relation: ConnectionRelation): TwelveEdge;
+export declare function getSixFaceTwentyFourAngleRelationTwelveEdge(sixFaceTwentyFourAngle: SixFaceTwentyFourAngle, relation: ConnectionRelation): TwelveEdge;
 export interface Cell {
     rowIndex: number;
     colIndex: number;
@@ -230,20 +235,102 @@ export declare class Cube implements CubePaperModel, CubeObject {
     gridLines: GridLine[];
     firstRowActCellColIndexBill: string;
     lastRowEmptyCellColIndexBill: string;
-    private updateIsValid;
-    updateGridLines(): void;
-    count(): void;
     sixFaces: SixFaces;
     twelveEdges: TwelveEdges;
     isValid: boolean;
     constructor(no: number, rowCount: number, colCount: number, coreRowIndex: number, coreColIndex: number, isCloning?: boolean);
     clone(): Cube;
+    count(): void;
+    countLayerIndex(): void;
+    syncAndClear(): void;
+    private updateIsValid;
+    private updateGridLines;
 }
 export declare const COL_INDEX_ARRAY_LESS_THAN_OR_EQUALS_THREE_ROW: number[][];
 export declare const COL_INDEX_ARRAY_MORE_THAN_THREE_ROW: number[][];
-export interface RecuriseOption {
+export interface SiblingsAppendInfo {
+    relationRowIndex: number;
+    relationColIndex: number;
     rowIndex: number;
     colIndex: number;
     relation: ConnectionRelation;
+}
+export type SiblingsAppendInfoArray = SiblingsAppendInfo[];
+export interface AppendSiblingsOptions {
+    cube: Cube;
+    addOrder: number;
+    siblings: SiblingsAppendInfoArray;
+}
+export interface NewAppendSiblingsOptions {
+    cube: SimpleCube;
+    addOrder: number;
+    siblings: SiblingsAppendInfoArray;
+}
+export interface CellAppendInfoManner {
+    rowIndex: number;
+    colIndex: number;
+    feature: CellFeature;
+    borderLines: CellBorderLine[];
+    addOrder: number;
+    sixFace: SixFace;
+    faceDirection: FourDirection;
+    siblingsAppendInfoArray: SiblingsAppendInfo[];
+}
+export declare function showCubeCoreInfo(cube: Cube): string;
+export declare function showSimpleCubeCoreInfo(cube: SimpleCube): string;
+export declare class SimpleCell {
+    rowIndex: number;
+    colIndex: number;
+    cellIndex: number;
+    addOrder: number;
+    relatedInformationWhenAdding: {
+        rowIndex: number;
+        colIndex: number;
+        relation: ConnectionRelation;
+    };
+    feature: CellFeature;
+    sixFace: SixFace;
+    faceDirection: FourDirection;
+    twelveEdge: TwelveEdge;
+    get isEmpty(): boolean;
+    get isUnknown(): boolean;
+    get sixFaceTwentyFourAngle(): SixFaceTwentyFourAngle;
+    borderLines: CellBorderLine[];
+    toString: () => string;
+    clone(): SimpleCell;
+    constructor(rowIndex: number, colIndex: number, cellIndex: number);
+    transferTo(cell: SimpleCell): void;
+    reset(): void;
+}
+export declare class SimpleCube {
+    rowCount: number;
+    colCount: number;
+    cells: SimpleCell[][];
+    isValid: boolean;
+    constructor(rowCount: number, colCount: number, isCloning?: boolean);
+    clone(): SimpleCube;
+    transferTo(other: SimpleCube): void;
+    count(): void;
+    reset(): void;
+}
+export declare function getCubeFromJson(json: string): Cube;
+export interface CubeForDrawingActCell {
+    layerIndex: number;
+    relation: ConnectionRelation;
+    feature: CellFeature;
+    sixFace: SixFace;
+    faceDirection: FourDirection;
+    twelveEdge: TwelveEdge;
+    rowIndex: number;
+    colIndex: number;
+}
+export interface CubeForDrawing {
+    no: number;
+    actCells: CubeForDrawingActCell[];
+    gridLines: GridLine[];
+    firstRowActCellColIndexBill: string;
+    lastRowEmptyCellColIndexBill: string;
+    rowCount: number;
+    colCount: number;
 }
 export {};
