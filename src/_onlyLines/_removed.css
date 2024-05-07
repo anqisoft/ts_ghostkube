@@ -1,0 +1,10 @@
+line.inner {
+    stroke: #888;
+    stroke-width: 0.1mm;
+    stroke-dasharray: 3 2;
+}
+
+line.outer {
+    stroke-width: 0.2mm;
+    stroke: #000;
+}

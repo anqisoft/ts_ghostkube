@@ -1,0 +1,40 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style id="dynamicStyle">
+    /* landscape/portrait */
+    @media print {
+      @page {
+        size: A3 landscape;
+      }
+    }
+
+    * {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    html,
+    body {
+      overflow: hidden;
+      width: 420mm;
+      height: 297mm;
+    }
+
+    line {
+      stroke: #888;
+      stroke-width: 0.1mm;
+      stroke-dasharray: 3 2;
+    }
+
+  </style>
+  <script charset="utf-8" src="../../test/js/h5_base.js"></script>
+  <script charset="utf-8" src="./js/A3.js"></script>
+</head>
+
+<body><svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg"></svg></body>
+
+</html>

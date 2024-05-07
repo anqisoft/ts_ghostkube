@@ -1,0 +1,77 @@
+begin: 5/6/2024, 9:13:00 PM
+init used 354.94 milliseconds, or 0.355 seconds
+step1: collect info from DATAS used 2.13 milliseconds, or 0.002 seconds
+step3: collect info from ../data/manners.txt used 3439.95 milliseconds, or 3.440 seconds
+done used 43.92 milliseconds, or 0.044 seconds
+end: 5/6/2024, 9:13:04 PM
+Total used 3488.16 milliseconds, or 3.488 seconds
+
+begin: 5/6/2024, 9:20:10 PM
+init used 18.84 milliseconds, or 0.019 seconds
+getMannerFromCubeInfo([7], [6]) => [object Object]
+getMannerFromCubeInfo([7], [6]) => [object Object]
+step1: collect info from DATAS used 4.08 milliseconds, or 0.004 seconds
+step3: collect info from ../data/manners.txt used 1446.12 milliseconds, or 1.446 seconds
+done used 2.88 milliseconds, or 0.003 seconds
+end: 5/6/2024, 9:20:12 PM
+Total used 1455.05 milliseconds, or 1.455 seconds
+
+begin: 5/6/2024, 9:20:57 PM
+init used 19.41 milliseconds, or 0.019 seconds
+getMannerFromCubeInfo([7], [6]) => {\"manner\":\"[FT][0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][123]T[0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][0123]\",\"pieceCount\":1,\"test\":\"F0F0F0F0F0F1T0F0F0F0F0F0\"}
+step1: collect info from DATAS used 3.04 milliseconds, or 0.003 seconds
+step3: collect info from ../data/manners.txt used 1414.88 milliseconds, or 1.415 seconds
+done used 2.16 milliseconds, or 0.002 seconds
+end: 5/6/2024, 9:20:58 PM
+Total used 1421.57 milliseconds, or 1.422 seconds
+
+begin: 5/6/2024, 9:24:36 PM
+init used 21.71 milliseconds, or 0.022 seconds
+getMannerFromCubeInfo([7], [6]) => {\"manner\":\"[FT][0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][123]T[0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][0123]\",\"pieceCount\":1,\"test\":\"F0F0F0F0F0F1T0F0F0F0F0F0\"}
+step1: collect info from DATAS used 2.89 milliseconds, or 0.003 seconds
+T1F0T0F0F0T1T0T0F0T0T1T0",1,"[FT][0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][123]T[0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][0123]
+step3: collect info from ../data/manners.txt used 1379.49 milliseconds, or 1.379 seconds
+done used 1.56 milliseconds, or 0.002 seconds
+end: 5/6/2024, 9:24:37 PM
+Total used 1385.56 milliseconds, or 1.386 seconds
+
+begin: 5/6/2024, 9:38:36 PM
+init used 18.25 milliseconds, or 0.018 seconds
+getMannerFromCubeInfo([7], [6]) => {\"manner\":\"[FT][0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][123]T[0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][0123]\",\"pieceCount\":1,\"test\":\"F0F0F0F0F0F1T0F0F0F0F0F0\"}
+getMannerFromCubeInfo([7], [6]) => {\"manner\":\"[FT][0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][123]T[0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][0123]\",\"pieceCount\":1,\"test\":\"F0F0F0F0F0F1T0F0F0F0F0F0\"}
+step1: collect info from DATAS used 4.49 milliseconds, or 0.004 seconds
+T1F0T0F0F0T1T0T0F0T0T1T0",1,"[FT][0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][123]T[0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][0123]
+step3: collect info from ../data/manners.txt used 1263.00 milliseconds, or 1.263 seconds
+done used 5.56 milliseconds, or 0.006 seconds
+end: 5/6/2024, 9:38:37 PM
+Total used 1276.26 milliseconds, or 1.276 seconds
+
+begin: 5/6/2024, 9:41:05 PM
+init used 23.24 milliseconds, or 0.023 seconds
+getMannerFromCubeInfo([7], [6]) => {\"manner\":\"[FT][0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][123]T[0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][0123]\",\"pieceCount\":1,\"test\":\"F0F0F0F0F0F1T0F0F0F0F0F0\"}
+getMannerFromCubeInfo([7], [6]) => {\"manner\":\"[FT][0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][123]T[0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][0123]\",\"pieceCount\":1,\"test\":\"F0F0F0F0F0F1T0F0F0F0F0F0\"}
+step1: collect info from DATAS used 4.27 milliseconds, or 0.004 seconds
+T1F0T0F0F0T1T0T0F0T0T1T0",1,"[FT][0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][123]T[0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][0123]
+step3: collect info from ../data/manners.txt used 1407.40 milliseconds, or 1.407 seconds
+done used 2.58 milliseconds, or 0.003 seconds
+end: 5/6/2024, 9:41:06 PM
+Total used 1415.84 milliseconds, or 1.416 seconds
+
+begin: 5/6/2024, 9:41:29 PM
+init used 18.36 milliseconds, or 0.018 seconds
+getMannerFromCubeInfo([7], [6]) => {\"manner\":\"[FT][0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][123]T[0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][0123]\",\"pieceCount\":1,\"test\":\"F0F0F0F0F0F1T0F0F0F0F0F0\"}
+step1: collect info from DATAS used 3.10 milliseconds, or 0.003 seconds
+T1F0T0F0F0T1T0T0F0T0T1T0",1,"[FT][0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][123]T[0123][FT][0123][FT][0123][FT][0123][FT][0123][FT][0123]
+step3: collect info from ../data/manners.txt used 1393.90 milliseconds, or 1.394 seconds
+done used 1.54 milliseconds, or 0.002 seconds
+end: 5/6/2024, 9:41:30 PM
+Total used 1400.17 milliseconds, or 1.400 seconds
+
+begin: 5/6/2024, 9:44:06 PM
+init used 20.09 milliseconds, or 0.020 seconds
+step1: collect info from DATAS used 2.29 milliseconds, or 0.002 seconds
+step3: collect info from ../data/manners.txt used 1401.25 milliseconds, or 1.401 seconds
+done used 2.20 milliseconds, or 0.002 seconds
+end: 5/6/2024, 9:44:08 PM
+Total used 1407.65 milliseconds, or 1.408 seconds
+

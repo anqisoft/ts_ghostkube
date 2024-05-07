@@ -1,14 +1,27 @@
 @echo off
-cd ..\dist\
-start /B "Compressing %cd%\index.js by uglifyjs." uglifyjs index.js -m -o index.min.js
-exit
 
 :: npm install uglify-js -g
-
+:: git clone git://github.com/mishoo/UglifyJS2.git
 :: uglifyjs --help
 :: * -o, ¨Coutput [string]
 :: * -b, ¨Cbeautify [string]
 :: * -m, ¨Cmangle [string]
 :: uglifyjs lazyLoad.js -m -o lazyLoad.min.js
 
-:: git clone git://github.com/mishoo/UglifyJS2.git
+set JS_FOLDER="%CD%\..\dist\"
+chdir /d %JS_FOLDER%
+
+setlocal enabledelayedexpansion
+
+title "Compressing the js files of %JS_FOLDER%"
+
+for /r . %%a in (*.js) do (
+  set src=%%~fa
+
+  REM Use "!src:~-7!", not !src:~-7!
+  if "!src:~-7!" neq ".min.js" (
+    echo !src!
+    set goal=!src:.js=.min.js!
+    start /B "" uglifyjs !src! -m -o !goal!
+  )
+)

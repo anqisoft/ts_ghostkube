@@ -1,0 +1,14 @@
+@import 'common.css';
+
+svg {
+    width: 287mm;
+    height: 410mm;
+}
+
+@media print {
+    @page {
+        size: A3 portrait;
+    }
+}
+
+/* landscape 横向 portrait 纵向*/
