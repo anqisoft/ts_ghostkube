@@ -10,23 +10,12 @@
  *
  * <zh_cn>
  * 创建：2024年4月29日 08:47:00
- * 功能：从第二步正方体（已拆解剪切与粘贴方案，但未1转24），1转24，写入：
- *       1. 每种拼插方案对应的正方体编号清单（以拼插方案命名），回车符分隔
- *          最大编号112260888，最多11,2260,8880字数据，约11亿字
- *       2. 每24个正方体（以1转24的第一个计算）一组，计算纸模完整横纵线，回车符分隔
- *          1）两行五列则15=5*(2+1)横12=(5+1)*2纵共27线；
- *          2）三行五列则20=5*(3+1)横18=(5+1)*3纵共38线。
- *          最大编号112260888，4677537组，最多1,8242,3943字数据，约2亿字
- *       3. 输出压缩后的正方体信息（正方体间以回车符分隔，4位一格，16进制）：
- *          1）1位：格序（1位，0-15，16进制0-E）
- *          2）1位：功能（1位，2-3，2面3片，减2乘6）+层序（1位，1-6转0-5），转1位16进制
- *          3）1位：面序或片序——面序0-5，片序0-11，转1位十六进制
- *          4）1位：方向序，0-3
- *          最多4*15+1=61位一个，最大编号112260888，最多68,4791,4168字数据，约68亿字，
- *          不确定是否19G左右
- *       4. 最终数据量约100亿字，预计20-30G
- * 缺陷：当前生成第二步的正方体时，未移除不符合物理规律的正方体（因还没想出相应算法）
- * 注意：本代码用于打补丁，因此仅处理部分文件，且仅处理第三项
+ * 功能：从第三步结果开始，进行一系列合并与分析操作：
+ *       1. lines.txt，将4677537行去重，且列出正方体序号段（不知道为什么最后有不连续的序号），
+ *          转为lineToCubeNo.txt文件，444442222244444422324433234:1-5,8-10
+ *       2. cubes/*.txt（3655 files），每文件30720个正方体，此文件夹不需处理，可直接反算文件名
+ *          Math.ceil((cube.no - 0.5) / 30720).toString().padStart(6, '0').concat('.txt')
+ *       3. manners/*.txt（3655 files）：合并到内存中，最后再排序后输出单个文件
  * </zh_cn>
  *
  * <zh_tw>
@@ -35,60 +24,15 @@
  * </zh_tw>
  */
 
-// https://www.cnblogs.com/livelab/p/14111142.html
 import {
   copySync,
   emptyDirSync,
   ensureDirSync,
   existsSync,
-} from "https://deno.land/std/fs/mod.ts"; // copy
+} from "https://deno.land/std/fs/mod.ts";
 import * as path from "https://deno.land/std/path/mod.ts";
 
-import {
-  ANGLE_COUNT,
-  AppendSiblingsOptions,
-  CellAppendInfoManner,
-  CellBorderLine,
-  CellBorderPosition,
-  CellFeature,
-  CellObject,
-  COL_INDEX_ARRAY_MORE_THAN_THREE_ROW,
-  ConnectionRelation,
-  convertSixFaceAndDirectionToSixFaceTwentyFourAngle,
-  convertSixFaceTwentyFourAngleToSixFaceAndDirection,
-  Cube,
-  FaceMemberOfSixFace,
-  // CUBES,
-  FourDirection,
-  FourDirectionCount,
-  FourDirectionMaxIndex,
-  getCubeFromJson,
-  getSixFaceTwentyFourAngleRelationTwelveEdge,
-  global_removed_middle_cube_count,
-  log,
-  logUsedTime,
-  NewAppendSiblingsOptions,
-  OneCellRowColIndex,
-  OneOfTwelveEdges,
-  OneOrTwoCellRowColIndex,
-  showCubeCoreInfo,
-  showSimpleCubeCoreInfo,
-  showUsedTime,
-  SiblingsAppendInfo,
-  SiblingsAppendInfoArray,
-  SimpleCell,
-  SimpleCube,
-  SIX_FACE_AND_DIRECTION_RELATIONS,
-  SixFace,
-  SixFaceCount,
-  SixFaceMaxIndex,
-  SixFaces,
-  SixFaceTwentyFourAngle,
-  SixFaceTwentyFourAngleToTwelveEdge,
-  TwelveEdge,
-  TwelveEdges,
-} from "./cubeCore.ts";
-const { floor } = Math;
+import { ANGLE_COUNT, log, logUsedTime, showUsedTime } from "./cubeCore.ts";
 
 const STEP_FLAG = "step4";
 const LOG_FILE_NAME = "./log.txt";
@@ -106,716 +50,362 @@ emptyDirSync(GOAL_FILE_TOP_PATH);
 log(`begin: ${(new Date()).toLocaleString()}`);
 const DATE_BEGIN = performance.now();
 
-const SOURCE_FILE_TOP_PATH = "./step2/";
+const OVER_WRITE_TRUE_FLAG = { overwrite: true };
 
-const COL_COUNT = 5;
-const MAX_COL_INDEX = COL_COUNT - 1;
+const SOURCE_FILE_TOP_PATH = "./step3/";
 
 const APPEND_TRUE_FLAG = { append: true };
-const EMPTY_OBJECT = {};
 
-//  同一方案24个角度
-const MANNER_COUNT = ANGLE_COUNT;
+const DEBUG = {
+  // true false
+  COMPACT_LINE_INFO_WRITE_COUNT_PER_TIME: 204800,
 
-const SIMPLE_MANNER_ARRAY: string[] = [];
-const SIMPLE_DATA_ARRAY: {
-  manner: string;
-  cube: Cube;
-}[] = [];
+  COMPACT_MANNER_FILES_FOR_LARGE_FILE: true,
+  COMPACT_MANNER_FILES_FOR_LARGE_FILE_OUTPUT_TIMES: 8,
+
+  OUTPUT_MANNER_BILL_FILE: false,
+
+  JOIN_CUBE_FILES: true,
+};
 
 await (async () => {
-  let fileNo = 0;
-  // let cubeLinesFileContent = '';
+  // step3/lines.txt => step4/lineToCubeNo.txt
+  compactLineInfo();
 
-  // const CUBE_COUNT_PER_FILE = 10240;
-  // * 3 => 23 seconds / 4 files
-  // * 4 => 123 seconds / 4 files 86/4=21.5
-  // * 5 =>  51 seconds / 2 files 50.6/2=25.3
-  // * 8 => 175 seconds / 4 files 125/4=32
-  const CUBE_COUNT_PER_FILE = 10240 * 3;
-  const CUBES: Cube[] = [];
+  if (DEBUG.COMPACT_MANNER_FILES_FOR_LARGE_FILE) {
+    // step3/manners/*.txt => step4/manners.txt
+    await compactMannerFilesForLargeFile();
 
-  const CUBE_GOAL_FILE_PATH = `${GOAL_FILE_TOP_PATH}cubes/`;
-  ensureDirSync(CUBE_GOAL_FILE_PATH);
-  emptyDirSync(CUBE_GOAL_FILE_PATH);
+    // step3/manners/*.txt => step4/joinedManners/*.txt
+    await joinMannerFiles();
+  } else {
+    // step3/manners/*.txt => step4/manners.txt
+    await compactMannerFiles();
+  }
 
-  // const MANNER_CUBES_GOAL_FILE_PATH = `${GOAL_FILE_TOP_PATH}manners/`;
-  // ensureDirSync(MANNER_CUBES_GOAL_FILE_PATH);
-  // emptyDirSync(MANNER_CUBES_GOAL_FILE_PATH);
+  if (DEBUG.OUTPUT_MANNER_BILL_FILE) {
+    // step3/manners/*.txt => step4/mannerBill.txt
+    await outputMannerBillFile();
+  }
 
-  const CUBE_LINES_FILE_NAME = `${GOAL_FILE_TOP_PATH}lines.txt`;
-  // Deno.writeTextFileSync(CUBE_LINES_FILE_NAME, '');
+  // step3/cubes/*.txt => step4/cubes.txt
+  if (DEBUG.JOIN_CUBE_FILES) {
+    await joinCubeFiles();
+  }
 
-  let sourceFilename = "";
-  // for await (const dirEntry of Deno.readDir(SOURCE_FILE_TOP_PATH)) {
-  // const filename = path.join(SOURCE_FILE_TOP_PATH, dirEntry.name);
-  // const stats = Deno.statSync(filename);
-  // if (stats.isFile) {
-  // sourceFilename = filename;
-  // showUsedTime(`read file: ${filename}`);
-  // Deno.readTextFileSync(filename).split('\n').forEach((codeLine) => {
-  // const cube = getCubeFromJson(codeLine);
-  // batchAppendCubeOneToTwentyFour(cube);
-  // });
-  // }
-  // }
-  // [25,26]
-  [
-    25,
-    26,
-    27,
-    28,
-    29,
-    30,
-    32,
-    33,
-    35,
-    37,
-    39,
-    41,
-    42,
-    43,
-    44,
-    45,
-    46,
-    47,
-    48,
-    49,
-    50,
-    51,
-    52,
-    53,
-    54,
-    86,
-    87,
-    88,
-    91,
-    92,
-    93,
-    95,
-    96,
-    98,
-    99,
-    101,
-    102,
-    103,
-    105,
-    106,
-    108,
-    109,
-    110,
-    111,
-    112,
-    113,
-    114,
-    127,
-    134,
-    135,
-    136,
-    138,
-    143,
-    144,
-    145,
-    150,
-    151,
-    153,
-    154,
-    156,
-    157,
-    160,
-    161,
-    162,
-    163,
-    164,
-    165,
-    166,
-    168,
-    169,
-    171,
-    172,
-    173,
-    174,
-    175,
-    177,
-    178,
-    180,
-    181,
-    182,
-    183,
-    184,
-    185,
-    186,
-    187,
-    200,
-    208,
-    209,
-    210,
-    217,
-    218,
-    219,
-    224,
-    225,
-    227,
-    228,
-    229,
-    230,
-    231,
-    235,
-    236,
-    238,
-    240,
-    241,
-    244,
-    245,
-    246,
-    248,
-    249,
-    250,
-    280,
-    281,
-    282,
-    283,
-    284,
-    285,
-    286,
-    287,
-    288,
-    289,
-    291,
-    292,
-    293,
-    295,
-    297,
-    298,
-    299,
-    300,
-    301,
-    302,
-    303,
-    304,
-    305,
-    306,
-    308,
-    309,
-    310,
-    311,
-    343,
-    344,
-    347,
-    348,
-    350,
-    351,
-    352,
-    353,
-    354,
-    358,
-    359,
-    361,
-    362,
-    363,
-    364,
-    365,
-    366,
-    367,
-    368,
-    371,
-    372,
-    382,
-    387,
-    388,
-    389,
-    395,
-    396,
-    400,
-    401,
-    402,
-    403,
-    404,
-    405,
-    407,
-    408,
-    409,
-    410,
-    411,
-    412,
-    415,
-    416,
-    417,
-    418,
-    419,
-    420,
-    421,
-    422,
-    423,
-    424,
-    425,
-    426,
-    434,
-    435,
-    439,
-    440,
-    444,
-    445,
-    446,
-    451,
-    453,
-    455,
-  ]
-    .forEach((sourceFileNo) => {
-      fileNo = 8 * (sourceFileNo - 1);
-      sourceFilename = path.join(
-        SOURCE_FILE_TOP_PATH,
-        `${sourceFileNo.toString().padStart(6, "0")}.txt`,
-      );
-      showUsedTime(`read file: ${sourceFilename}`);
-      Deno.readTextFileSync(sourceFilename).split("\n").forEach((codeLine) => {
-        const cube = getCubeFromJson(codeLine);
-        // if(!cube.isValid) {
-        // log(`[warn]${cube.no} is not valid!`);
-        // } else {
-        // batchAppendCubeOneToTwentyFour(cube);
-        // }
-        batchAppendCubeOneToTwentyFour(cube);
-      });
+  function compactLineInfo() {
+    logFilenamePostfix += "_compactLineInfo";
+    // 1. lines.txt，将4677537行去重，且列出正方体序号段（不知道为什么最后有不连续的序号），
+    //    转为lineToCubeNo.txt文件，444442222244444422324433234:1-5,8-10
+    const GOAL_FILE_NAME = `${GOAL_FILE_TOP_PATH}lineToCubeNo.txt`;
+
+    const SOURCE_FILE_NAME = `${SOURCE_FILE_TOP_PATH}lines.txt`;
+    const DATA_ARRAY = Deno.readTextFileSync(SOURCE_FILE_NAME).split("\n");
+    showUsedTime(`read ${SOURCE_FILE_NAME} ok`);
+
+    const { COMPACT_LINE_INFO_WRITE_COUNT_PER_TIME } = DEBUG;
+
+    Deno.writeTextFileSync(GOAL_FILE_NAME, "");
+    let lastOne = "";
+    let codes = "";
+    DATA_ARRAY.forEach((info, index) => {
+      if (index % COMPACT_LINE_INFO_WRITE_COUNT_PER_TIME === 0 && index) {
+        Deno.writeTextFileSync(GOAL_FILE_NAME, codes, APPEND_TRUE_FLAG);
+        codes = "";
+        showUsedTime(`ok: ${index}`);
+      }
+      const BEGIN = ANGLE_COUNT * index + 1;
+      // const END = BEGIN + DIFFENT_BETWEEN_BEGIN_AND_END;
+      if (info === lastOne) {
+        codes += `|${BEGIN}`;
+      } else {
+        codes += `${index ? "\n" : ""}${info}\t${BEGIN}`;
+        lastOne = info;
+      }
     });
-  outputCubes();
-
-  function batchAppendCubeOneToTwentyFour(cube: Cube) {
-    const { coreRowIndex: CORE_ROW_INDEX, coreColIndex: CORE_COL_INDEX } = cube;
-    const {
-      sixFaces: OLD_SIX_FACES,
-      twelveEdges: OLD_TWELVE_EDGES,
-      cells: OLD_CELLS,
-      no: START_NO,
-      rowCount,
-      colCount,
-      gridLines,
-    } = cube;
-
-    // { xStart, xEnd, yStart, yEnd, lineStyle }
-    // GridLineStyle: Unknown, None, InnerLine, CutLine, OuterLine
-    // const LINE_ARRAY: number[] = [];
-    // for (let rowIndexLoop = 0; rowIndexLoop <= rowCount; ++rowIndexLoop) {
-    // for (let colIndexLoop = 0; colIndexLoop < colCount; ++colIndexLoop) {
-    // LINE_ARRAY.push(1);
-    // }
-    // }
-    // const VERTICAL_LINE_INDEX_OFFSET = LINE_ARRAY.length;
-    // for (let rowIndexLoop = 0; rowIndexLoop < rowCount; ++rowIndexLoop) {
-    // for (let colIndexLoop = 0; colIndexLoop <= colCount; ++colIndexLoop) {
-    // LINE_ARRAY.push(1);
-    // }
-    // }
-    // gridLines.forEach(({ xStart, xEnd, yStart, yEnd, lineStyle }) => {
-    // if (yStart === yEnd) {
-    // LINE_ARRAY[colCount * yStart + xStart] = lineStyle;
-    // } else {
-    // LINE_ARRAY[VERTICAL_LINE_INDEX_OFFSET + (colCount + 1) * yStart + xStart] = lineStyle;
-    // }
-    // });
-    // cubeLinesFileContent += (cubeLinesFileContent.length ? '\n' : '').concat(LINE_ARRAY.join(''));
-
-    const MAX_ADD_ORDER =
-      cube.actCells.map((cell) => cell.addOrder).sort().reverse()[0];
-    const CORE_CELL_IS_PIECE =
-      OLD_CELLS[CORE_ROW_INDEX][CORE_COL_INDEX].feature === CellFeature.Piece;
-
-    for (let mannerIndex = 0; mannerIndex < MANNER_COUNT; ++mannerIndex) {
-      const cloned = getClonedCubeByMannerIndex(
-        cube,
-        mannerIndex,
-        OLD_SIX_FACES,
-        OLD_TWELVE_EDGES,
-        OLD_CELLS,
-        MAX_ADD_ORDER,
-        CORE_CELL_IS_PIECE,
-      );
-      cloned.no = START_NO + mannerIndex;
-
-      cloned.syncAndClear();
-      cloned.cells = undefined;
-      cloned.isValid = undefined;
-      cloned.emptyCells = undefined;
-
-      cloned.colCount = undefined;
-      cloned.coreRowIndex = undefined;
-
-      const MANNER = cloned.twelveEdges.map((twelveEdge) =>
-        `${twelveEdge.canBeInserted ? "T" : "F"}${twelveEdge.pieces.length}`
-      ).join("");
-      cloned["manner"] = MANNER;
-
-      appendCube(cloned);
-    }
+    Deno.writeTextFileSync(GOAL_FILE_NAME, codes, APPEND_TRUE_FLAG);
+    // 4677537 lines => 247616 lines
   }
 
-  function appendCube(cube: Cube) {
-    CUBES.push(cube);
+  async function compactMannerFiles() {
+    logFilenamePostfix += "_compactMannerFiles";
 
-    if (CUBES.length >= CUBE_COUNT_PER_FILE) {
-      outputCubes();
-    }
-  }
+    const SOURCE_MANNER_FILE_PATH = `${SOURCE_FILE_TOP_PATH}manners/`;
+    let readedFileCount = 0;
 
-  function outputCubes() {
-    if (!CUBES.length) {
-      return;
-    }
-    ++fileNo;
-    const filenamePostfix = `${fileNo.toString().padStart(6, "0")}.txt`;
+    const GOAL_FILE_NAME = `${GOAL_FILE_TOP_PATH}manners.txt`;
+    Deno.writeTextFileSync(GOAL_FILE_NAME, "");
+    for await (const dirEntry of Deno.readDir(SOURCE_MANNER_FILE_PATH)) {
+      const filename = path.join(SOURCE_MANNER_FILE_PATH, dirEntry.name);
+      const stats = Deno.statSync(filename);
+      if (!stats.isFile) {
+        continue;
+      }
 
-    // 1. 每种拼插方案对应的正方体编号清单（以拼插方案命名），回车符分隔
-    //    最大编号112260888，最多11,2260,8880字数据，约11亿字
-    // CUBES.forEach(cube => {
-    // const { manner } = cube;
+      if ((++readedFileCount) % 100 === 0) {
+        showUsedTime(`readed ${readedFileCount} files`);
+      }
+      // Deno.writeTextFileSync(
+      //   GOAL_FILE_NAME,
+      //   Deno.readTextFileSync(filename)
+      //     .replace(/:/g, "\t")
+      //     .replace(/[\[\]]/g, "")
+      //     .replace(/,/g, "|"),
+      //   APPEND_TRUE_FLAG,
+      // );
 
-    // const MANNER_FILE_NAME = `${MANNER_CUBES_GOAL_FILE_PATH}${manner}.txt`;
-    // cube['manner'] = undefined;
-    // const EXISTS = existsSync(MANNER_FILE_NAME);
-    // Deno.writeTextFileSync(
-    // MANNER_FILE_NAME,
-    // `${EXISTS ? '\n' : ''}${cube.no}`,
-    // EXISTS ? APPEND_TRUE_FLAG : EMPTY_OBJECT
-    // );
-    // });
-
-    // const MANNER_CUBES_ARRAY = [];
-    // const MANNER_ARRAY = [];
-    // CUBES.forEach((cube) => {
-    // const { manner, no } = cube;
-    // cube['manner'] = undefined;
-
-    // const OLD_INDEX = MANNER_ARRAY.indexOf(manner);
-    // if (OLD_INDEX === -1) {
-    // MANNER_ARRAY.push(manner);
-    // MANNER_CUBES_ARRAY.push([no]);
-    // } else {
-    // MANNER_CUBES_ARRAY[OLD_INDEX].push(no);
-    // }
-    // });
-    // Deno.writeTextFileSync(
-    // `${MANNER_CUBES_GOAL_FILE_PATH}${filenamePostfix}`,
-    // MANNER_CUBES_ARRAY.map((noArray, index) => `${MANNER_ARRAY[index]}:[${noArray.join(',')}]`)
-    // .join('\n'),
-    // );
-    // MANNER_CUBES_ARRAY.length = 0;
-    // MANNER_ARRAY.length = 0;
-
-    //  3. 输出压缩后的正方体信息（正方体间以回车符分隔，4位一格，16进制）：
-    //      1）1位：格序（1位，0-15，16进制0-E）
-    //      2）1位：功能（1位，2-3，2面3片，减2乘6）+层序（1位，1-6转0-5），转1位16进制
-    //      3）1位：面序或片序——面序0-5，片序0-11，转1位十六进制
-    //      4）1位：方向序，0-3
-    //      最多4*15+1=61位一个，最大编号112260888，最多68,4791,4168字数据，约68亿字，
-    //      不确定是否19G左右
-    const GOAL_FILE_NAME = `${CUBE_GOAL_FILE_PATH}${filenamePostfix}`;
-    // try {
-    // Deno.writeTextFileSync(
-    // GOAL_FILE_NAME,
-    // CUBES.map((cube) =>
-    // cube.actCells.map(
-    // ({
-    // no,
-    // cellIndex,
-    // layerIndex,
-    // feature,
-    // sixFace,
-    // faceDirection,
-    // twelveEdge,
-    // }) =>
-    // // `${cellIndex.toString(16)}${
-    // // (parseInt(`${(feature - 2) * 6 + (layerIndex - 1)}`)).toString(16)
-    // // }${feature === 2 ? `${sixFace}` : `${twelveEdge.toString(16)}`}${faceDirection}`
-
-    // {
-    // if(!('toString' in cellIndex)) {
-    // console.log(`${no}.cellIndex:${cellIndex}`);
-    // return '';
-    // }
-
-    // if(feature === 3 && !('toString' in twelveEdge)) {
-    // console.log(`${no}.twelveEdge:${twelveEdge}`);
-    // return '';
-    // }
-
-    // const FEATURE_AND_LAYERINDEX = parseInt('' + ((feature - 2) * 6 + (layerIndex - 1)));
-    // if(!('toString' in FEATURE_AND_LAYERINDEX)) {
-    // console.log(`${no}.featureAndLayerindex:${FEATURE_AND_LAYERINDEX}`);
-    // return '';
-    // }
-
-    // return
-    // `${cellIndex.toString(16)}${(FEATURE_AND_LAYERINDEX).toString(16)}${feature === 2 ? `${sixFace}` : `${twelveEdge.toString(16)}`}${faceDirection}`;
-    // }
-    // ).join('')
-    // ).join('\n')
-    // );
-    // } catch (error) {
-    // console.error('[error]', sourceFilename, filenamePostfix, error);
-    // }
-    try {
-      const codes: string[] = [];
-      CUBES.forEach((cube) => {
-        let code = "";
-        const { no, actCells } = cube;
-        actCells.forEach((cell) => {
-          const {
-            cellIndex,
-            layerIndex,
-            feature,
-            sixFace,
-            faceDirection,
-            rowIndex,
-            colIndex,
-            addOrder,
-          } = cell;
-          let { twelveEdge } = cell;
-          code += cellIndex.toString(16);
-          const FEATURE_AND_LAYERINDEX = parseInt(
-            "" + ((feature - 2) * 6 + (layerIndex - 1)),
-          );
-          code += FEATURE_AND_LAYERINDEX.toString(16);
-          if (feature === 2) {
-            code += sixFace;
-          } else {
-            if (typeof twelveEdge === "undefined") {
-              const { relatedInformationWhenAdding } = cell;
-              if (
-                relatedInformationWhenAdding.rowIndex === -1 &&
-                relatedInformationWhenAdding.colIndex === -1
-              ) {
-                const FIND_ADD_ORDER = addOrder + 1;
-                const RELATION_CELL = actCells.filter(
-                  (o) =>
-                    o.addOrder === FIND_ADD_ORDER &&
-                    o.relatedInformationWhenAdding.rowIndex === rowIndex &&
-                    o.relatedInformationWhenAdding.colIndex === colIndex,
-                )[0];
-
-                const relation =
-                  RELATION_CELL.relatedInformationWhenAdding.relation;
-
-                twelveEdge = getSixFaceTwentyFourAngleRelationTwelveEdge(
-                  RELATION_CELL.sixFaceTwentyFourAngle,
-                  relation % 2 === 0 ? (2 - relation) : 1 + floor(relation / 2),
-                );
-              } else {
-                console.log(
-                  "cell.twelveEdge is undefined",
-                  no,
-                  relatedInformationWhenAdding,
-                );
-              }
-            }
-
-            try {
-              code += twelveEdge.toString(16);
-            } catch (error) {
-              console.log("cell", no, cell);
-            }
-          }
-
-          code += faceDirection;
+      const ARRAY: { manner: string; cubeNoBill: string }[] = Deno
+        .readTextFileSync(filename)
+        .replace(/:/g, "\t")
+        .replace(/[\[\]]/g, "")
+        .replace(/,/g, "|").split("\n").map((line) => {
+          const [manner, cubeNoBill] = line.split("\t");
+          return { manner, cubeNoBill };
         });
-        codes.push(code);
-      });
-      Deno.writeTextFileSync(GOAL_FILE_NAME, codes.join("\n"));
-    } catch (error) {
-      console.error("[error]", sourceFilename, filenamePostfix, error);
+      ARRAY.sort((prev, next) => prev.manner.localeCompare(next.manner));
+      console.log("sort it");
+
+      Deno.writeTextFileSync(
+        GOAL_FILE_NAME,
+        ARRAY.map(({ manner, cubeNoBill }) => `${manner}\t${cubeNoBill}`)
+          .join("\n"),
+        APPEND_TRUE_FLAG,
+      );
     }
+    // First time: Total used , used 153560.50 milliseconds, or 153.560 seconds, or 2.6 minutes.
 
-    // `${(cellIndex).toString(16)}${(parseInt(`${layerIndex}${feature}`)).toString(16)}${feature===2?`${sixFace}${faceDirection}`:twelveEdge.toString().padStart(2, '0')}`
+    // Second time:
+    // begin: 4/30/2024, 9:18:51 AM
+    // readed 100 files, used 1245.30 milliseconds, or 1.245 seconds
+    // readed 200 files, used 1309.05 milliseconds, or 1.309 seconds
+    // readed 300 files, used 1190.31 milliseconds, or 1.190 seconds
+    // readed 400 files, used 1240.31 milliseconds, or 1.240 seconds
+    // readed 500 files, used 1640.54 milliseconds, or 1.641 seconds
+    // readed 600 files, used 1574.70 milliseconds, or 1.575 seconds
+    // readed 700 files, used 1585.79 milliseconds, or 1.586 seconds
+    // readed 800 files, used 1717.13 milliseconds, or 1.717 seconds
+    // readed 900 files, used 1712.19 milliseconds, or 1.712 seconds
+    // readed 1000 files, used 1440.75 milliseconds, or 1.441 seconds
+    // readed 1100 files, used 1575.05 milliseconds, or 1.575 seconds
+    // readed 1200 files, used 1305.73 milliseconds, or 1.306 seconds
+    // readed 1300 files, used 1453.30 milliseconds, or 1.453 seconds
+    // readed 1400 files, used 1252.67 milliseconds, or 1.253 seconds
+    // readed 1500 files, used 1109.89 milliseconds, or 1.110 seconds
+    // readed 1600 files, used 1384.44 milliseconds, or 1.384 seconds
+    // readed 1700 files, used 1395.11 milliseconds, or 1.395 seconds
+    // readed 1800 files, used 1520.37 milliseconds, or 1.520 seconds
+    // readed 1900 files, used 1629.46 milliseconds, or 1.629 seconds
+    // readed 2000 files, used 1445.17 milliseconds, or 1.445 seconds
+    // readed 2100 files, used 1597.54 milliseconds, or 1.598 seconds
+    // readed 2200 files, used 1779.48 milliseconds, or 1.779 seconds
+    // readed 2300 files, used 1665.58 milliseconds, or 1.666 seconds
+    // readed 2400 files, used 1701.54 milliseconds, or 1.702 seconds
+    // readed 2500 files, used 1674.25 milliseconds, or 1.674 seconds
+    // readed 2600 files, used 1533.90 milliseconds, or 1.534 seconds
+    // readed 2700 files, used 1972.77 milliseconds, or 1.973 seconds
+    // readed 2800 files, used 1708.63 milliseconds, or 1.709 seconds
+    // readed 2900 files, used 1698.91 milliseconds, or 1.699 seconds
+    // readed 3000 files, used 1616.99 milliseconds, or 1.617 seconds
+    // readed 3100 files, used 1673.94 milliseconds, or 1.674 seconds
+    // readed 3200 files, used 1799.85 milliseconds, or 1.800 seconds
+    // readed 3300 files, used 1744.90 milliseconds, or 1.745 seconds
+    // readed 3400 files, used 1647.63 milliseconds, or 1.648 seconds
+    // readed 3500 files, used 1666.44 milliseconds, or 1.666 seconds
+    // readed 3600 files, used 1362.89 milliseconds, or 1.363 seconds
+    // end, used 713.26 milliseconds, or 0.713 seconds
+    // end: 4/30/2024, 9:19:47 AM
+    // Total used , used 56269.80 milliseconds, or 56.270 seconds
 
-    // // 2. 每24个正方体（以1转24的第一个计算）一组，计算纸模完整横纵线，回车符分隔
-    // //    1）两行五列则15=5*(2+1)横12=(5+1)*2纵共27线；
-    // //    2）三行五列则20=5*(3+1)横18=(5+1)*3纵共38线。
-    // //    最大编号112260888，4677537组，最多1,8242,3943字数据，约2亿字
-    // Deno.writeTextFileSync(
-    // CUBE_LINES_FILE_NAME,
-    // (fileNo === 1 ? '' : '\n').concat(cubeLinesFileContent),
-    // APPEND_TRUE_FLAG,
-    // );
-    // cubeLinesFileContent = '';
-
-    CUBES.length = 0;
+    // File size: 1.74GB
+    // Couldn't open it by notepad.
   }
 
-  function getClonedCubeByMannerIndex(
-    cube: Cube,
-    mannerIndex: number,
-    OLD_SIX_FACES: SixFaces,
-    OLD_TWELVE_EDGES: TwelveEdges,
-    OLD_CELLS: CellObject[][],
-    MAX_ADD_ORDER: number,
-    CORE_CELL_IS_PIECE: boolean,
-  ) {
-    const { coreRowIndex: CORE_ROW_INDEX, coreColIndex: CORE_COL_INDEX } = cube;
+  async function compactMannerFilesForLargeFile() {
+    logFilenamePostfix = "_compactMannerFilesForLargeFile";
+    const SOURCE_MANNER_FILE_PATH = `${SOURCE_FILE_TOP_PATH}manners/`;
+    const MANNER_ARRAY: string[] = [];
+    const CUBE_NO_ARRAY = [];
+    let readedFileCount = 0;
+    let mannerCount = 0;
+    for await (const dirEntry of Deno.readDir(SOURCE_MANNER_FILE_PATH)) {
+      const filename = path.join(SOURCE_MANNER_FILE_PATH, dirEntry.name);
+      const stats = Deno.statSync(filename);
+      if (stats.isFile) {
+        if ((++readedFileCount) % 100 === 0) { // || readedFileCount < 10) {
+          showUsedTime(`readed ${readedFileCount} files`);
+        }
 
-    const cloned = cube.clone();
-
-    const { cells, actCells, sixFaces, twelveEdges } = cloned;
-
-    const [CORE_CELL_SIX_FACE, CORE_CELL_FOUR_DIRECTION] =
-      convertSixFaceTwentyFourAngleToSixFaceAndDirection(mannerIndex);
-    const CORE_CELL = cells[CORE_ROW_INDEX][CORE_COL_INDEX];
-    CORE_CELL.sixFace = CORE_CELL_SIX_FACE;
-    CORE_CELL.faceDirection = CORE_CELL_FOUR_DIRECTION;
-    for (let addOrder = 2; addOrder <= MAX_ADD_ORDER; ++addOrder) {
-      cells.forEach((cellRow) =>
-        cellRow.filter((cell) => cell.addOrder === addOrder).forEach(
-          (cell) => {
-            const { rowIndex, colIndex, relation: RELATION } =
-              cell.relatedInformationWhenAdding;
-            const RELATED_CELL = cells[rowIndex][colIndex];
-            const [newSixFace, newFaceDirection] =
-              convertSixFaceTwentyFourAngleToSixFaceAndDirection(
-                SIX_FACE_AND_DIRECTION_RELATIONS[
-                  RELATED_CELL.sixFaceTwentyFourAngle
-                ][RELATION],
-              );
-            cell.sixFace = newSixFace;
-            cell.faceDirection = newFaceDirection;
-          },
-        )
-      );
+        const SOURCE_ARRAY = Deno.readTextFileSync(filename)
+          .replace(/:/g, "\t")
+          .replace(/[\[\]]/g, "")
+          .replace(/,/g, "|")
+          .split("\n");
+        const SOURCE_COUNT = SOURCE_ARRAY.length;
+        for (let lineIndex = 0; lineIndex < SOURCE_COUNT; ++lineIndex) {
+          const [MANNER, CUBE_NO_BILL] = SOURCE_ARRAY[lineIndex].split("\t");
+          let finded = false;
+          for (let i = 0; i < mannerCount; ++i) {
+            if (MANNER_ARRAY[i] === MANNER) {
+              CUBE_NO_ARRAY[i] += "|".concat(CUBE_NO_BILL);
+              finded = true;
+              break;
+            }
+          }
+          if (!finded) {
+            MANNER_ARRAY.push(MANNER);
+            CUBE_NO_ARRAY.push(CUBE_NO_BILL);
+            ++mannerCount;
+          }
+        }
+      }
     }
-    if (CORE_CELL_IS_PIECE) {
-      const { rowIndex, colIndex } = actCells.filter((cell) =>
-        cell.addOrder === 2
-      )[0];
-      const RELATED_CELL = cells[rowIndex][colIndex];
-      const RELATION = RELATED_CELL.relatedInformationWhenAdding.relation;
-      CORE_CELL.twelveEdge = getSixFaceTwentyFourAngleRelationTwelveEdge(
-        RELATED_CELL.sixFaceTwentyFourAngle,
-        2 - RELATION % 2 + 2 * floor(RELATION / 2),
+    showUsedTime(`read remaining files`);
+
+    const MANNER_GOAL_FILE_NAME = `${GOAL_FILE_TOP_PATH}manners.txt`;
+    Deno.writeTextFileSync(MANNER_GOAL_FILE_NAME, "");
+
+    const WRITE_TIMES = DEBUG.COMPACT_MANNER_FILES_FOR_LARGE_FILE_OUTPUT_TIMES;
+    const OUTPUT_COUNT_PER_TIME = Math.ceil(MANNER_ARRAY.length / WRITE_TIMES);
+    for (let outputIndex = 0; outputIndex < WRITE_TIMES; ++outputIndex) {
+      const QUARTER_CUBE_NO_ARRAY = CUBE_NO_ARRAY.splice(
+        0,
+        OUTPUT_COUNT_PER_TIME,
       );
-    }
-
-    sixFaces.forEach((face, faceIndex) => {
-      face.length = 0;
-
-      OLD_SIX_FACES.forEach((oldFaces: FaceMemberOfSixFace) => {
-        if (oldFaces.length === 0) {
-          Deno.writeTextFileSync(
-            `${GOAL_FILE_TOP_PATH}error_cube_${cube.no}.ts`,
-            `const _error_cube = ${JSON.stringify(cube)};`,
-          );
-        }
-        const [rowIndex, colIndex] = oldFaces[0];
-        if (cells[rowIndex][colIndex].sixFace === faceIndex) {
-          oldFaces.forEach((item) => face.push(item));
-        }
-      });
-    });
-
-    twelveEdges.forEach((edge) => {
-      edge.pieces.forEach(([pieceRowIndex, pieceColIndex]) => {
-        const PIECE_CELL = cells[pieceRowIndex][pieceColIndex];
-        const { rowIndex, colIndex, relation } =
-          PIECE_CELL.relatedInformationWhenAdding;
-        let fixedRelation = relation;
-        let fixedSixFaceTwentyFourAngle = 0;
-        if (rowIndex === -1) {
-          cells.forEach((cellRow, cellRowIndex) =>
-            cellRow.forEach((cell, cellColIndex) => {
-              if (cell.addOrder === 2) {
-                fixedSixFaceTwentyFourAngle = cell.sixFaceTwentyFourAngle;
-                const RELATION = cell.relatedInformationWhenAdding.relation;
-                fixedRelation = (2 - RELATION % 2) + 2 * floor(RELATION / 2);
-              }
-            })
-          );
-        } else {
-          fixedSixFaceTwentyFourAngle =
-            cells[rowIndex][colIndex].sixFaceTwentyFourAngle;
-        }
-        PIECE_CELL.twelveEdge = getSixFaceTwentyFourAngleRelationTwelveEdge(
-          fixedSixFaceTwentyFourAngle,
-          fixedRelation,
+      if (outputIndex) {
+        Deno.writeTextFileSync(
+          MANNER_GOAL_FILE_NAME,
+          "\n",
+          APPEND_TRUE_FLAG,
         );
-      });
-    });
-
-    // 找到新旧十二棱对应关系
-    const TWELVE_EDGES_NEW_TO_OLD_ARRAY: number[] = [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ];
-    const FINDED_TWELVE_EDGES_INDEX_ARRAY: number[] = [];
-    OLD_SIX_FACES.forEach((sixFaces) => {
-      sixFaces.forEach(
-        ([firstRowIndex, firstColIndex, secondRowIndex, secondColIndex]) => {
-          if (FINDED_TWELVE_EDGES_INDEX_ARRAY.length === 12) {
-            return;
-          }
-
-          relateTwelveEdge(firstRowIndex, firstColIndex);
-          if (typeof secondRowIndex !== "undefined") {
-            relateTwelveEdge(secondRowIndex, secondColIndex as number);
-          }
-
-          function relateTwelveEdge(rowIndex: number, colIndex: number) {
-            if (FINDED_TWELVE_EDGES_INDEX_ARRAY.length === 12) {
-              return;
-            }
-
-            const oldFirstCell = OLD_CELLS[rowIndex][colIndex];
-            const oldSixFaceTwentyFourAngle =
-              oldFirstCell.sixFaceTwentyFourAngle;
-
-            const newFirstCell = cells[rowIndex][colIndex];
-            const newSixFaceTwentyFourAngle =
-              newFirstCell.sixFaceTwentyFourAngle;
-
-            for (
-              let connectionRelation = 0;
-              connectionRelation < 4;
-              ++connectionRelation
-            ) {
-              const NEW = getSixFaceTwentyFourAngleRelationTwelveEdge(
-                newSixFaceTwentyFourAngle,
-                connectionRelation,
-              );
-              if (FINDED_TWELVE_EDGES_INDEX_ARRAY.indexOf(NEW) > -1) {
-                continue;
-              }
-
-              const OLD = getSixFaceTwentyFourAngleRelationTwelveEdge(
-                oldSixFaceTwentyFourAngle,
-                connectionRelation,
-              );
-              FINDED_TWELVE_EDGES_INDEX_ARRAY.push(NEW);
-              TWELVE_EDGES_NEW_TO_OLD_ARRAY[NEW] = OLD;
-            }
-          }
-        },
+      }
+      Deno.writeTextFileSync(
+        MANNER_GOAL_FILE_NAME,
+        MANNER_ARRAY.splice(0, OUTPUT_COUNT_PER_TIME).map((MANNER, index) =>
+          `${MANNER}\t${QUARTER_CUBE_NO_ARRAY[index]}`
+        ).join("\n"),
+        APPEND_TRUE_FLAG,
       );
-    });
+    }
+    showUsedTime(`output manners.txt`);
 
-    twelveEdges.forEach((edge, edgeIndex) => {
-      edge.pieces.length = 0;
+    // Deno.writeTextFileSync(
+    // `${GOAL_FILE_TOP_PATH}mannerBill.txt`,
+    // MANNER_ARRAY.join('\n'),
+    // );
+    // showUsedTime(`output mannerBill.txt`);
+  }
 
-      TWELVE_EDGES_NEW_TO_OLD_ARRAY.forEach((oldValue, oldIndex) => {
-        if (oldValue === edgeIndex) {
-          const OLD_TWELVE_EDGE = OLD_TWELVE_EDGES[oldIndex];
-          edge.canBeInserted = OLD_TWELVE_EDGE.canBeInserted;
+  async function outputMannerBillFile() {
+    logFilenamePostfix += "_outputMannerBillOfOnlyOneFile";
+    const SOURCE_MANNER_FILE_PATH = `${SOURCE_FILE_TOP_PATH}manners/`;
 
-          OLD_TWELVE_EDGE.pieces.forEach((item) => edge.pieces.push(item));
-        }
-      });
-    });
+    let readedFileCount = 0;
 
-    return cloned;
+    const GOAL_FILE_NAME = `${GOAL_FILE_TOP_PATH}mannerBill.txt`;
+    Deno.writeTextFileSync(GOAL_FILE_NAME, "");
+    for await (const dirEntry of Deno.readDir(SOURCE_MANNER_FILE_PATH)) {
+      const filename = path.join(SOURCE_MANNER_FILE_PATH, dirEntry.name);
+      const stats = Deno.statSync(filename);
+      if (!stats.isFile) {
+        continue;
+      }
+
+      if ((++readedFileCount) % 100 === 0) {
+        showUsedTime(`readed ${readedFileCount} files`);
+      }
+      Deno.writeTextFileSync(
+        GOAL_FILE_NAME,
+        Deno.readTextFileSync(filename)
+          // .replace(/:/g, '\t')
+          // .replace(/[\[\]]/g, '')
+          // .replace(/,/g, '|')
+          .split("\n").map((line) => line.split(":")[0]).join("\n"),
+        APPEND_TRUE_FLAG,
+      );
+    }
+
+    // File size: 1.13G
+    // Couldn't open it by notepad or notepad++.
+  }
+
+  async function joinMannerFiles() {
+    const SOURCE_MANNER_FILE_PATH = `${SOURCE_FILE_TOP_PATH}manners/`;
+    let readedFileCount = 0;
+
+    // const GOAL_FILE_PATH = `${GOAL_FILE_TOP_PATH}manners/`;
+    const GOAL_FILE_PATH = `${GOAL_FILE_TOP_PATH}joinedManners/`;
+    ensureDirSync(GOAL_FILE_PATH);
+    emptyDirSync(GOAL_FILE_PATH);
+
+    const MANNER_ARRAY: string[] = [];
+    let outputFileNo = 0;
+    let totalCount = 0;
+    function output() {
+      const COUNT = MANNER_ARRAY.length;
+      if (!COUNT) {
+        return;
+      }
+
+      ++outputFileNo;
+      Deno.writeTextFileSync(
+        `${GOAL_FILE_PATH}${outputFileNo}.txt`,
+        MANNER_ARRAY.join("\n"),
+      );
+
+      totalCount += COUNT;
+      MANNER_ARRAY.length = 0;
+    }
+    function append(manner: string) {
+      MANNER_ARRAY.push(manner);
+      if (MANNER_ARRAY.length >= 1048000) {
+        output();
+      }
+    }
+
+    for await (const dirEntry of Deno.readDir(SOURCE_MANNER_FILE_PATH)) {
+      const filename = path.join(SOURCE_MANNER_FILE_PATH, dirEntry.name);
+      const stats = Deno.statSync(filename);
+      if (!stats.isFile) {
+        continue;
+      }
+
+      if ((++readedFileCount) % 100 === 0) {
+        showUsedTime(`readed ${readedFileCount} files`);
+      }
+      Deno.readTextFileSync(filename).split("\n").forEach((line) =>
+        append(line.split(":")[0])
+      );
+    }
+    output();
+
+    // File count: 33 files
+  }
+
+  async function joinCubeFiles() {
+    logFilenamePostfix = "_joinCubeFiles";
+    const SOURCE_MANNER_FILE_PATH = `${SOURCE_FILE_TOP_PATH}cubes/`;
+
+    const CUBE_GOAL_FILE_NAME = `${GOAL_FILE_TOP_PATH}cubes.txt`;
+    Deno.writeTextFileSync(CUBE_GOAL_FILE_NAME, "");
+
+    let readedFileCount = 0;
+    for await (const dirEntry of Deno.readDir(SOURCE_MANNER_FILE_PATH)) {
+      const filename = path.join(SOURCE_MANNER_FILE_PATH, dirEntry.name);
+      const stats = Deno.statSync(filename);
+      if (!stats.isFile) {
+        continue;
+      }
+
+      if ((++readedFileCount) % 100 === 0) { // || readedFileCount < 10) {
+        showUsedTime(`readed ${readedFileCount} files`);
+      }
+
+      Deno.writeTextFileSync(
+        CUBE_GOAL_FILE_NAME,
+        Deno.readTextFileSync(filename),
+        APPEND_TRUE_FLAG,
+      );
+    }
   }
 })();
 
@@ -823,10 +413,12 @@ showUsedTime("end");
 log(`end: ${(new Date()).toLocaleString()}`);
 logUsedTime("Total", performance.now() - DATE_BEGIN);
 
-copySync(LOG_FILE_NAME, `log_${STEP_FLAG}.txt`, { overwrite: true });
-copySync(LOG_FILE_NAME, `${GOAL_FILE_TOP_PATH}log${logFilenamePostfix}.txt`, {
-  overwrite: true,
-});
+copySync(LOG_FILE_NAME, `log_${STEP_FLAG}.txt`, OVER_WRITE_TRUE_FLAG);
+copySync(
+  LOG_FILE_NAME,
+  `${GOAL_FILE_TOP_PATH}log${logFilenamePostfix}.txt`,
+  OVER_WRITE_TRUE_FLAG,
+);
 Deno.removeSync(LOG_FILE_NAME);
 
 /*
@@ -840,4 +432,6 @@ deno run --v8-flags=--max-old-space-size=20480 -A P:\anqi\Desktop\tech\ts\projec
 deno run --v8-flags=--max-old-space-size=20480 -A %pwd%\cubeCompute6_step4.ts
 
 cls && deno run --v8-flags=--max-old-space-size=20480 -A %pwd%\cubeCompute6_step4.ts
+
+cd /d E:\_cubes_240428
 */

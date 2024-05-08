@@ -11,7 +11,6 @@
  * <zh_cn>
  * 创建：2024年4月27日 23:35:47
  * 功能：从第一步所获取的中间正方体开始，生成未进行1转24的正方体
- * 缺陷：部分正方体无法直接裁剪与粘贴出来，因其违背物理规律
  * </zh_cn>
  *
  * <zh_tw>
@@ -20,18 +19,18 @@
  * </zh_tw>
  */
 
-// https://www.cnblogs.com/livelab/p/14111142.html
 import {
   copySync,
   emptyDirSync,
   ensureDirSync,
   existsSync,
-} from "https://deno.land/std/fs/mod.ts"; // copy
+} from "https://deno.land/std/fs/mod.ts";
 import * as path from "https://deno.land/std/path/mod.ts";
 
 import {
   ANGLE_COUNT,
   AppendSiblingsOptions,
+  Cell,
   CellAppendInfoManner,
   CellBorderLine,
   CellBorderPosition,
@@ -48,6 +47,7 @@ import {
   FourDirectionCount,
   FourDirectionMaxIndex,
   getCubeFromJson,
+  getReversedRelation,
   getSixFaceTwentyFourAngleRelationTwelveEdge,
   global_removed_middle_cube_count,
   log,
@@ -72,6 +72,7 @@ import {
   SixFaceTwentyFourAngleToTwelveEdge,
   TwelveEdge,
   TwelveEdges,
+  TwoCellRowColIndex,
 } from "./cubeCore.ts";
 
 const STEP_FLAG = "step2";
@@ -90,7 +91,70 @@ emptyDirSync(GOAL_FILE_TOP_PATH);
 log(`begin: ${(new Date()).toLocaleString()}`);
 const DATE_BEGIN = performance.now();
 
-const SOURCE_FILE_TOP_PATH = "./step1/";
+const OVER_WRITE_TRUE_FLAG = { overwrite: true };
+
+// const SOURCE_FILE_TOP_PATH = "./step1/";
+// const SOURCE_FILE_TOP_PATH = "../step1_rows_23/";
+// const SOURCE_FILE_TOP_PATH = "../step1_rows_2/";
+const SOURCE_FILE_TOP_PATH = "C:\\__cube\\240507A\\step1_rows_23\\";
+
+const GOAL_CUBE_FILE_PATH = `${GOAL_FILE_TOP_PATH}cubesOnlyFirstOfTwentyFour/`;
+ensureDirSync(GOAL_CUBE_FILE_PATH);
+emptyDirSync(GOAL_CUBE_FILE_PATH);
+
+const APPEND_TRUE_FLAG = { append: true };
+const CHECK_FACES_LAYER_INDEX_FAILED_FILENAME =
+  `${GOAL_FILE_TOP_PATH}checkFacesLayerIndexFailed.txt`;
+const FIX_LONELY_FACE_OF_CUBE_FILENAME =
+  `${GOAL_FILE_TOP_PATH}fixLonelyFaceOfCube.txt`;
+const FIX_HIDDEN_PIECES_FILENAME = `${GOAL_FILE_TOP_PATH}fixHiddenPieces.txt`;
+const FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT_FILENAME =
+  `${GOAL_FILE_TOP_PATH}fixLonelyFaceOfCubeAndAppendIt.txt`;
+
+const CHECK_FACES_LAYER_INDEX_FAILED_FILE_CONTENT_ARRAY: string[] = [];
+const FIX_LONELY_FACE_OF_CUBE_FILE_CONTENT_ARRAY: string[] = [];
+const FIX_HIDDEN_PIECES_FILE_CONTENT_ARRAY: string[] = [];
+const FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT_FILE_CONTENT_ARRAY: string[] = [];
+
+const MIDDLE_FILE_CONTENT_ARRAY = [
+  CHECK_FACES_LAYER_INDEX_FAILED_FILE_CONTENT_ARRAY,
+  FIX_LONELY_FACE_OF_CUBE_FILE_CONTENT_ARRAY,
+  FIX_HIDDEN_PIECES_FILE_CONTENT_ARRAY,
+  FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT_FILE_CONTENT_ARRAY,
+];
+const MIDDLE_FILENAME_ARRAY = [
+  CHECK_FACES_LAYER_INDEX_FAILED_FILENAME,
+  FIX_LONELY_FACE_OF_CUBE_FILENAME,
+  FIX_HIDDEN_PIECES_FILENAME,
+  FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT_FILENAME,
+];
+
+enum MiddleFileKind {
+  CheckFacesLayerIndexFailed,
+  FixLonelyFaceOfCube,
+  FixHiddenPieces,
+  FixLonelyFaceOfCubeAndAppendIt,
+}
+function appendContent(content: string, middleFileKind: MiddleFileKind) {
+  const CONTENT_ARRAY = MIDDLE_FILE_CONTENT_ARRAY[middleFileKind];
+  CONTENT_ARRAY.push(content);
+  const COUNT = CONTENT_ARRAY.length;
+
+  if (COUNT >= DEBUG.OUTPUT_ROW_COUNT_PER_TIME) {
+    appendFile(middleFileKind);
+  }
+}
+
+function appendFile(middleFileKind: MiddleFileKind) {
+  const CONTENT_ARRAY = MIDDLE_FILE_CONTENT_ARRAY[middleFileKind];
+  const FILENAME = MIDDLE_FILENAME_ARRAY[middleFileKind];
+  Deno.writeTextFileSync(
+    FILENAME,
+    CONTENT_ARRAY.join("\n").concat("\n"),
+    APPEND_TRUE_FLAG,
+  );
+  CONTENT_ARRAY.length = 0;
+}
 
 const COL_COUNT = 5;
 const MAX_COL_INDEX = COL_COUNT - 1;
@@ -101,6 +165,9 @@ const DEBUG = {
   // false true
   CUBE_COUNT_PER_FILE: 10240,
 
+  // Too big: OUTPUT_ROW_COUNT_PER_TIME: 204800,
+  OUTPUT_ROW_COUNT_PER_TIME: 20480,
+
   SHOW_MIDDLE_CUBE_CONVERT_INFO: false,
 };
 
@@ -109,10 +176,13 @@ await (async () => {
   let nextCubeNo = 1 - CUBE_NO_STEP;
   const CUBES: Cube[] = [];
 
-  for (let rowCountLoop = 2; rowCountLoop <= 3; ++rowCountLoop) {
+  for (let rowCountLoop = 2; rowCountLoop <= 5; ++rowCountLoop) {
     const ROW_COUNT = rowCountLoop;
     const SOURCE_FILE_PATH =
       `${SOURCE_FILE_TOP_PATH}${ROW_COUNT}rows_${COL_COUNT}cols/`;
+    if (!existsSync(SOURCE_FILE_PATH)) {
+      continue;
+    }
 
     for await (const dirEntry of Deno.readDir(SOURCE_FILE_PATH)) {
       const filename = path.join(SOURCE_FILE_PATH, dirEntry.name);
@@ -351,11 +421,14 @@ await (async () => {
                 // );
 
                 // 通过六面及十二棱可用片，计算十二棱是否可插入
+                // cloned.twelveEdges.forEach((twelveEdge) => {
+                //   if (twelveEdge.pieces.length) {
+                //     twelveEdge.canBeInserted = true;
+                //     return;
+                //   }
+                // });
                 cloned.twelveEdges.forEach((twelveEdge) => {
-                  if (twelveEdge.pieces.length) {
-                    twelveEdge.canBeInserted = true;
-                    return;
-                  }
+                  twelveEdge.canBeInserted = !!twelveEdge.pieces.length;
                 });
 
                 const twelveEdges = cloned.twelveEdges as OneOfTwelveEdges[];
@@ -598,7 +671,20 @@ await (async () => {
                   });
                 });
 
-                appendCubeWithoutOneToTwentyFour(cloned);
+                // appendCubeWithoutOneToTwentyFour(cloned);
+                if (cloned.checkFacesLayerIndex()) {
+                  fixLonelyFaceOfCubeAndAppendIt(cloned);
+                } else {
+                  // Deno.writeTextFileSync(
+                  //   CHECK_FACES_LAYER_INDEX_FAILED_FILENAME,
+                  //   JSON.stringify(cloned),
+                  //   APPEND_TRUE_FLAG,
+                  // );
+                  appendContent(
+                    JSON.stringify(cloned),
+                    MiddleFileKind.CheckFacesLayerIndexFailed,
+                  );
+                }
               });
             });
           });
@@ -607,6 +693,406 @@ await (async () => {
     });
 
     // log(`call times: ${times}`);
+  }
+
+  /**
+   * <en_us>en_us</en_us>
+   * <zh_cn>检查是否有孤面，若有，则将相连的插片或其它方向又叠到同一位置的插片转为面（内外皆可）；随后处理隐藏面</zh_cn>
+   * <zh_tw>zh_tw</zh_tw>
+   *
+   * @param cube Cube
+   * <en_us>en_us</en_us>
+   * <zh_cn>需修正的正方体</zh_cn>
+   * <zh_tw>zh_tw</zh_tw>
+   */
+  function fixLonelyFaceOfCubeAndAppendIt(
+    cube: Cube,
+    recursiveTimes: number = 1,
+  ) {
+    const { cells, sixFaces, twelveEdges } = cube;
+    const { cells: SOURCE_CUBE_CELLS } = cube;
+
+    const PIECE_CELL_ARRAY: CellObject[] = [];
+    twelveEdges.forEach((twelveEdge, twelveEdgeIndex) => {
+      twelveEdge.pieces.forEach((piece) => {
+        const [rowIndex, colIndex] = piece;
+        const CELL = cells[rowIndex][colIndex];
+        (CELL as unknown as { twelveEdgeIndex: number }).twelveEdgeIndex =
+          twelveEdgeIndex;
+        PIECE_CELL_ARRAY.push(CELL);
+      });
+    });
+
+    const LONELY_FACE_CELL_ARRAY: CellObject[] = [];
+    sixFaces.forEach((faces) => {
+      if (faces.length > 1) {
+        return;
+      }
+
+      const [firstRowIndex, firstColIndex, secondRowIndex] = faces[0];
+      // 	<en_us>en_us</en_us>
+      // 	<zh_cn>排除插片（只有一条内联线，无关联插片）</zh_cn>
+      // 	<zh_tw>zh_tw</zh_tw>
+      if (typeof secondRowIndex !== "undefined") {
+        return;
+      }
+
+      const CELL = cells[firstRowIndex][firstColIndex];
+      const RELATION_PIECE_CELL_ARRAY: CellObject[] = [];
+      const INNER_LINE_COUNT = CELL.borderLines.filter((borderLine) =>
+        borderLine === CellBorderLine.InnerLine
+      ).length;
+      PIECE_CELL_ARRAY.forEach((pieceCell) => {
+        if (
+          pieceCell.relatedInformationWhenAdding.rowIndex === firstRowIndex &&
+          pieceCell.relatedInformationWhenAdding.colIndex === firstColIndex
+        ) {
+          RELATION_PIECE_CELL_ARRAY.push(pieceCell);
+        }
+      });
+      if (INNER_LINE_COUNT - RELATION_PIECE_CELL_ARRAY.length === 1) {
+        LONELY_FACE_CELL_ARRAY.push(CELL);
+
+        (CELL as unknown as { relationPieceCellArray: CellObject[] })
+          .relationPieceCellArray = RELATION_PIECE_CELL_ARRAY;
+
+        const CELL_SIXFACE = CELL.sixFace;
+        const SAME_FACE_PIECE_CELL_ARRAY: CellObject[] = [];
+        PIECE_CELL_ARRAY.forEach((pieceCell) => {
+          if (pieceCell.sixFace === CELL_SIXFACE) {
+            SAME_FACE_PIECE_CELL_ARRAY.push(pieceCell);
+          }
+        });
+        (CELL as unknown as { sameFacePieceCellArray: CellObject[] })
+          .sameFacePieceCellArray = SAME_FACE_PIECE_CELL_ARRAY;
+      }
+    });
+
+    const LONELY_FACE_CELL_ARRAY_LENGTH = LONELY_FACE_CELL_ARRAY.length;
+    if (!LONELY_FACE_CELL_ARRAY_LENGTH) {
+      fixHiddenPiecesOfCubeAndAppendIt(cube);
+      return;
+    }
+
+    const CUBE_NO = cube.no;
+    console.log({
+      recursiveTimes,
+      cubeNo: CUBE_NO,
+      LONELY_FACE_CELL_ARRAY_LENGTH,
+    });
+    appendContent(
+      `${recursiveTimes}\t${CUBE_NO}\t${LONELY_FACE_CELL_ARRAY_LENGTH}`,
+      MiddleFileKind.FixLonelyFaceOfCubeAndAppendIt,
+    );
+
+    const TAB = "\t".repeat(recursiveTimes - 1);
+    // Deno.writeTextFileSync(
+    //   FIX_LONELY_FACE_OF_CUBE_FILENAME,
+    //   `${TAB}${recursiveTimes}\t${LONELY_FACE_CELL_ARRAY.length}\n${TAB}${
+    //     JSON.stringify(cube)
+    //   }`,
+    //   APPEND_TRUE_FLAG,
+    // );
+    appendContent(
+      `${TAB}${recursiveTimes}\t${LONELY_FACE_CELL_ARRAY.length}\n${TAB}${
+        JSON.stringify(cube)
+      }`,
+      MiddleFileKind.FixLonelyFaceOfCube,
+    );
+
+    const FIRST_LONELY_FACE_CELL = LONELY_FACE_CELL_ARRAY[0];
+    const { sameFacePieceCellArray, relationPieceCellArray } =
+      FIRST_LONELY_FACE_CELL as unknown as {
+        sameFacePieceCellArray: CellObject[];
+        relationPieceCellArray: CellObject[];
+      };
+    // Deno.writeTextFileSync(
+    //   FIX_LONELY_FACE_OF_CUBE_FILENAME,
+    //   `${TAB}sameFacePieceCellArray: ${
+    //     JSON.stringify(sameFacePieceCellArray)
+    //   }\n${TAB}relationPieceCellArray: ${
+    //     JSON.stringify(relationPieceCellArray)
+    //   }`,
+    //   APPEND_TRUE_FLAG,
+    // );
+    appendContent(
+      `${TAB}sameFacePieceCellArray: ${
+        JSON.stringify(sameFacePieceCellArray)
+      }\n${TAB}relationPieceCellArray: ${
+        JSON.stringify(relationPieceCellArray)
+      }`,
+      MiddleFileKind.FixLonelyFaceOfCube,
+    );
+
+    const {
+      layerIndex: LONELY_FACE_LAYER_INDEX,
+      sixFace: LONELY_FACE_SIX_FACE,
+      rowIndex: LONELY_FACE_ROW_INDEX,
+      colIndex: LONELY_FACE_COL_INDEX,
+    } = FIRST_LONELY_FACE_CELL;
+
+    sameFacePieceCellArray.forEach((pieceCell) => {
+      const {
+        rowIndex: PIECE_CELL_ROW_INDEX,
+        colIndex: PIECE_CELL_COL_INDEX,
+      } = pieceCell;
+      for (let inOutIndex = 0; inOutIndex < 2; ++inOutIndex) {
+        const cloned = cube.clone();
+        const { cells, sixFaces, twelveEdges } = cloned;
+        const CLONED_LONELY_FACE_CELL =
+          cells[LONELY_FACE_ROW_INDEX][LONELY_FACE_COL_INDEX];
+        const CLONED_PIECE_CELL =
+          cells[PIECE_CELL_ROW_INDEX][PIECE_CELL_COL_INDEX];
+
+        CLONED_PIECE_CELL.feature = CellFeature.Face;
+        const PIECES = twelveEdges[
+          (SOURCE_CUBE_CELLS[PIECE_CELL_ROW_INDEX][
+            PIECE_CELL_COL_INDEX
+          ] as unknown as {
+            twelveEdgeIndex: number;
+          }).twelveEdgeIndex
+        ].pieces;
+        PIECES.splice(
+          PIECES.indexOf([
+            PIECE_CELL_ROW_INDEX,
+            PIECE_CELL_COL_INDEX,
+          ]),
+          1,
+        );
+
+        if (inOutIndex === 0) {
+          CLONED_PIECE_CELL.layerIndex = LONELY_FACE_LAYER_INDEX + 1;
+          sixFaces[LONELY_FACE_SIX_FACE][0] = [
+            LONELY_FACE_ROW_INDEX,
+            LONELY_FACE_COL_INDEX,
+            PIECE_CELL_ROW_INDEX,
+            PIECE_CELL_COL_INDEX,
+          ] as OneOrTwoCellRowColIndex;
+        } else {
+          CLONED_LONELY_FACE_CELL.layerIndex = LONELY_FACE_LAYER_INDEX + 1;
+          CLONED_PIECE_CELL.layerIndex = LONELY_FACE_LAYER_INDEX;
+          sixFaces[LONELY_FACE_SIX_FACE][0] = [
+            PIECE_CELL_ROW_INDEX,
+            PIECE_CELL_COL_INDEX,
+            LONELY_FACE_ROW_INDEX,
+            LONELY_FACE_COL_INDEX,
+          ] as OneOrTwoCellRowColIndex;
+        }
+
+        cloned.updateTwelveEdges();
+        fixLonelyFaceOfCubeAndAppendIt(cloned, recursiveTimes + 1);
+      }
+    });
+
+    relationPieceCellArray.forEach((pieceCell) => {
+      const {
+        rowIndex: PIECE_CELL_ROW_INDEX,
+        colIndex: PIECE_CELL_COL_INDEX,
+      } = pieceCell;
+      for (let inOutIndex = 0; inOutIndex < 2; ++inOutIndex) {
+        const cloned = cube.clone();
+        const { cells, sixFaces, twelveEdges } = cloned;
+
+        const CLONED_PIECE_CELL =
+          cells[PIECE_CELL_ROW_INDEX][PIECE_CELL_COL_INDEX];
+
+        CLONED_PIECE_CELL.feature = CellFeature.Face;
+        const PIECES = twelveEdges[
+          (SOURCE_CUBE_CELLS[PIECE_CELL_ROW_INDEX][
+            PIECE_CELL_COL_INDEX
+          ] as unknown as {
+            twelveEdgeIndex: number;
+          }).twelveEdgeIndex
+        ].pieces;
+        PIECES.splice(
+          PIECES.indexOf([
+            PIECE_CELL_ROW_INDEX,
+            PIECE_CELL_COL_INDEX,
+          ]),
+          1,
+        );
+
+        const CLONED_PIECE_CELL_SIX_FACE = CLONED_PIECE_CELL.sixFace;
+        const CLONED_PIECE_CELL_CELL_INDEX = CLONED_PIECE_CELL.cellIndex;
+        const CLONED_SIX_FACE_ITEM_ARRAY = sixFaces[CLONED_PIECE_CELL_SIX_FACE];
+
+        const OLD_CELL_ARRAY: CellObject[] = [];
+        let maxLayerIndex = 0;
+        cells.filter((cellRow) =>
+          cellRow.forEach((cell) => {
+            if (
+              cell.feature !== CellFeature.Face ||
+              cell.sixFace !== CLONED_PIECE_CELL_SIX_FACE
+            ) {
+              return;
+            }
+            if (cell.cellIndex !== CLONED_PIECE_CELL_CELL_INDEX) {
+              OLD_CELL_ARRAY.push(cell);
+              maxLayerIndex = Math.max(maxLayerIndex, cell.layerIndex);
+            }
+          })
+        );
+        if (inOutIndex === 0) {
+          CLONED_SIX_FACE_ITEM_ARRAY.push([
+            PIECE_CELL_ROW_INDEX,
+            PIECE_CELL_COL_INDEX,
+          ]);
+          CLONED_PIECE_CELL.layerIndex = maxLayerIndex + 1;
+        } else {
+          CLONED_PIECE_CELL.layerIndex = 1;
+          CLONED_SIX_FACE_ITEM_ARRAY.unshift([
+            PIECE_CELL_ROW_INDEX,
+            PIECE_CELL_COL_INDEX,
+          ]);
+          OLD_CELL_ARRAY.forEach((cell) => ++cell.layerIndex);
+        }
+
+        cloned.updateTwelveEdges();
+        fixLonelyFaceOfCubeAndAppendIt(cloned, recursiveTimes + 1);
+      }
+    });
+  }
+
+  /**
+   * <en_us>en_us</en_us>
+   * <zh_cn>将隐藏插片转为面（内外皆可）</zh_cn>
+   * <zh_tw>zh_tw</zh_tw>
+   *
+   * @param cube
+   * <en_us>en_us</en_us>
+   * <zh_cn>需修正的正方体</zh_cn>
+   * <zh_tw>zh_tw</zh_tw>
+   */
+  function fixHiddenPiecesOfCubeAndAppendIt(cube: Cube) {
+    // TODO(@anqisoft) 找到相应算法
+    let hidePieceCount = 0;
+    const { cells, sixFaces, twelveEdges } = cube;
+
+    const CELL_ARRAY = cube.getCellArray();
+    function getCellByCellIndex(cellIndex: number): CellObject | undefined {
+      const FILTERED = CELL_ARRAY.filter((cell) =>
+        cell.cellIndex === cellIndex
+      );
+      return FILTERED.length ? FILTERED[0] : undefined;
+    }
+
+    twelveEdges.forEach((twelveEdge) => {
+      const REMOVE_INDEX_ARRAY: number[] = [];
+      twelveEdge.pieces.forEach(
+        ([pieceRowIndex, pieceColIndex], pieceIndex) => {
+          const PIECE_CELL = cells[pieceRowIndex][pieceColIndex];
+          // const {
+          //   sixFace: PIECE_CELL_SIX_FACE,
+          //   faceDirection: PIECE_CELL_FACE_DIRECTION,
+          // } = PIECE_CELL;
+          const {
+            rowIndex: PIECE_CELL_RELATION_CELL_ROW_INDEX,
+            colIndex: PIECE_CELL_RELATION_CELL_COL_INDEX,
+            relation: PIECE_CELL_RELATION,
+          } = PIECE_CELL.relatedInformationWhenAdding.rowIndex === -1
+            ? cube.getCoreCellReserveRelatedInformation()
+            : PIECE_CELL.relatedInformationWhenAdding;
+          const PIECE_CELL_REVERSED_RELATION = getReversedRelation(
+            PIECE_CELL_RELATION,
+          );
+          // console.log({
+          //   PIECE_CELL_RELATION_CELL_ROW_INDEX,
+          //   PIECE_CELL_RELATION_CELL_COL_INDEX,
+          //   PIECE_CELL_RELATION,
+          //   PIECE_CELL_REVERSED_RELATION,
+          //   pieceRowIndex,
+          //   pieceColIndex,
+          //   coreRowIndex: cube.coreRowIndex,
+          //   coreColIndex: cube.coreColIndex,
+          // });
+          const PIECE_CELL_RELATION_CELL =
+            cells[PIECE_CELL_RELATION_CELL_ROW_INDEX][
+              PIECE_CELL_RELATION_CELL_COL_INDEX
+            ];
+
+          const PIECE_CELL_RELATION_CELL_SIX_FACE =
+            PIECE_CELL_RELATION_CELL.sixFace;
+          const PIECE_CELL_RELATION_CELL_LAYER_INDEX =
+            PIECE_CELL_RELATION_CELL.layerIndex;
+
+          const SAME_FACE_CELL_INFO_ARRAY =
+            sixFaces[PIECE_CELL_RELATION_CELL_SIX_FACE];
+          const SAME_FACE_CELL_INFO_COUNT = SAME_FACE_CELL_INFO_ARRAY.length;
+          let hasOuterFace = false;
+          for (
+            let sameFaceCellInfoIndex = 0;
+            sameFaceCellInfoIndex < SAME_FACE_CELL_INFO_COUNT;
+            ++sameFaceCellInfoIndex
+          ) {
+            const [
+              firstRowIndex,
+              firstColIndex,
+              secondRowIndex,
+              secondColIndex,
+            ] = SAME_FACE_CELL_INFO_ARRAY[sameFaceCellInfoIndex];
+            const firstCell = cells[firstRowIndex][firstColIndex];
+            if (
+              firstCell.layerIndex > PIECE_CELL_RELATION_CELL_LAYER_INDEX &&
+              firstCell.borderLines[PIECE_CELL_REVERSED_RELATION] ===
+                CellBorderLine.InnerLine &&
+              getCellByCellIndex(firstCell.getConnectedCellIndexByRelation(
+                  PIECE_CELL_REVERSED_RELATION,
+                ))?.feature === CellFeature.Face
+            ) {
+              hasOuterFace = true;
+              break;
+            }
+
+            if (
+              typeof secondRowIndex !== "undefined" &&
+              typeof secondColIndex !== "undefined"
+            ) {
+              const secondCell = cells[secondRowIndex][secondColIndex];
+              if (
+                secondCell.layerIndex > PIECE_CELL_RELATION_CELL_LAYER_INDEX &&
+                secondCell.borderLines[PIECE_CELL_REVERSED_RELATION] ===
+                  CellBorderLine.InnerLine &&
+                getCellByCellIndex(secondCell.getConnectedCellIndexByRelation(
+                    PIECE_CELL_REVERSED_RELATION,
+                  ))?.feature === CellFeature.Face
+              ) {
+                hasOuterFace = true;
+                break;
+              }
+            }
+          }
+
+          if (hasOuterFace) {
+            REMOVE_INDEX_ARRAY.push(pieceIndex);
+            PIECE_CELL.feature = CellFeature.Face;
+            PIECE_CELL.layerIndex = 0;
+            ++hidePieceCount;
+          }
+        },
+      );
+
+      REMOVE_INDEX_ARRAY.toReversed().forEach((index) =>
+        twelveEdge.pieces.splice(index, 1)
+      );
+    });
+
+    if (hidePieceCount) {
+      cube.updateTwelveEdges();
+    }
+
+    cube.sync();
+    if (hidePieceCount) {
+      // Deno.writeTextFileSync(
+      //   FIX_HIDDEN_PIECES_FILENAME,
+      //   JSON.stringify(cube),
+      //   APPEND_TRUE_FLAG,
+      // );
+      appendContent(
+        JSON.stringify(cube),
+        MiddleFileKind.FixHiddenPieces,
+      );
+    }
+    appendCubeWithoutOneToTwentyFour(cube);
   }
 
   function appendCubeWithoutOneToTwentyFour(cube: Cube) {
@@ -624,7 +1110,7 @@ await (async () => {
       return;
     }
 
-    const GOAL_FILE_NAME = `${GOAL_FILE_TOP_PATH}${
+    const GOAL_FILE_NAME = `${GOAL_CUBE_FILE_PATH}${
       (++fileNo).toString().padStart(6, "0")
     }.txt`;
     Deno.writeTextFileSync(
@@ -638,16 +1124,22 @@ await (async () => {
   }
 })();
 
+appendFile(MiddleFileKind.CheckFacesLayerIndexFailed);
+appendFile(MiddleFileKind.FixLonelyFaceOfCube);
+appendFile(MiddleFileKind.FixHiddenPieces);
+appendFile(MiddleFileKind.FixLonelyFaceOfCubeAndAppendIt);
+
 showUsedTime("end");
 log(`end: ${(new Date()).toLocaleString()}`);
 logUsedTime("Total", performance.now() - DATE_BEGIN);
 
-copySync(LOG_FILE_NAME, `log_${STEP_FLAG}.txt`, { overwrite: true });
-copySync(LOG_FILE_NAME, `${GOAL_FILE_TOP_PATH}log${logFilenamePostfix}.txt`, {
-  overwrite: true,
-});
+copySync(LOG_FILE_NAME, `log_${STEP_FLAG}.txt`, OVER_WRITE_TRUE_FLAG);
+copySync(
+  LOG_FILE_NAME,
+  `${GOAL_FILE_TOP_PATH}log${logFilenamePostfix}.txt`,
+  OVER_WRITE_TRUE_FLAG,
+);
 Deno.removeSync(LOG_FILE_NAME);
-
 /*
 cd /d C:\__cube\240507A\
 set pwd=P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\src\
@@ -656,6 +1148,7 @@ cls && deno lint %pwd%\cubeCompute6_step2.ts && deno fmt %pwd%\cubeCompute6_step
 
 deno run --v8-flags=--max-old-space-size=20480 -A P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\src\cubeCompute6_step2.ts
 
+deno lint %pwd%\cubeCompute6_step2.ts
 deno run --v8-flags=--max-old-space-size=20480 -A %pwd%\cubeCompute6_step2.ts
 
 */

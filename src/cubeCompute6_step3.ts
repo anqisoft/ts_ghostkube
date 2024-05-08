@@ -25,7 +25,6 @@
  *          最多4*15+1=61位一个，最大编号112260888，最多68,4791,4168字数据，约68亿字，
  *          不确定是否19G左右
  *       4. 最终数据量约100亿字，预计20-30G
- * 缺陷：当前生成第二步的正方体时，未移除不符合物理规律的正方体（因还没想出相应算法）
  * </zh_cn>
  *
  * <zh_tw>
@@ -34,13 +33,12 @@
  * </zh_tw>
  */
 
-// https://www.cnblogs.com/livelab/p/14111142.html
 import {
   copySync,
   emptyDirSync,
   ensureDirSync,
   existsSync,
-} from "https://deno.land/std/fs/mod.ts"; // copy
+} from "https://deno.land/std/fs/mod.ts";
 import * as path from "https://deno.land/std/path/mod.ts";
 
 import {
@@ -105,22 +103,18 @@ emptyDirSync(GOAL_FILE_TOP_PATH);
 log(`begin: ${(new Date()).toLocaleString()}`);
 const DATE_BEGIN = performance.now();
 
-const SOURCE_FILE_TOP_PATH = "./step2/";
+const OVER_WRITE_TRUE_FLAG = { overwrite: true };
 
-const COL_COUNT = 5;
-const MAX_COL_INDEX = COL_COUNT - 1;
+const SOURCE_FILE_TOP_PATH = "./step2/cubesOnlyFirstOfTwentyFour/";
+
+// const OK_FILE_TOP_PATH = `./_ok/`;
+// ensureDirSync(OK_FILE_TOP_PATH);
+// emptyDirSync(OK_FILE_TOP_PATH);
 
 const APPEND_TRUE_FLAG = { append: true };
-const EMPTY_OBJECT = {};
 
 //  同一方案24个角度
 const MANNER_COUNT = ANGLE_COUNT;
-
-const SIMPLE_MANNER_ARRAY: string[] = [];
-const SIMPLE_DATA_ARRAY: {
-  manner: string;
-  cube: Cube;
-}[] = [];
 
 await (async () => {
   let fileNo = 0;
@@ -583,14 +577,22 @@ await (async () => {
   }
 })();
 
+// copySync(
+//   `${GOAL_FILE_TOP_PATH}lines.txt`,
+//   OK_FILE_TOP_PATH,
+//   OVER_WRITE_TRUE_FLAG,
+// );
+
 showUsedTime("end");
 log(`end: ${(new Date()).toLocaleString()}`);
 logUsedTime("Total", performance.now() - DATE_BEGIN);
 
-copySync(LOG_FILE_NAME, `log_${STEP_FLAG}.txt`, { overwrite: true });
-copySync(LOG_FILE_NAME, `${GOAL_FILE_TOP_PATH}log${logFilenamePostfix}.txt`, {
-  overwrite: true,
-});
+copySync(LOG_FILE_NAME, `log_${STEP_FLAG}.txt`, OVER_WRITE_TRUE_FLAG);
+copySync(
+  LOG_FILE_NAME,
+  `${GOAL_FILE_TOP_PATH}log${logFilenamePostfix}.txt`,
+  OVER_WRITE_TRUE_FLAG,
+);
 Deno.removeSync(LOG_FILE_NAME);
 
 /*

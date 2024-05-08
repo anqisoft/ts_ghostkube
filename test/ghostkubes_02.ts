@@ -1,27 +1,31 @@
 // v0.0.1
 
-import { log, LOG_FILE_NAME, logUsedTime, showUsedTime } from './log.ts';
-import { done } from './ghostkubes.ts';
+import { log, logUsedTime, showUsedTime } from "./log.ts";
+import { done } from "./ghostkubes.ts";
 
-globalThis.LOG_FILE_NAME = './ghostkubes_02.log.txt';
-const GOAL_FILE = './js/data_ghostkubes_02.js';
+(globalThis as unknown as { LOG_FILE_NAME: string }).LOG_FILE_NAME =
+  "./ghostkubes_02.log.txt";
+const GOAL_FILE = "./js/data_ghostkubes_02.js";
 
-const DATAS = [];
+const DATAS: {
+  setName: string;
+  cubes: [number[], number[]][];
+}[] = [];
 
 log(`begin: ${(new Date()).toLocaleString()}`);
 const DATE_BEGIN = performance.now();
 
-showUsedTime('init');
+showUsedTime("init");
 try {
-	await done(DATAS, GOAL_FILE);
+  await done(DATAS, GOAL_FILE);
 } catch (error) {
-	log('[error]', error);
+  log("[error]", error);
 }
-showUsedTime('done');
+showUsedTime("done");
 
 log(`end: ${(new Date()).toLocaleString()}`);
-logUsedTime('Total', performance.now() - DATE_BEGIN);
-log('');
+logUsedTime("Total", performance.now() - DATE_BEGIN);
+log("");
 
 /*
 set pwd=P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\test

@@ -19,13 +19,12 @@
  * </zh_tw>
  */
 
-// https://www.cnblogs.com/livelab/p/14111142.html
 import {
   copySync,
   emptyDirSync,
   ensureDirSync,
   existsSync,
-} from "https://deno.land/std/fs/mod.ts"; // copy
+} from "https://deno.land/std/fs/mod.ts";
 
 import {
   CellBorderLine,
@@ -59,7 +58,39 @@ interface PrepareJoinCellToCubeResult {
   twelveEdge: TwelveEdge;
 }
 
+/*
+  COUNT_LINES_ONLY: false,
+  COUNT_CUT_MANNER_ONLY: true,
+
+  // countByRowCount(2);
+  // countByRowCount(3);
+  countByRowCount(4);
+  countByRowCount(5);
+*/
+// const STEP_FLAG = "step1_count_but_not_output_rows_4_and_5";
+
+/*
+  COUNT_LINES_ONLY: true,
+  COUNT_CUT_MANNER_ONLY: true,
+
+  countByRowCount(2);
+  countByRowCount(3);
+  countByRowCount(4);
+  countByRowCount(5);
+*/
+// const STEP_FLAG = "step1_count_lines_only_rows_2345";
+
+/*
+  COUNT_LINES_ONLY: false,
+  COUNT_CUT_MANNER_ONLY: false,
+
+  countByRowCount(2);
+  countByRowCount(3);
+  // countByRowCount(4);
+  // countByRowCount(5);
+*/
 const STEP_FLAG = "step1";
+
 const LOG_FILE_NAME = "./log.txt";
 if (existsSync(LOG_FILE_NAME)) {
   Deno.removeSync(LOG_FILE_NAME);
@@ -75,8 +106,13 @@ emptyDirSync(GOAL_FILE_TOP_PATH);
 log(`begin: ${(new Date()).toLocaleString()}`);
 const DATE_BEGIN = performance.now();
 
+const OVER_WRITE_TRUE_FLAG = { overwrite: true };
+
 const DEBUG = {
   // false true
+  COUNT_LINES_ONLY: false,
+  COUNT_CUT_MANNER_ONLY: false,
+
   MIDDLE_CUBE_BATCH_DEAL_COUNT: 10240,
 
   SHOW_CUT_MANNERS: true,
@@ -100,6 +136,7 @@ let totalMiddleCubeCount = 0;
 function countByRowCount(
   ROW_COUNT: number,
 ) {
+  let thisLineMannerCount = 0;
   let thisLineMannerIndex = 0;
 
   let middleFileNo = 0;
@@ -146,7 +183,6 @@ function countByRowCount(
 
           const { relatedInformationWhenAdding, borderLines } = goalCell;
 
-          // goalCell.layerIndex = 0;
           goalCell.addOrder = sourceCell.addOrder;
 
           const sourceRelatedInformationWhenAdding =
@@ -184,7 +220,11 @@ function countByRowCount(
         }
       }
 
-      appendMiddleCube(cube);
+      if (DEBUG.COUNT_CUT_MANNER_ONLY) {
+        ++thisMiddleCubeCount;
+      } else {
+        appendMiddleCube(cube);
+      }
     }
 
     function appendMiddleCube(cube: Cube) {
@@ -199,16 +239,6 @@ function countByRowCount(
       if (!MIDDLE_CUBE_COUNT) {
         return;
       }
-
-      // let codes = '';
-      // for (
-      // 	let cubeIndex = 0;
-      // 	cubeIndex < MIDDLE_CUBE_COUNT;
-      // 	++cubeIndex
-      // ) {
-      // 	codes += `${JSON.stringify(MIDDLE_CUBE_ARRAY[cubeIndex])}\n`;
-      // }
-      // Deno.writeTextFileSync(`${MIDDLE_FILE_NAME_PREFIX}${++middleFileNo}.txt`, codes);
 
       Deno.writeTextFileSync(
         `${MIDDLE_FILE_NAME_PREFIX}${
@@ -278,8 +308,7 @@ function countByRowCount(
           const LOOP_COUNT = verticalColIndex === 3 ? 2 : 1;
           for (let iOffset = 1; iOffset <= LOOP_COUNT; ++iOffset) {
             const colIndex = verticalColIndex - 1 + iOffset;
-            // const ADDRESS = `${rowIndex}${colIndex}`;
-            const ADDRESS = [rowIndex, colIndex];
+            const ADDRESS = [rowIndex, colIndex] as [number, number];
 
             if (rowIndex === 0) {
               if (HORIZONTAL_LINE_ARRAY[colIndex] === 3) {
@@ -353,11 +382,13 @@ function countByRowCount(
         }
 
         ++thisLineMannerIndex;
-        countByLines(
-          HORIZONTAL_LINE_ARRAY,
-          VERTICAL_LINE_ARRAY,
-          EMPTY_CELL_POSITOIN_ARRAY,
-        );
+        if (!DEBUG.COUNT_LINES_ONLY) {
+          countByLines(
+            HORIZONTAL_LINE_ARRAY,
+            VERTICAL_LINE_ARRAY,
+            EMPTY_CELL_POSITOIN_ARRAY,
+          );
+        }
       }
 
       showUsedTime(
@@ -379,7 +410,9 @@ function countByRowCount(
     ): PrepareJoinCellToCubeResult | null {
       const { cells } = cube;
 
-      // 如已添加，则返回null
+      // 	<en_us>en_us</en_us>
+      // 	<zh_cn>如已添加，则返回null</zh_cn>
+      // 	<zh_tw>zh_tw</zh_tw>
       const CELL = cells[rowIndex][colIndex];
       if (CELL.feature !== CellFeature.Unknown) {
         return null;
@@ -401,15 +434,6 @@ function countByRowCount(
           ? CellBorderLine.OuterLine
           : VERTICAL_LINE_ARRAY[LEFT_LINE_INDEX],
       ];
-      // log({
-      // 	rowIndex,
-      // 	colIndex,
-      // 	isCoreCell,
-
-      // 	TOP_LINE_INDEX,
-      // 	LEFT_LINE_INDEX,
-      // 	gridLines,
-      // });
 
       if (
         gridLines.filter((line) =>
@@ -431,15 +455,20 @@ function countByRowCount(
         relation: ConnectionRelation.Top,
       };
 
-      // 检查若添加进去，是否会冲突
+      // 	<en_us>en_us</en_us>
+      // 	<zh_cn>检查若添加进去，是否会冲突</zh_cn>
+      // 	<zh_tw>zh_tw</zh_tw>
       let sixFaceTwentyFourAngle: SixFaceTwentyFourAngle =
         SixFaceTwentyFourAngle.UpOriginal;
       let twelveEdge = TwelveEdge.NotSure;
       let hasError = false;
       let relationCellCount = 0;
-      // 故意交换顺序
+
+      // 	<en_us>en_us</en_us>
+      // 	<zh_cn>故意交换顺序</zh_cn>
+      // 	<zh_tw>zh_tw</zh_tw>
       [gridLines[2], gridLines[3], gridLines[0], gridLines[1]].forEach(
-        (line, relation) => {
+        (_line, relation) => {
           if (hasError) {
             return;
           }
@@ -479,7 +508,6 @@ function countByRowCount(
             relatedInformationWhenAdding.colIndex = oldCell.colIndex;
             relatedInformationWhenAdding.relation = relation;
 
-            // twelveEdge = SixFaceTwentyFourAngleToTwelveEdge[OLD_CELL_SIX_FACE_TWENTY_FOUR_ANGLE][relation];
             twelveEdge = getSixFaceTwentyFourAngleRelationTwelveEdge(
               OLD_CELL_SIX_FACE_TWENTY_FOUR_ANGLE,
               relation,
@@ -506,10 +534,6 @@ function countByRowCount(
       if (!isCoreCell && relatedInformationWhenAdding.rowIndex === -1) {
         return null;
       }
-
-      // if (hasError) {
-      // 	return null;
-      // }
 
       return {
         failed: hasError,
@@ -605,13 +629,13 @@ function countByRowCount(
               );
             }
 
-            // countAndPushIfOk(cube);
             cube.count();
-            // log(`cube.isValid: ${cube.isValid}`);
             if (cube.isValid) {
               countAndPushIfOk(cube);
 
-              // 已找到合适的方案，直接退出方法！
+              // 	<en_us>en_us</en_us>
+              // 	<zh_cn>已找到合适的方案，直接退出方法！</zh_cn>
+              // 	<zh_tw>zh_tw</zh_tw>
               return;
             } else {
               continue LABLE_OUTER_LOOP;
@@ -705,6 +729,9 @@ function countByRowCount(
     thisMiddleCubeCount,
     MIDDLE_CUBE_COUNT_ARRAY,
 
+    thisLineMannerCount,
+    thisLineMannerIndex,
+
     CUT_MANNER_COUNT_ARRAY,
     CUT_MANNER_ARRAY_LENGTH: CUT_MANNER_ARRAY.length,
   });
@@ -712,6 +739,8 @@ function countByRowCount(
 
 countByRowCount(2);
 countByRowCount(3);
+// countByRowCount(4);
+// countByRowCount(5);
 
 if (global_removed_middle_cube_count) {
   log("removed middle cube count:", global_removed_middle_cube_count);
@@ -736,10 +765,12 @@ showUsedTime("end");
 log(`end: ${(new Date()).toLocaleString()}`);
 logUsedTime("Total", performance.now() - DATE_BEGIN);
 
-copySync(LOG_FILE_NAME, `log_${STEP_FLAG}.txt`, { overwrite: true });
-copySync(LOG_FILE_NAME, `${GOAL_FILE_TOP_PATH}log${logFilenamePostfix}.txt`, {
-  overwrite: true,
-});
+copySync(LOG_FILE_NAME, `log_${STEP_FLAG}.txt`, OVER_WRITE_TRUE_FLAG);
+copySync(
+  LOG_FILE_NAME,
+  `${GOAL_FILE_TOP_PATH}log${logFilenamePostfix}.txt`,
+  OVER_WRITE_TRUE_FLAG,
+);
 Deno.removeSync(LOG_FILE_NAME);
 
 /*

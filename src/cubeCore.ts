@@ -22,6 +22,7 @@
  * </zh_tw>
 */
 
+const COL_COUNT = 5;
 const { floor } = Math;
 const SETTINGS = {
   mustContainEveryColumn: true,
@@ -144,24 +145,6 @@ interface Array extends ArrayRepeatFunction {}
 
   return RESULT;
 };
-
-// Slowly also......
-// export interface ArrayNewIndexOfFunction {
-// newIndexOf: (item: any) => number;
-// }
-// interface Array extends ArrayNewIndexOfFunction {}
-// (Array.prototype as unknown as ArrayNewIndexOfFunction).newIndexOf = function (
-// item: any,
-// ): number {
-// const COUNT = this.length;
-// for(let i = 0; i < COUNT; ++i) {
-// if(this[i] === item) {
-// return i;
-// }
-// }
-
-// return -1;
-// };
 
 export enum FourDirection {
   Original,
@@ -336,7 +319,10 @@ export enum ConnectionRelation {
 
 // 	SIX_FACE_AND_DIRECTION_RELATIONS.push(RELATIONS);
 // }
-// 在调试窗口直接获得相应结果，不再计算
+
+// 	<en_us>en_us</en_us>
+// 	<zh_cn>在调试窗口直接获得相应结果，不再计算</zh_cn>
+// 	<zh_tw>zh_tw</zh_tw>
 export const SIX_FACE_AND_DIRECTION_RELATIONS: SixFaceTwentyFourAngle[][] = [
   [20, 12, 16, 8],
   [9, 21, 13, 17],
@@ -396,51 +382,6 @@ export enum TwelveEdge {
 
   NotSure,
 }
-
-// export const SixFaceTwentyFourAngleToTwelveEdge: TwelveEdge[][] = [
-//   // U
-//   [
-//     TwelveEdge.UpTop,
-//     TwelveEdge.UpRight,
-//     TwelveEdge.UpBottom,
-//     TwelveEdge.UpLeft,
-//   ],
-//   // D
-//   [
-//     TwelveEdge.DownTop,
-//     TwelveEdge.DownLeft,
-//     TwelveEdge.DownBottom,
-//     TwelveEdge.DownRight,
-//   ],
-//   // L
-//   [
-//     TwelveEdge.BackLeft,
-//     TwelveEdge.UpLeft,
-//     TwelveEdge.FrontLeft,
-//     TwelveEdge.DownLeft,
-//   ],
-//   // R
-//   [
-//     TwelveEdge.BackRight,
-//     TwelveEdge.DownRight,
-//     TwelveEdge.FrontRight,
-//     TwelveEdge.UpRight,
-//   ],
-//   // F
-//   [
-//     TwelveEdge.DownBottom,
-//     TwelveEdge.FrontLeft,
-//     TwelveEdge.UpBottom,
-//     TwelveEdge.FrontRight,
-//   ],
-//   // B
-//   [
-//     TwelveEdge.DownTop,
-//     TwelveEdge.BackRight,
-//     TwelveEdge.UpTop,
-//     TwelveEdge.BackLeft,
-//   ],
-// ];
 
 export const SixFaceTwentyFourAngleToTwelveEdge: TwelveEdge[][] = [
   // U
@@ -616,50 +557,6 @@ export function convertTwelveEdgeToString(value: TwelveEdge): string {
   ][value];
 }
 
-// export function getSixFaceTwentyFourAngleRelationTwelveEdge(
-//   value: SixFaceTwentyFourAngle,
-//   relation: ConnectionRelation,
-// ): TwelveEdge {
-//   // UDLRFB + Top/Right/Bottom/Left =>
-//   // UpTop/UpRight/UpBottom/UpLeft/BackLeft/BackRight/FrontRight/FrontLeft/DownTop/DownRight/DownBottom/DownLeft
-//   const [sixFace, fourDirection] =
-//     convertSixFaceTwentyFourAngleToSixFaceAndDirection(value);
-//   // const ARRAY = ;
-//   const index = floor((relation + fourDirection + 0.5) % 4);
-
-//   const RESULT = SixFaceTwentyFourAngleToTwelveEdge[sixFace][index];
-//   if (typeof RESULT === "undefined") {
-//     console.error("getSixFaceTwentyFourAngleRelationTwelveEdge", {
-//       value,
-//       relation,
-//       sixFace,
-//       fourDirection,
-//       index: floor((relation + fourDirection - 0.5) % 4),
-//       array: SixFaceTwentyFourAngleToTwelveEdge[sixFace],
-//     });
-//   }
-//   return RESULT;
-// }
-
-// export function getSixFaceTwentyFourAngleRelationTwelveEdge(
-//   value: SixFaceTwentyFourAngle,
-//   relation: ConnectionRelation,
-// ): TwelveEdge {
-//   const [sixFace, fourDirection] =
-//     convertSixFaceTwentyFourAngleToSixFaceAndDirection(value);
-//   const ARRAY: TwelveEdge[] = [];
-//   SixFaceTwentyFourAngleToTwelveEdge[sixFace].forEach((value) =>
-//     ARRAY.push(value)
-//   );
-//   for (let i = 0; i < fourDirection; ++i) {
-//     const value = ARRAY.pop() as TwelveEdge ;
-//     ARRAY.unshift(value);
-//   }
-
-//   const RESULT = ARRAY[relation];
-//   return RESULT;
-// }
-
 export function getSixFaceTwentyFourAngleRelationTwelveEdge(
   sixFaceTwentyFourAngle: SixFaceTwentyFourAngle,
   relation: ConnectionRelation,
@@ -738,55 +635,6 @@ export class CellObject implements Cell {
   ];
   toString: () => string = () => {
     return JSON.stringify(this);
-    // const sixFaceTwentyFourAngle = convertSixFaceAndDirectionToSixFaceTwentyFourAngle(
-    // 	this.sixFace,
-    // 	this.faceDirection,
-    // );
-    // if (DEBUG.SHOW_CELL_TO_STRING) {
-    // 	log(
-    // 		'toString()',
-    // 		JSON.stringify({
-    // 			rowIndex: this.rowIndex,
-    // 			colIndex: this.colIndex,
-    // 			cellIndex: this.cellIndex,
-    // 			layerIndex: this.layerIndex,
-
-    // 			addOrder: this.addOrder,
-    // 			relatedInformationWhenAdding: this.relatedInformationWhenAdding,
-
-    // 			feature: this.feature,
-    // 			sixFace: this.sixFace,
-    // 			faceDirection: this.faceDirection,
-    // 			twelveEdge: this.twelveEdge,
-    // 			isEmpty: this.isEmpty,
-
-    // 			sixFaceTwentyFourAngle,
-    // 			sixFaceTwentyFourAngleString: convertSixFaceTwentyFourAngleToString(
-    // 				sixFaceTwentyFourAngle,
-    // 			),
-    // 			borderLines: JSON.stringify(this.borderLines),
-    // 		}),
-    // 	);
-    // }
-    // return JSON.stringify({
-    // 	rowIndex: this.rowIndex,
-    // 	colIndex: this.colIndex,
-    // 	cellIndex: this.cellIndex,
-    // 	layerIndex: this.layerIndex,
-
-    // 	addOrder: this.addOrder,
-    // 	relatedInformationWhenAdding: this.relatedInformationWhenAdding,
-
-    // 	feature: this.feature,
-    // 	sixFace: this.sixFace,
-    // 	faceDirection: this.faceDirection,
-    // 	twelveEdge: this.twelveEdge,
-    // 	isEmpty: this.isEmpty,
-
-    // 	sixFaceTwentyFourAngle,
-    // 	sixFaceTwentyFourAngleString: convertSixFaceTwentyFourAngleToString(sixFaceTwentyFourAngle),
-    // 	borderLines: JSON.stringify(this.borderLines),
-    // });
   };
   clone(): CellObject {
     const RESULT = new CellObject(this.rowIndex, this.colIndex, this.cellIndex);
@@ -811,10 +659,25 @@ export class CellObject implements Cell {
     public colIndex: number,
     public cellIndex: number,
   ) {
-    // this.borderLines = [];
-    // for (let borderLineIndex = 0; borderLineIndex < 4; ++borderLineIndex) {
-    // 	this.borderLines.push(CellBorderLine.Unknown);
-    // }
+  }
+
+  getConnectedCellIndexByRelation(
+    relation: ConnectionRelation,
+  ): number {
+    const CELL_INDEX = this.cellIndex;
+    switch (relation) {
+      case ConnectionRelation.Top:
+        return CELL_INDEX - COL_COUNT;
+      case ConnectionRelation.Right:
+        return CELL_INDEX + 1;
+      case ConnectionRelation.Bottom:
+        return CELL_INDEX + COL_COUNT;
+      case ConnectionRelation.Left:
+        return CELL_INDEX - 1;
+        // default:
+        //   // unreachable
+        //   return 0;
+    }
   }
 }
 
@@ -826,9 +689,18 @@ export interface GridLine {
   lineStyle: GridLineStyle;
 }
 
-// 一个面形成正方体最外面六面之一时，对应的单元格行列序号（在纸模中）
+/**
+ * <en_us>en_us</en_us>
+ * <zh_cn>一个面形成正方体最外面六面之一时，对应的单元格行列序号（在纸模中）</zh_cn>
+ * <zh_tw>zh_tw</zh_tw>
+ */
 export type OneCellRowColIndex = [number, number];
-// 两个面粘贴成正方体最外面六面之一时，对应的两个单元格行列序号（在纸模中）
+
+/**
+ * <en_us>en_us</en_us>
+ * <zh_cn>两个面粘贴成正方体最外面六面之一时，对应的两个单元格行列序号（在纸模中）</zh_cn>
+ * <zh_tw>zh_tw</zh_tw>
+ */
 export type TwoCellRowColIndex = [number, number, number, number];
 export type OneOrTwoCellRowColIndex = OneCellRowColIndex | TwoCellRowColIndex;
 
@@ -901,8 +773,6 @@ export interface CubePaperModel {
   emptyCells: CellObject[];
   gridLines: GridLine[];
 
-  // previousNoArray: number[];
-
   firstRowActCellColIndexBill: string;
   lastRowEmptyCellColIndexBill: string;
   count(): void;
@@ -912,8 +782,6 @@ export interface CubeObject {
   sixFaces: SixFaces;
   twelveEdges: TwelveEdges;
   isValid: boolean;
-
-  // get isComplete(): boolean;
 }
 export class Cube implements CubePaperModel, CubeObject {
   // from CubePaperModel
@@ -961,9 +829,6 @@ export class Cube implements CubePaperModel, CubeObject {
       coreColIndex,
 
       cells,
-      // // previousNoArray, // removed
-      // sixFaces,
-      // twelveEdges,
     } = this;
     const cloned = new Cube(
       no,
@@ -977,8 +842,6 @@ export class Cube implements CubePaperModel, CubeObject {
     cells.forEach((rows) => {
       cloned.cells.push(rows.map((cell) => cell.clone()));
     });
-    // cloned.actCells = JSON.parse(JSON.stringify(this.actCells));
-    // cloned.emptyCells = JSON.parse(JSON.stringify(this.emptyCells));
 
     cloned.actCells.length = 0;
     this.actCells.forEach((cell) => {
@@ -1007,10 +870,6 @@ export class Cube implements CubePaperModel, CubeObject {
     this.actCells.length = 0;
     this.emptyCells.length = 0;
     this.cells.forEach((cellRows: CellObject[]) => {
-      // cellRows.filter((cell: CellObject) => cell.feature === CellFeature.None).forEach((
-      // 	cell: CellObject,
-      // ) => RESULT.push(cell));
-
       cellRows.forEach((
         cell: CellObject,
       ) => {
@@ -1102,14 +961,15 @@ export class Cube implements CubePaperModel, CubeObject {
         pieceCell.feature = CellFeature.Piece;
         pieceCell.twelveEdge = edgeIndex;
 
-        // 复位“面属性”
+        // 	<en_us>en_us</en_us>
+        // 	<zh_cn>复位“面属性”</zh_cn>
+        // 	<zh_tw>zh_tw</zh_tw>
         pieceCell.sixFace = SixFace.Up;
         pieceCell.faceDirection = FourDirection.Original;
 
         const {
           rowIndex: relatedRowIndex,
           colIndex: relatedColIndex,
-          // relation,
         } = pieceCell.relatedInformationWhenAdding;
 
         if (relatedRowIndex === -1) {
@@ -1147,6 +1007,11 @@ export class Cube implements CubePaperModel, CubeObject {
   }
 
   syncAndClear(): void {
+    this.sync();
+    // clear?......
+  }
+
+  sync(): void {
     const { cells, actCells, emptyCells } = this;
     function transferProperties(GOAL_CELL: CellObject) {
       const { rowIndex, colIndex } = GOAL_CELL;
@@ -1168,9 +1033,300 @@ export class Cube implements CubePaperModel, CubeObject {
     emptyCells.forEach((GOAL_CELL) => {
       transferProperties(GOAL_CELL);
     });
+  }
 
-    // TODO(@anqisoft) use next statement
-    // cells.length = 0;
+  updateTwelveEdges(): Cube {
+    this.twelveEdges.forEach((twelveEdge) => {
+      twelveEdge.canBeInserted = !!twelveEdge.pieces.length;
+    });
+
+    const twelveEdges = this.twelveEdges as OneOfTwelveEdges[];
+    const { cells } = this;
+
+    twelveEdges.forEach((oneEdge) => {
+      oneEdge.pieces.forEach((cellRowColIndex) => {
+        const [rowIndex, colIndex] = cellRowColIndex;
+        const pieceCell = cells[rowIndex][colIndex];
+
+        const {
+          rowIndex: relatedRowIndex,
+          colIndex: relatedColIndex,
+          // relation,
+        } = pieceCell.relatedInformationWhenAdding;
+
+        if (relatedRowIndex === -1) {
+          pieceCell.borderLines.forEach(
+            (borderLine, borderLineIndex) => {
+              if (borderLine === CellBorderLine.InnerLine) {
+                switch (borderLineIndex as ConnectionRelation) {
+                  case ConnectionRelation.Top:
+                    pieceCell.layerIndex =
+                      cells[rowIndex - 1][colIndex].layerIndex +
+                      1;
+                    break;
+                  case ConnectionRelation.Bottom:
+                    pieceCell.layerIndex =
+                      cells[rowIndex + 1][colIndex].layerIndex +
+                      1;
+                    break;
+                  case ConnectionRelation.Left:
+                    pieceCell.layerIndex =
+                      cells[rowIndex][colIndex - 1].layerIndex +
+                      1;
+                    break;
+                  case ConnectionRelation.Right:
+                    pieceCell.layerIndex =
+                      cells[rowIndex][colIndex + 1].layerIndex +
+                      1;
+                    break;
+                  default:
+                    // unreachable
+                    break;
+                }
+              }
+            },
+          );
+        } else {
+          pieceCell.layerIndex =
+            cells[relatedRowIndex][relatedColIndex].layerIndex +
+            1;
+        }
+      });
+    });
+
+    const sixFaceOutestCellArray: CellObject[] = [];
+    const { sixFaces } = this;
+    sixFaces.forEach((sixFaceInfo) => {
+      sixFaceInfo.forEach(([
+        firstRowIndex,
+        firstColIndex,
+        secondRowIndex,
+        secondColIndex,
+      ]) => {
+        sixFaceOutestCellArray.push(
+          (typeof secondRowIndex === "undefined" ||
+              typeof secondColIndex === "undefined")
+            ? cells[firstRowIndex][firstColIndex]
+            : cells[secondRowIndex][secondColIndex],
+        );
+      });
+    });
+
+    const sixFaceTwentyFourAngleOfSixFaceOutestCellArray:
+      SixFaceTwentyFourAngle[] = [];
+    sixFaceOutestCellArray.forEach((cell) => {
+      sixFaceTwentyFourAngleOfSixFaceOutestCellArray.push(
+        convertSixFaceAndDirectionToSixFaceTwentyFourAngle(
+          cell.sixFace,
+          cell.faceDirection,
+        ),
+      );
+    });
+
+    sixFaceOutestCellArray.forEach((cell, cellIndex) => {
+      cell.borderLines.forEach((borderLine, borderLineIndex) => {
+        if (borderLine !== CellBorderLine.InnerLine) {
+          const twelveEdgeIndex: TwelveEdge =
+            getSixFaceTwentyFourAngleRelationTwelveEdge(
+              sixFaceTwentyFourAngleOfSixFaceOutestCellArray[cellIndex],
+              borderLineIndex,
+            );
+
+          if (!twelveEdges[twelveEdgeIndex].canBeInserted) {
+            twelveEdges[twelveEdgeIndex].canBeInserted = true;
+          }
+        }
+      });
+    });
+
+    return this;
+  }
+
+  getCellArray(): CellObject[] {
+    const ARRAY: CellObject[] = [];
+    this.cells.forEach((rows) => rows.forEach((cell) => ARRAY.push(cell)));
+    return ARRAY;
+  }
+
+  checkFacesLayerIndex(): boolean {
+    const CELL_ARRAY = this.getCellArray();
+    function getCellByCellIndex(cellIndex: number): CellObject | undefined {
+      const FILTERED = CELL_ARRAY.filter((cell) =>
+        cell.cellIndex === cellIndex
+      );
+      return FILTERED.length ? FILTERED[0] : undefined;
+    }
+
+    const { cells, sixFaces } = this;
+    const SIX_FACE_CELL_ARRAY_ARRAY = sixFaces.map(
+      (faceInfo) => {
+        const ARRAY: CellObject[] = [];
+        faceInfo.forEach(
+          ([firstRowIndex, firstColIndex, secondRowIndex, secondColIndex]) => {
+            ARRAY.push(cells[firstRowIndex][firstColIndex]);
+
+            if (
+              typeof secondRowIndex !== "undefined" &&
+              typeof secondColIndex !== "undefined"
+            ) {
+              ARRAY.push(cells[secondRowIndex][secondColIndex]);
+            }
+          },
+        );
+        return ARRAY;
+      },
+    ) as unknown as CellObject[][];
+    // const SIX_FACE_CELL_ARRAY_COUNT = SIX_FACE_CELL_ARRAY_ARRAY.length;
+    for (
+      let sixFaceIndex = 0;
+      sixFaceIndex < SixFaceCount;
+      // SIX_FACE_CELL_ARRAY_COUNT;
+      ++sixFaceIndex
+    ) {
+      const SIX_FACE_CELL_ARRAY = SIX_FACE_CELL_ARRAY_ARRAY[sixFaceIndex];
+      const SIX_FACE_CELL_COUNT = SIX_FACE_CELL_ARRAY.length;
+      for (
+        let faceCellIndex = 0;
+        faceCellIndex < SIX_FACE_CELL_COUNT;
+        ++faceCellIndex
+      ) {
+        const FACE_CELL = SIX_FACE_CELL_ARRAY[faceCellIndex];
+        // const FACE_CELL_SIX_FACE = FACE_CELL.sixFace;
+        const FACE_CELL_LAYER_INDEX = FACE_CELL.layerIndex;
+        const FACE_CELL_INNER_CELL_ARRAY = SIX_FACE_CELL_ARRAY.filter(
+          (cell) => cell.layerIndex < FACE_CELL_LAYER_INDEX,
+        );
+        const FACE_CELL_INNER_CELL_COUNT = FACE_CELL_INNER_CELL_ARRAY.length;
+        for (
+          let faceCellBorderLineIndex = 0;
+          faceCellBorderLineIndex < FourDirectionCount;
+          ++faceCellBorderLineIndex
+        ) {
+          if (
+            FACE_CELL.borderLines[faceCellBorderLineIndex] !==
+              CellBorderLine.InnerLine
+          ) {
+            continue;
+          }
+
+          const FACE_CELL_CONNECTED_CELL = getCellByCellIndex(
+            FACE_CELL.getConnectedCellIndexByRelation(faceCellBorderLineIndex),
+          );
+          if (
+            !FACE_CELL_CONNECTED_CELL ||
+            FACE_CELL_CONNECTED_CELL.feature !== CellFeature.Face
+          ) {
+            continue;
+          }
+
+          const FACE_CELL_CONNECTED_CELL_SIX_FACE =
+            FACE_CELL_CONNECTED_CELL.sixFace;
+          const FACE_CELL_CONNECTED_CELL_LAYER_INDEX =
+            FACE_CELL_CONNECTED_CELL.layerIndex;
+
+          for (
+            let faceCellInnerCellIndex = 0;
+            faceCellInnerCellIndex < FACE_CELL_INNER_CELL_COUNT;
+            ++faceCellInnerCellIndex
+          ) {
+            const FACE_CELL_INNER_CELL =
+              FACE_CELL_INNER_CELL_ARRAY[faceCellInnerCellIndex];
+            for (
+              let faceCellBorderLineIndex = 0;
+              faceCellBorderLineIndex < FourDirectionCount;
+              ++faceCellBorderLineIndex
+            ) {
+              if (
+                FACE_CELL_INNER_CELL.borderLines[faceCellBorderLineIndex] !==
+                  CellBorderLine.InnerLine
+              ) {
+                continue;
+              }
+
+              const FACE_CELL_INNER_CELL_CONNECTED_CELL = getCellByCellIndex(
+                FACE_CELL_INNER_CELL.getConnectedCellIndexByRelation(
+                  faceCellBorderLineIndex,
+                ),
+              );
+              if (
+                !FACE_CELL_INNER_CELL_CONNECTED_CELL ||
+                FACE_CELL_INNER_CELL_CONNECTED_CELL.feature !== CellFeature.Face
+              ) {
+                continue;
+              }
+
+              if (
+                FACE_CELL_INNER_CELL_CONNECTED_CELL.sixFace !==
+                  FACE_CELL_CONNECTED_CELL_SIX_FACE
+              ) {
+                continue;
+              }
+              if (
+                FACE_CELL_INNER_CELL_CONNECTED_CELL.layerIndex >
+                  FACE_CELL_CONNECTED_CELL_LAYER_INDEX
+              ) {
+                return false;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return true;
+  }
+
+  getCoreCellReserveRelatedInformation(): {
+    rowIndex: number;
+    colIndex: number;
+    relation: ConnectionRelation;
+  } {
+    const { cells } = this;
+    const CORE_CELL = cells[this.coreRowIndex][this.coreColIndex];
+    const FILTERED_BORDER_LINE_ARRAY = CORE_CELL.borderLines.filter((
+      borderLine,
+    ) => borderLine === CellBorderLine.InnerLine);
+    // console.log(
+    //   "getCoreCellReserveRelatedInformation()",
+    //   FILTERED_BORDER_LINE_ARRAY.length,
+    //   this.coreRowIndex,
+    //   this.coreColIndex,
+    // );
+    if (FILTERED_BORDER_LINE_ARRAY.length === 1) {
+      for (
+        let borderLineIndex = 0;
+        borderLineIndex < FourDirectionCount;
+        ++borderLineIndex
+      ) {
+        if (
+          CORE_CELL.borderLines[borderLineIndex] !== CellBorderLine.InnerLine
+        ) {
+          continue;
+        }
+
+        const REVERSED_RELATION = getReversedRelation(borderLineIndex);
+        const RELATION_CELL_CELL_INDEX = CORE_CELL
+          .getConnectedCellIndexByRelation(borderLineIndex);
+        const RESULT = {
+          rowIndex: Math.floor(RELATION_CELL_CELL_INDEX / COL_COUNT),
+          colIndex: RELATION_CELL_CELL_INDEX % COL_COUNT,
+          relation: REVERSED_RELATION,
+        };
+        // console.log(
+        //   RELATION_CELL_CELL_INDEX,
+        //   this.rowCount,
+        //   this.colCount,
+        //   RESULT,
+        // );
+        return RESULT;
+      }
+    }
+
+    return {
+      rowIndex: -1,
+      colIndex: -1,
+      relation: ConnectionRelation.Top,
+    };
   }
 
   private updateIsValid() {
@@ -1210,11 +1366,15 @@ export class Cube implements CubePaperModel, CubeObject {
     const OLD_IS_VALID = this.isValid;
     const { sixFaces, twelveEdges, cells } = this;
 
-    // 解决多次修正正确性时，被附加多次的Bug
+    // 	<en_us>en_us</en_us>
+    // 	<zh_cn>解决多次修正正确性时，被附加多次的Bug</zh_cn>
+    // 	<zh_tw>zh_tw</zh_tw>
     sixFaces.forEach((array) => array.length = 0);
     twelveEdges.forEach((twelveEdge) => twelveEdge.pieces.length = 0);
 
-    // 检查六个面是否齐全（每个面至少有一个带“多内联线”的单元格，或至少两个带“单内联线”的单元格）
+    // 	<en_us>en_us</en_us>
+    // 	<zh_cn>检查六个面是否齐全（每个面至少有一个带“多内联线”的单元格，或至少两个带“单内联线”的单元格）</zh_cn>
+    // 	<zh_tw>zh_tw</zh_tw>
     const SIX_FACE_POINT_ARRAY = [0, 0, 0, 0, 0, 0];
     const ONE_INNER_LINE_CELL_TWENTY_FOUR_ANGEL_COUNT_ARRAY =
       (0 as unknown as NumberRepeatFunction)
@@ -1226,12 +1386,10 @@ export class Cube implements CubePaperModel, CubeObject {
         borderLines,
 
         sixFace,
-        faceDirection,
         twelveEdge,
       } = cell;
 
       let sixFaceIndex = 0;
-      // let sixFaceTwentyFourAngle = 0;
 
       switch (
         borderLines.filter((borderLine: CellBorderLine) =>
@@ -1247,19 +1405,13 @@ export class Cube implements CubePaperModel, CubeObject {
           sixFaces[sixFaceIndex].push([rowIndex, colIndex]);
           break;
         case 1:
-          // sixFaceTwentyFourAngle =
-          //   convertSixFaceAndDirectionToSixFaceTwentyFourAngle(
-          //     cell.sixFace,
-          //     cell.faceDirection,
-          //   );
-          // ONE_INNER_LINE_CELL_TWENTY_FOUR_ANGEL_COUNT_ARRAY[
-          //   sixFaceTwentyFourAngle
-          // // ] += 1;
           ONE_INNER_LINE_CELL_TWENTY_FOUR_ANGEL_COUNT_ARRAY[
             4 * sixFace + (twelveEdge % 4)
           ] += 1;
           if (cell.relatedInformationWhenAdding.rowIndex === -1) {
-            // 找到唯一的内联线，然后反算相应单元格行号列序，再确定本单元格作为面片时的序号
+            // 	<en_us>en_us</en_us>
+            // 	<zh_cn>找到唯一的内联线，然后反算相应单元格行号列序，再确定本单元格作为面片时的序号</zh_cn>
+            // 	<zh_tw>zh_tw</zh_tw>
             const RELATION_CELL = actCells.filter((cell) =>
               cell.relatedInformationWhenAdding.rowIndex === rowIndex &&
               cell.relatedInformationWhenAdding.colIndex === colIndex
@@ -1310,11 +1462,7 @@ export class Cube implements CubePaperModel, CubeObject {
         JSON.stringify(ONE_INNER_LINE_CELL_TWENTY_FOUR_ANGEL_COUNT_ARRAY)
       }`
       : "";
-    // if (OLD_IS_VALID) {
-    //   NEW_LOG = `<=${JSON.stringify(SIX_FACE_POINT_ARRAY)} + ${
-    //     JSON.stringify(ONE_INNER_LINE_CELL_TWENTY_FOUR_ANGEL_COUNT_ARRAY)
-    //   }`;
-    // }
+
     SIX_FACE_POINT_ARRAY.forEach((_point, index) => {
       const OFFSET = 4 * index;
       for (let i = 0; i < 4; ++i) {
@@ -1361,22 +1509,6 @@ export class Cube implements CubePaperModel, CubeObject {
       return;
     }
 
-    // ${JSON.stringify(this.actCells)}
-    // if (!OLD_IS_VALID) {
-    //   log(
-    //     `OLD SIX_FACE_POINT_ARRAY:${JSON.stringify(SIX_FACE_POINT_ARRAY)} ${
-    //       this.actCells.map((cell) => `${cell.rowIndex}${cell.colIndex}`).join(
-    //         "_",
-    //       )
-    //     } ${
-    //       this.actCells.map((cell) =>
-    //         `${cell.rowIndex}${cell.colIndex}_${cell.addOrder}_${
-    //           cell.borderLines.join("")
-    //         }_${cell.sixFaceTwentyFourAngleStr}_${cell.twelveEdgeStr}`
-    //       ).join(",")
-    //     }`,
-    //   );
-    // }
     if (!OLD_IS_VALID) {
       showFullCubeInfo(true);
     }
@@ -1444,6 +1576,11 @@ export class Cube implements CubePaperModel, CubeObject {
 
           case CellBorderLine.InnerLine:
             // Attention: only change to OuterLine. If you change it to CutLine, all cells will be connected by only one another cell. So, changed the else branch to comments.
+
+            // 	<en_us>en_us</en_us>
+            // 	<zh_cn>注意：仅可修改为“外框线”。如果更改为“裁剪线”，所有格都将只连接一格。所以，移除原来的else分支！</zh_cn>
+            // 	<zh_tw>zh_tw</zh_tw>
+
             // => OuterLine
             if (HAS_NOT_SIBLING_CELL) {
               borderLines[borderPosition] = CellBorderLine.OuterLine;
@@ -1477,7 +1614,6 @@ export class Cube implements CubePaperModel, CubeObject {
 
     const { gridLines } = this;
     gridLines.length = 0;
-    // const RESULT: GridLine[] = [];
     const EXISTS_GRID_LINES: string[] = [];
 
     this.actCells.forEach((cell: CellObject) => {
@@ -1555,7 +1691,10 @@ export const COL_INDEX_ARRAY_LESS_THAN_OR_EQUALS_THREE_ROW: number[][] = [[
 // 	COL_INDEX_ARRAY_MORE_THAN_THREE_ROW.push(ZERO_TO_FOUR_ARRAY);
 // }
 // fillColIndexArrayMoreThanThreeRow();
-// 直接在调试窗口获得计算结果，不再计算
+
+// 	<en_us>en_us</en_us>
+// 	<zh_cn>直接在调试窗口获得计算结果，不再计算</zh_cn>
+// 	<zh_tw>zh_tw</zh_tw>
 // export const COL_INDEX_ARRAY_MORE_THAN_THREE_ROW: number[][] = [
 // [0],
 // [1],
@@ -1610,7 +1749,9 @@ export const COL_INDEX_ARRAY_LESS_THAN_OR_EQUALS_THREE_ROW: number[][] = [[
 // [0, 1, 2, 3, 4],
 // ];
 
-// sort it.
+// 	<en_us>en_us</en_us>
+// 	<zh_cn>排序</zh_cn>
+// 	<zh_tw>zh_tw</zh_tw>
 export const COL_INDEX_ARRAY_MORE_THAN_THREE_ROW: number[][] = [
   [0],
   [1],
@@ -1665,12 +1806,6 @@ export const COL_INDEX_ARRAY_MORE_THAN_THREE_ROW: number[][] = [
   [0, 1, 2, 3, 4],
 ];
 
-// export interface RecuriseOption {
-//   rowIndex: number;
-//   colIndex: number;
-
-//   relation: ConnectionRelation;
-// }
 export interface SiblingsAppendInfo {
   relationRowIndex: number;
   relationColIndex: number;
@@ -1690,7 +1825,6 @@ export interface AppendSiblingsOptions {
 }
 
 export interface NewAppendSiblingsOptions {
-  // cubeIndex: number;
   cube: SimpleCube;
   addOrder: number;
   siblings: SiblingsAppendInfoArray;
@@ -1760,7 +1894,7 @@ export class SimpleCell {
     return JSON.stringify(this);
   };
   clone(): SimpleCell {
-    const RESULT = new CellObject(this.rowIndex, this.colIndex, this.cellIndex);
+    const RESULT = new SimpleCell(this.rowIndex, this.colIndex, this.cellIndex);
 
     RESULT.addOrder = this.addOrder;
     RESULT.relatedInformationWhenAdding = this.relatedInformationWhenAdding;
@@ -1820,10 +1954,6 @@ export class SimpleCell {
     this.feature = CellFeature.Unknown;
     this.sixFace = SixFace.Up;
     this.faceDirection = FourDirection.Original;
-
-    // this.rowIndex;
-    // this.colIndex;
-    // this.cellIndex;
   }
 }
 
@@ -1874,31 +2004,7 @@ export class SimpleCube {
   transferTo(other: SimpleCube): void {
     const { cells, isValid } = this;
     other.isValid = isValid;
-    // other.cells.forEach((rows, rowIndex) => {
-    //   const SOURCE_ROWS = cells[rowIndex];
-    //   rows.forEach((cell, colIndex) => {
-    //     SOURCE_ROWS[colIndex].transferTo(cell);
-    //     // const SOURCE_CELL = SOURCE_ROWS[colIndex];
 
-    //     // cell.addOrder = SOURCE_CELL.addOrder;
-
-    //     // const goalRelatedInfo = cell.relatedInformationWhenAdding;
-    //     // const sourceRelatedInfo = SOURCE_CELL.relatedInformationWhenAdding;
-    //     // goalRelatedInfo.rowIndex = sourceRelatedInfo.rowIndex;
-    //     // goalRelatedInfo.colIndex = sourceRelatedInfo.colIndex;
-    //     // goalRelatedInfo.relation = sourceRelatedInfo.relation;
-
-    //     // cell.borderLines = SOURCE_CELL.borderLines;
-
-    //     // cell.feature = SOURCE_CELL.feature;
-    //     // cell.faceDirection = SOURCE_CELL.faceDirection;
-    //     // cell.sixFace = SOURCE_CELL.sixFace;
-
-    //     // // cell.rowIndex = SOURCE_CELL.rowIndex;
-    //     // // cell.colIndex = SOURCE_CELL.colIndex;
-    //     // // cell.cellIndex = SOURCE_CELL.cellIndex;
-    //   });
-    // });
     other.cells.forEach((rows, rowIndex) => {
       const SOURCE_ROWS = cells[rowIndex];
       rows.forEach((cell, colIndex) => SOURCE_ROWS[colIndex].transferTo(cell));
@@ -1908,13 +2014,9 @@ export class SimpleCube {
   count(): void {
     const { cells, rowCount, colCount } = this;
 
-    // const that = this;
-
     const actCells: SimpleCell[] = [];
     const emptyCells: SimpleCell[] = [];
     const sixFaces: SixFaces = getEmptySixFaces();
-
-    // const MAX_ROW_INDEX = rowCount - 1;
 
     cells.forEach((cellRows: SimpleCell[]) => {
       cellRows.forEach((cell: SimpleCell) => {
@@ -1935,7 +2037,6 @@ export class SimpleCube {
     });
 
     this.isValid = getIsValid();
-    // log(this.isValid);
 
     if (!this.isValid) {
       return;
@@ -1943,7 +2044,6 @@ export class SimpleCube {
 
     updateGridLines();
     this.isValid = getIsValid();
-    // log(this.isValid);
 
     if (!this.isValid) {
       ++global_removed_middle_cube_count;
@@ -1959,7 +2059,6 @@ export class SimpleCube {
           return false;
         }
       }
-      // log("checkRowIndex ok");
 
       if (SETTINGS.mustContainEveryColumn) {
         for (let checkColIndex = 0; checkColIndex < colCount; ++checkColIndex) {
@@ -1972,14 +2071,17 @@ export class SimpleCube {
           }
         }
       }
-      // log("checkColIndex ok");
 
-      // 解决多次修正正确性时，被附加多次的Bug
+      // 	<en_us>en_us</en_us>
+      // 	<zh_cn>解决多次修正正确性时，被附加多次的Bug</zh_cn>
+      // 	<zh_tw>zh_tw</zh_tw>
       sixFaces.forEach((array) => array.length = 0);
 
-      // 检查六个面是否齐全（每个面至少有一个带“多内联线”的单元格，或至少两个带“单内联线”的单元格）
+      // 	<en_us>en_us</en_us>
+      // 	<zh_cn>检查六个面是否齐全（每个面至少有一个带“多内联线”的单元格，或至少两个带“单内联线”的单元格）</zh_cn>
+      // 	<zh_tw>zh_tw</zh_tw>
       const SIX_FACE_POINT_ARRAY = [0, 0, 0, 0, 0, 0];
-      // const TWELVE_EDGE_POINT_ARRAY:number[] = (0 as unknown as NumberRepeatFunction).repeat(12);
+
       const ONE_INNER_LINE_CELL_TWENTY_FOUR_ANGEL_COUNT_ARRAY =
         (0 as unknown as NumberRepeatFunction)
           .repeat(ANGLE_COUNT);
@@ -1991,7 +2093,6 @@ export class SimpleCube {
         } = cell;
 
         let sixFaceIndex = 0;
-        // let sixFaceTwentyFourAngle = 0;
 
         switch (
           borderLines.filter((borderLine: CellBorderLine) =>
@@ -2016,12 +2117,6 @@ export class SimpleCube {
             break;
         }
       });
-      // log("SIX_FACE_POINT_ARRAY:", SIX_FACE_POINT_ARRAY);
-      // // log("TWELVE_EDGE_POINT_ARRAY:", TWELVE_EDGE_POINT_ARRAY);
-      // log(
-      //   "ONE_INNER_LINE_CELL_TWENTY_FOUR_ANGEL_COUNT_ARRAY:",
-      //   ONE_INNER_LINE_CELL_TWENTY_FOUR_ANGEL_COUNT_ARRAY,
-      // );
 
       SIX_FACE_POINT_ARRAY.forEach((_point, index) => {
         const OFFSET = 4 * index;
@@ -2031,17 +2126,8 @@ export class SimpleCube {
               ? 0.5
               : 0;
         }
-
-        // const OFFSET = 2 * index;
-        // for (let i = 0; i < 2; ++i) {
-        //   SIX_FACE_POINT_ARRAY[index] +=
-        //   TWELVE_EDGE_POINT_ARRAY[OFFSET + i] > 0
-        //       ? 0.5
-        //       : 0;
-        // }
       });
 
-      // log("SIX_FACE_POINT_ARRAY:", SIX_FACE_POINT_ARRAY);
       if (SIX_FACE_POINT_ARRAY.filter((point: number) => point < 1).length) {
         sixFaces.forEach((array) => array.length = 0);
         return false;
@@ -2108,6 +2194,11 @@ export class SimpleCube {
 
               case CellBorderLine.InnerLine:
                 // Attention: only change to OuterLine. If you change it to CutLine, all cells will be connected by only one another cell. So, changed the else branch to comments.
+
+                // 	<en_us>en_us</en_us>
+                // 	<zh_cn>注意：仅可修改为“外框线”。如果更改为“裁剪线”，所有格都将只连接一格。所以，移除原来的else分支！</zh_cn>
+                // 	<zh_tw>zh_tw</zh_tw>
+
                 // => OuterLine
                 if (HAS_NOT_SIBLING_CELL) {
                   borderLines[borderPosition] = CellBorderLine.OuterLine;
@@ -2149,7 +2240,7 @@ export class SimpleCube {
 }
 
 export function getCubeFromJson(json: string): Cube {
-  const CUBE = JSON.parse(json);
+  const CUBE = JSON.parse(json) as Cube;
 
   const cloned = new Cube(
     CUBE.no,
@@ -2160,13 +2251,13 @@ export function getCubeFromJson(json: string): Cube {
     true,
   );
   const {
-    //   no,
-    //   rowCount,
-    //   colCount,
-    //   coreRowIndex,
-    //   coreColIndex,
+    // no,
+    // rowCount,
+    // colCount,
+    // coreRowIndex,
+    // coreColIndex,
+    // cells,
 
-    cells,
     sixFaces,
     twelveEdges,
     isValid,
@@ -2192,7 +2283,9 @@ export function getCubeFromJson(json: string): Cube {
     }));
   });
 
-  // 经测试，需先count，再赋值sixFaces、twelveEdges，否则count后sixFaces可能丢失部分值
+  // 	<en_us>en_us</en_us>
+  // 	<zh_cn>经测试，需先count，再赋值sixFaces、twelveEdges，否则count后sixFaces可能丢失部分值</zh_cn>
+  // 	<zh_tw>zh_tw</zh_tw>
   // {
   //   cloned.sixFaces = sixFaces;
   //   cloned.twelveEdges = twelveEdges;
@@ -2206,9 +2299,7 @@ export function getCubeFromJson(json: string): Cube {
   //     log('after count', cloned);
   //   }
   // }
-
-  //   cloned.count();
-
+  // cloned.count();
   // cloned.actCells = JSON.parse(JSON.stringify(CUBE.actCells));
   // cloned.emptyCells = JSON.parse(JSON.stringify(CUBE.emptyCells));
 
@@ -2255,6 +2346,12 @@ export interface CubeForDrawing {
 
   rowCount: number;
   colCount: number;
+}
+
+export function getReversedRelation(
+  relation: ConnectionRelation,
+): ConnectionRelation {
+  return relation % 2 + 2 * (1 - Math.floor(relation / 2));
 }
 
 /*
