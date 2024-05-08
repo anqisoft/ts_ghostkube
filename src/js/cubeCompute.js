@@ -70,16 +70,11 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 exports.__esModule = true;
-// const ROW_COUNT_ARRAY = [2, 3];
-var ROW_COUNT_ARRAY = [2];
-var USE_LARGE_FILE = ROW_COUNT_ARRAY.length > 1 || ROW_COUNT_ARRAY[0] !== 2;
+exports.main = void 0;
 var mod_ts_1 = require("https://deno.land/std/fs/mod.ts");
 var path = require("https://deno.land/std/path/mod.ts");
 var cubeCore_ts_1 = require("./cubeCore.ts");
 var floor = Math.floor;
-var GLOBAL_LOG_CONTENT_ARRAY = [];
-GLOBAL_LOG_CONTENT_ARRAY.push("begin: " + (new Date()).toLocaleString());
-var DATE_BEGIN = performance.now();
 var OVER_WRITE_TRUE_FLAG = { overwrite: true };
 var APPEND_TRUE_FLAG = { append: true };
 // const EMPTY_OBJECT = {};
@@ -1857,7 +1852,8 @@ function step3(GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
         });
     });
 }
-function step4(GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
+function step4(USE_LARGE_FILE, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
+    if (USE_LARGE_FILE === void 0) { USE_LARGE_FILE = true; }
     if (GOAL_FILE_TOP_PATH === void 0) { GOAL_FILE_TOP_PATH = "./"; }
     if (SOURCE_FILE_TOP_PATH === void 0) { SOURCE_FILE_TOP_PATH = "./"; }
     return __awaiter(this, void 0, void 0, function () {
@@ -2325,23 +2321,57 @@ function step4(GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
         });
     });
 }
-// useless:
-// console.log("\n");
-// log("\n");
-GLOBAL_LOG_CONTENT_ARRAY.push("step1: " + (new Date()).toLocaleString());
-step1(ROW_COUNT_ARRAY);
-GLOBAL_LOG_CONTENT_ARRAY.push("step2: " + (new Date()).toLocaleString());
-await step2(ROW_COUNT_ARRAY);
-GLOBAL_LOG_CONTENT_ARRAY.push("step3: " + (new Date()).toLocaleString());
-await step3();
-GLOBAL_LOG_CONTENT_ARRAY.push("step4: " + (new Date()).toLocaleString());
-await step4();
-if (mod_ts_1.existsSync(LOG_FILE_NAME)) {
-    Deno.removeSync(LOG_FILE_NAME);
+function main(options, ROW_COUNT_ARRAY) {
+    if (ROW_COUNT_ARRAY === void 0) { ROW_COUNT_ARRAY = [2]; }
+    return __awaiter(this, void 0, void 0, function () {
+        var GLOBAL_LOG_CONTENT_ARRAY, DATE_BEGIN, step1Option, step2Option, step3Option, step4Option;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    GLOBAL_LOG_CONTENT_ARRAY = [];
+                    GLOBAL_LOG_CONTENT_ARRAY.push("begin: " + (new Date()).toLocaleString());
+                    DATE_BEGIN = performance.now();
+                    step1Option = options.step1Option, step2Option = options.step2Option, step3Option = options.step3Option, step4Option = options.step4Option;
+                    // useless:
+                    // console.log("\n");
+                    // log("\n");
+                    if (!(step1Option === null || step1Option === void 0 ? void 0 : step1Option.skipped)) {
+                        GLOBAL_LOG_CONTENT_ARRAY.push("step1: " + (new Date()).toLocaleString());
+                        step1(ROW_COUNT_ARRAY, step1Option === null || step1Option === void 0 ? void 0 : step1Option.GOAL_FILE_TOP_PATH);
+                    }
+                    if (!!(step2Option === null || step2Option === void 0 ? void 0 : step2Option.skipped)) return [3 /*break*/, 2];
+                    GLOBAL_LOG_CONTENT_ARRAY.push("step2: " + (new Date()).toLocaleString());
+                    return [4 /*yield*/, step2(ROW_COUNT_ARRAY, step2Option === null || step2Option === void 0 ? void 0 : step2Option.GOAL_FILE_TOP_PATH, step2Option === null || step2Option === void 0 ? void 0 : step2Option.SOURCE_FILE_TOP_PATH)];
+                case 1:
+                    _a.sent();
+                    _a.label = 2;
+                case 2:
+                    if (!!(step3Option === null || step3Option === void 0 ? void 0 : step3Option.skipped)) return [3 /*break*/, 4];
+                    GLOBAL_LOG_CONTENT_ARRAY.push("step3: " + (new Date()).toLocaleString());
+                    return [4 /*yield*/, step3(step3Option === null || step3Option === void 0 ? void 0 : step3Option.GOAL_FILE_TOP_PATH, step3Option === null || step3Option === void 0 ? void 0 : step3Option.SOURCE_FILE_TOP_PATH)];
+                case 3:
+                    _a.sent();
+                    _a.label = 4;
+                case 4:
+                    if (!!(step4Option === null || step4Option === void 0 ? void 0 : step4Option.skipped)) return [3 /*break*/, 6];
+                    GLOBAL_LOG_CONTENT_ARRAY.push("step4: " + (new Date()).toLocaleString());
+                    return [4 /*yield*/, step4(step4Option === null || step4Option === void 0 ? void 0 : step4Option.USE_LARGE_FILE, step4Option === null || step4Option === void 0 ? void 0 : step4Option.GOAL_FILE_TOP_PATH, step4Option === null || step4Option === void 0 ? void 0 : step4Option.SOURCE_FILE_TOP_PATH)];
+                case 5:
+                    _a.sent();
+                    _a.label = 6;
+                case 6:
+                    if (mod_ts_1.existsSync(LOG_FILE_NAME)) {
+                        Deno.removeSync(LOG_FILE_NAME);
+                    }
+                    GLOBAL_LOG_CONTENT_ARRAY.push("  end: " + (new Date()).toLocaleString());
+                    cubeCore_ts_1.log(GLOBAL_LOG_CONTENT_ARRAY.join("\n"));
+                    cubeCore_ts_1.logUsedTime("Total", performance.now() - DATE_BEGIN);
+                    return [2 /*return*/];
+            }
+        });
+    });
 }
-GLOBAL_LOG_CONTENT_ARRAY.push("  end: " + (new Date()).toLocaleString());
-cubeCore_ts_1.log(GLOBAL_LOG_CONTENT_ARRAY.join("\n"));
-cubeCore_ts_1.logUsedTime("Total", performance.now() - DATE_BEGIN);
+exports.main = main;
 /*
 set pwd=P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\src\
 

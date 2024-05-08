@@ -19,10 +19,6 @@
  * </zh_tw>
  */
 
-// const ROW_COUNT_ARRAY = [2, 3];
-const ROW_COUNT_ARRAY = [2];
-const USE_LARGE_FILE = ROW_COUNT_ARRAY.length > 1 || ROW_COUNT_ARRAY[0] !== 2;
-
 import {
   copySync,
   emptyDirSync,
@@ -96,10 +92,6 @@ interface PrepareJoinCellToCubeResult {
 
 const { floor } = Math;
 
-const GLOBAL_LOG_CONTENT_ARRAY = [];
-GLOBAL_LOG_CONTENT_ARRAY.push(`begin: ${(new Date()).toLocaleString()}`);
-const DATE_BEGIN = performance.now();
-
 const OVER_WRITE_TRUE_FLAG = { overwrite: true };
 const APPEND_TRUE_FLAG = { append: true };
 // const EMPTY_OBJECT = {};
@@ -109,7 +101,10 @@ const LOG_FILE_NAME = "./log.txt";
 const COL_COUNT = 5;
 const MAX_COL_INDEX = COL_COUNT - 1;
 
-function step1(ROW_COUNT_ARRAY: number[], GOAL_FILE_TOP_PATH: string = "./") {
+function step1(
+  ROW_COUNT_ARRAY: number[],
+  GOAL_FILE_TOP_PATH: string = "./",
+) {
   const STEP_FLAG = "step1";
 
   if (existsSync(LOG_FILE_NAME)) {
@@ -2447,6 +2442,7 @@ async function step3(
 }
 
 async function step4(
+  USE_LARGE_FILE: boolean = true,
   GOAL_FILE_TOP_PATH: string = "./",
   SOURCE_FILE_TOP_PATH: string = "./",
 ) {
@@ -2842,28 +2838,93 @@ async function step4(
   Deno.removeSync(LOG_FILE_NAME);
 }
 
-// useless:
-// console.log("\n");
-// log("\n");
-
-GLOBAL_LOG_CONTENT_ARRAY.push(`step1: ${(new Date()).toLocaleString()}`);
-step1(ROW_COUNT_ARRAY);
-
-GLOBAL_LOG_CONTENT_ARRAY.push(`step2: ${(new Date()).toLocaleString()}`);
-await step2(ROW_COUNT_ARRAY);
-
-GLOBAL_LOG_CONTENT_ARRAY.push(`step3: ${(new Date()).toLocaleString()}`);
-await step3();
-
-GLOBAL_LOG_CONTENT_ARRAY.push(`step4: ${(new Date()).toLocaleString()}`);
-await step4();
-
-if (existsSync(LOG_FILE_NAME)) {
-  Deno.removeSync(LOG_FILE_NAME);
+interface StepSkipped {
+  skipped?: boolean;
 }
-GLOBAL_LOG_CONTENT_ARRAY.push(`  end: ${(new Date()).toLocaleString()}`);
-log(GLOBAL_LOG_CONTENT_ARRAY.join("\n"));
-logUsedTime("Total", performance.now() - DATE_BEGIN);
+export interface Step1Option extends StepSkipped {
+  GOAL_FILE_TOP_PATH?: string;
+}
+
+export interface BehindStepsOption extends StepSkipped {
+  GOAL_FILE_TOP_PATH?: string;
+  SOURCE_FILE_TOP_PATH?: string;
+}
+export interface Step2Option extends BehindStepsOption {
+}
+export interface Step3Option extends BehindStepsOption {
+}
+export interface Step4Option extends BehindStepsOption {
+  USE_LARGE_FILE?: boolean;
+}
+
+export interface MainOption {
+  step1Option?: Step1Option;
+  step2Option?: Step2Option;
+  step3Option?: Step3Option;
+  step4Option?: Step4Option;
+}
+
+export async function main(
+  options: MainOption,
+  ROW_COUNT_ARRAY: number[] = [2],
+) {
+  const GLOBAL_LOG_CONTENT_ARRAY = [];
+  GLOBAL_LOG_CONTENT_ARRAY.push(`begin: ${(new Date()).toLocaleString()}`);
+  const DATE_BEGIN = performance.now();
+
+  // const ROW_COUNT_ARRAY = [2, 3];
+  // const ROW_COUNT_ARRAY = [2];
+  // const USE_LARGE_FILE = ROW_COUNT_ARRAY.length > 1 || ROW_COUNT_ARRAY[0] !== 2;
+
+  const {
+    step1Option,
+    step2Option,
+    step3Option,
+    step4Option,
+  } = options;
+
+  // useless:
+  // console.log("\n");
+  // log("\n");
+
+  if (!step1Option?.skipped) {
+    GLOBAL_LOG_CONTENT_ARRAY.push(`step1: ${(new Date()).toLocaleString()}`);
+    step1(ROW_COUNT_ARRAY, step1Option?.GOAL_FILE_TOP_PATH);
+  }
+
+  if (!step2Option?.skipped) {
+    GLOBAL_LOG_CONTENT_ARRAY.push(`step2: ${(new Date()).toLocaleString()}`);
+    await step2(
+      ROW_COUNT_ARRAY,
+      step2Option?.GOAL_FILE_TOP_PATH,
+      step2Option?.SOURCE_FILE_TOP_PATH,
+    );
+  }
+
+  if (!step3Option?.skipped) {
+    GLOBAL_LOG_CONTENT_ARRAY.push(`step3: ${(new Date()).toLocaleString()}`);
+    await step3(
+      step3Option?.GOAL_FILE_TOP_PATH,
+      step3Option?.SOURCE_FILE_TOP_PATH,
+    );
+  }
+
+  if (!step4Option?.skipped) {
+    GLOBAL_LOG_CONTENT_ARRAY.push(`step4: ${(new Date()).toLocaleString()}`);
+    await step4(
+      step4Option?.USE_LARGE_FILE,
+      step4Option?.GOAL_FILE_TOP_PATH,
+      step4Option?.SOURCE_FILE_TOP_PATH,
+    );
+  }
+
+  if (existsSync(LOG_FILE_NAME)) {
+    Deno.removeSync(LOG_FILE_NAME);
+  }
+  GLOBAL_LOG_CONTENT_ARRAY.push(`  end: ${(new Date()).toLocaleString()}`);
+  log(GLOBAL_LOG_CONTENT_ARRAY.join("\n"));
+  logUsedTime("Total", performance.now() - DATE_BEGIN);
+}
 
 /*
 set pwd=P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\src\
