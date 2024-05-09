@@ -893,12 +893,6 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH, OUTPUT
                                                         //   cubeOriginal.sixFaces,
                                                         // );
                                                         // 通过六面及十二棱可用片，计算十二棱是否可插入
-                                                        // cloned.twelveEdges.forEach((twelveEdge) => {
-                                                        //   if (twelveEdge.pieces.length) {
-                                                        //     twelveEdge.canBeInserted = true;
-                                                        //     return;
-                                                        //   }
-                                                        // });
                                                         cloned.twelveEdges.forEach(function (twelveEdge) {
                                                             twelveEdge.canBeInserted = !!twelveEdge.pieces.length;
                                                         });
@@ -1000,25 +994,46 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH, OUTPUT
                                                         //   frontFaceOutestCell,
                                                         //   backFaceOutestCell,
                                                         // ] = sixFaceOutestCellArray;
-                                                        var sixFaceTwentyFourAngleOfSixFaceOutestCellArray = [];
-                                                        sixFaceOutestCellArray.forEach(function (cell) {
-                                                            sixFaceTwentyFourAngleOfSixFaceOutestCellArray.push(cubeCore_ts_1.convertSixFaceAndDirectionToSixFaceTwentyFourAngle(cell.sixFace, cell.faceDirection));
-                                                        });
-                                                        // const [
-                                                        // 	upFaceOutestCellSixFaceTwentyFourAngle,
-                                                        // 	downFaceOutestCellSixFaceTwentyFourAngle,
-                                                        // 	leftFaceOutestCellSixFaceTwentyFourAngle,
-                                                        // 	rightFaceOutestCellSixFaceTwentyFourAngle,
-                                                        // 	frontFaceOutestCellSixFaceTwentyFourAngle,
-                                                        // 	backFaceOutestCellSixFaceTwentyFourAngle,
-                                                        // ] = sixFaceTwentyFourAngleOfSixFaceOutestCellArray;
-                                                        // [upFaceOutestCell]
-                                                        sixFaceOutestCellArray.forEach(function (cell, cellIndex) {
-                                                            cell.borderLines.forEach(function (borderLine, borderLineIndex) {
+                                                        // const sixFaceTwentyFourAngleOfSixFaceOutestCellArray:
+                                                        //   SixFaceTwentyFourAngle[] = [];
+                                                        // sixFaceOutestCellArray.forEach((cell) => {
+                                                        //   sixFaceTwentyFourAngleOfSixFaceOutestCellArray.push(
+                                                        //     convertSixFaceAndDirectionToSixFaceTwentyFourAngle(
+                                                        //       cell.sixFace,
+                                                        //       cell.faceDirection,
+                                                        //     ),
+                                                        //   );
+                                                        // });
+                                                        // // const [
+                                                        // // 	upFaceOutestCellSixFaceTwentyFourAngle,
+                                                        // // 	downFaceOutestCellSixFaceTwentyFourAngle,
+                                                        // // 	leftFaceOutestCellSixFaceTwentyFourAngle,
+                                                        // // 	rightFaceOutestCellSixFaceTwentyFourAngle,
+                                                        // // 	frontFaceOutestCellSixFaceTwentyFourAngle,
+                                                        // // 	backFaceOutestCellSixFaceTwentyFourAngle,
+                                                        // // ] = sixFaceTwentyFourAngleOfSixFaceOutestCellArray;
+                                                        // // [upFaceOutestCell]
+                                                        // sixFaceOutestCellArray.forEach((cell, cellIndex) => {
+                                                        //   cell.borderLines.forEach((borderLine, borderLineIndex) => {
+                                                        //     if (borderLine !== CellBorderLine.InnerLine) {
+                                                        //       const twelveEdgeIndex: TwelveEdge =
+                                                        //         getSixFaceTwentyFourAngleRelationTwelveEdge(
+                                                        //           // upFaceOutestCellSixFaceTwentyFourAngle,
+                                                        //           sixFaceTwentyFourAngleOfSixFaceOutestCellArray[
+                                                        //             cellIndex
+                                                        //           ],
+                                                        //           borderLineIndex,
+                                                        //         );
+                                                        //       if (!twelveEdges[twelveEdgeIndex].canBeInserted) {
+                                                        //         twelveEdges[twelveEdgeIndex].canBeInserted = true;
+                                                        //       }
+                                                        //     }
+                                                        //   });
+                                                        // });
+                                                        sixFaceOutestCellArray.forEach(function (OUTEST_CELL) {
+                                                            OUTEST_CELL.borderLines.forEach(function (borderLine, borderLineIndex) {
                                                                 if (borderLine !== cubeCore_ts_1.CellBorderLine.InnerLine) {
-                                                                    var twelveEdgeIndex = cubeCore_ts_1.getSixFaceTwentyFourAngleRelationTwelveEdge(
-                                                                    // upFaceOutestCellSixFaceTwentyFourAngle,
-                                                                    sixFaceTwentyFourAngleOfSixFaceOutestCellArray[cellIndex], borderLineIndex);
+                                                                    var twelveEdgeIndex = cubeCore_ts_1.getSixFaceTwentyFourAngleRelationTwelveEdge(OUTEST_CELL.sixFaceTwentyFourAngle, borderLineIndex);
                                                                     if (!twelveEdges[twelveEdgeIndex].canBeInserted) {
                                                                         twelveEdges[twelveEdgeIndex].canBeInserted = true;
                                                                     }
@@ -1076,7 +1091,7 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH, OUTPUT
                                                         // appendCubeWithoutOneToTwentyFour(cloned);
                                                         if (cloned.checkFacesLayerIndex()) {
                                                             if (OUTPUT_CUBE_PASS_CHECK_FACES_LAYER_INDEX) {
-                                                                Deno.writeTextFileSync("" + CUBE_PASSED_CHECK_FACES_LAYER_INDEX_PATH + (++cubePassCheckFacesLayerIndexFileNo).toString() + ".js", "const cube_" + cubePassCheckFacesLayerIndexFileNo + " = " + JSON.stringify(cloned) + ";");
+                                                                Deno.writeTextFileSync("" + CUBE_PASSED_CHECK_FACES_LAYER_INDEX_PATH + (++cubePassCheckFacesLayerIndexFileNo).toString() + ".js", "const cube_" + cubePassCheckFacesLayerIndexFileNo + " = " + JSON.stringify(cloned) + ";\n// " + cloned.getManner());
                                                             }
                                                             fixLonelyFaceOfCubeAndAppendIt(cloned);
                                                         }
@@ -1434,12 +1449,14 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH, OUTPUT
                             function appendCubeWithoutOneToTwentyFour(cube) {
                                 nextCubeNo += CUBE_NO_STEP;
                                 if (OUTPUT_MIDDLE_CUBE_TO_FIRST_NO) {
-                                    appendContent(nextCubeNo.toString(), MiddleFileKind.MiddleCubeToFirstNo);
+                                    appendContent(
+                                    // nextCubeNo.toString(),
+                                    nextCubeNo + ": " + cube.getManner(), MiddleFileKind.MiddleCubeToFirstNo);
                                 }
                                 cube.no = nextCubeNo;
                                 CUBES.push(cube);
                                 if (OUTPUT_ALONE_FIRST_CUBE) {
-                                    Deno.writeTextFileSync("" + ALONE_FIRST_CUBE_PATH + nextCubeNo + ".js", "const cube_" + nextCubeNo + " = " + JSON.stringify(cube) + ";");
+                                    Deno.writeTextFileSync("" + ALONE_FIRST_CUBE_PATH + nextCubeNo + ".js", "const cube_" + nextCubeNo + " = " + JSON.stringify(cube) + ";\n// " + cube.getManner());
                                 }
                                 if (CUBES.length >= DEBUG.CUBE_COUNT_PER_FILE) {
                                     outputCubes();
@@ -1632,9 +1649,7 @@ function step3(GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH, OUTPUT_FULL_CUBE, OUTPU
                                         Deno.writeTextFileSync(READ_CUBE_PATH + "output." + START_NO + "." + mannerIndex + ".sixFaces.txt", "" + JSON.stringify(cloned.sixFaces));
                                     }
                                     cloned.syncAndClear();
-                                    var MANNER = cloned.twelveEdges.map(function (twelveEdge) {
-                                        return "" + (twelveEdge.canBeInserted ? "T" : "F") + twelveEdge.pieces.length;
-                                    }).join("");
+                                    var MANNER = cloned.getManner();
                                     cloned.manner = MANNER;
                                     appendCube(cloned);
                                 }

@@ -1254,12 +1254,6 @@ async function step2(
                   // );
 
                   // 通过六面及十二棱可用片，计算十二棱是否可插入
-                  // cloned.twelveEdges.forEach((twelveEdge) => {
-                  //   if (twelveEdge.pieces.length) {
-                  //     twelveEdge.canBeInserted = true;
-                  //     return;
-                  //   }
-                  // });
                   cloned.twelveEdges.forEach((twelveEdge) => {
                     twelveEdge.canBeInserted = !!twelveEdge.pieces.length;
                   });
@@ -1408,44 +1402,61 @@ async function step2(
                   //   backFaceOutestCell,
                   // ] = sixFaceOutestCellArray;
 
-                  const sixFaceTwentyFourAngleOfSixFaceOutestCellArray:
-                    SixFaceTwentyFourAngle[] = [];
-                  sixFaceOutestCellArray.forEach((cell) => {
-                    sixFaceTwentyFourAngleOfSixFaceOutestCellArray.push(
-                      convertSixFaceAndDirectionToSixFaceTwentyFourAngle(
-                        cell.sixFace,
-                        cell.faceDirection,
-                      ),
-                    );
-                  });
+                  // const sixFaceTwentyFourAngleOfSixFaceOutestCellArray:
+                  //   SixFaceTwentyFourAngle[] = [];
+                  // sixFaceOutestCellArray.forEach((cell) => {
+                  //   sixFaceTwentyFourAngleOfSixFaceOutestCellArray.push(
+                  //     convertSixFaceAndDirectionToSixFaceTwentyFourAngle(
+                  //       cell.sixFace,
+                  //       cell.faceDirection,
+                  //     ),
+                  //   );
+                  // });
 
-                  // const [
-                  // 	upFaceOutestCellSixFaceTwentyFourAngle,
-                  // 	downFaceOutestCellSixFaceTwentyFourAngle,
-                  // 	leftFaceOutestCellSixFaceTwentyFourAngle,
-                  // 	rightFaceOutestCellSixFaceTwentyFourAngle,
-                  // 	frontFaceOutestCellSixFaceTwentyFourAngle,
-                  // 	backFaceOutestCellSixFaceTwentyFourAngle,
-                  // ] = sixFaceTwentyFourAngleOfSixFaceOutestCellArray;
+                  // // const [
+                  // // 	upFaceOutestCellSixFaceTwentyFourAngle,
+                  // // 	downFaceOutestCellSixFaceTwentyFourAngle,
+                  // // 	leftFaceOutestCellSixFaceTwentyFourAngle,
+                  // // 	rightFaceOutestCellSixFaceTwentyFourAngle,
+                  // // 	frontFaceOutestCellSixFaceTwentyFourAngle,
+                  // // 	backFaceOutestCellSixFaceTwentyFourAngle,
+                  // // ] = sixFaceTwentyFourAngleOfSixFaceOutestCellArray;
 
-                  // [upFaceOutestCell]
-                  sixFaceOutestCellArray.forEach((cell, cellIndex) => {
-                    cell.borderLines.forEach((borderLine, borderLineIndex) => {
-                      if (borderLine !== CellBorderLine.InnerLine) {
-                        const twelveEdgeIndex: TwelveEdge =
-                          getSixFaceTwentyFourAngleRelationTwelveEdge(
-                            // upFaceOutestCellSixFaceTwentyFourAngle,
-                            sixFaceTwentyFourAngleOfSixFaceOutestCellArray[
-                              cellIndex
-                            ],
-                            borderLineIndex,
-                          );
+                  // // [upFaceOutestCell]
+                  // sixFaceOutestCellArray.forEach((cell, cellIndex) => {
+                  //   cell.borderLines.forEach((borderLine, borderLineIndex) => {
+                  //     if (borderLine !== CellBorderLine.InnerLine) {
+                  //       const twelveEdgeIndex: TwelveEdge =
+                  //         getSixFaceTwentyFourAngleRelationTwelveEdge(
+                  //           // upFaceOutestCellSixFaceTwentyFourAngle,
+                  //           sixFaceTwentyFourAngleOfSixFaceOutestCellArray[
+                  //             cellIndex
+                  //           ],
+                  //           borderLineIndex,
+                  //         );
 
-                        if (!twelveEdges[twelveEdgeIndex].canBeInserted) {
-                          twelveEdges[twelveEdgeIndex].canBeInserted = true;
+                  //       if (!twelveEdges[twelveEdgeIndex].canBeInserted) {
+                  //         twelveEdges[twelveEdgeIndex].canBeInserted = true;
+                  //       }
+                  //     }
+                  //   });
+                  // });
+                  sixFaceOutestCellArray.forEach((OUTEST_CELL: CellObject) => {
+                    OUTEST_CELL.borderLines.forEach(
+                      (borderLine, borderLineIndex) => {
+                        if (borderLine !== CellBorderLine.InnerLine) {
+                          const twelveEdgeIndex: TwelveEdge =
+                            getSixFaceTwentyFourAngleRelationTwelveEdge(
+                              OUTEST_CELL.sixFaceTwentyFourAngle,
+                              borderLineIndex,
+                            );
+
+                          if (!twelveEdges[twelveEdgeIndex].canBeInserted) {
+                            twelveEdges[twelveEdgeIndex].canBeInserted = true;
+                          }
                         }
-                      }
-                    });
+                      },
+                    );
                   });
 
                   twelveEdges.forEach((oneEdge, edgeIndex) => {
@@ -1514,7 +1525,7 @@ async function step2(
                         }.js`,
                         `const cube_${cubePassCheckFacesLayerIndexFileNo} = ${
                           JSON.stringify(cloned)
-                        };`,
+                        };\n// ${cloned.getManner()}`,
                       );
                     }
                     fixLonelyFaceOfCubeAndAppendIt(cloned);
@@ -2028,7 +2039,8 @@ async function step2(
       nextCubeNo += CUBE_NO_STEP;
       if (OUTPUT_MIDDLE_CUBE_TO_FIRST_NO) {
         appendContent(
-          nextCubeNo.toString(),
+          // nextCubeNo.toString(),
+          `${nextCubeNo}: ${cube.getManner()}`,
           MiddleFileKind.MiddleCubeToFirstNo,
         );
       }
@@ -2038,7 +2050,9 @@ async function step2(
       if (OUTPUT_ALONE_FIRST_CUBE) {
         Deno.writeTextFileSync(
           `${ALONE_FIRST_CUBE_PATH}${nextCubeNo}.js`,
-          `const cube_${nextCubeNo} = ${JSON.stringify(cube)};`,
+          `const cube_${nextCubeNo} = ${
+            JSON.stringify(cube)
+          };\n// ${cube.getManner()}`,
         );
       }
 
@@ -2252,9 +2266,7 @@ async function step3(
 
         cloned.syncAndClear();
 
-        const MANNER = cloned.twelveEdges.map((twelveEdge) =>
-          `${twelveEdge.canBeInserted ? "T" : "F"}${twelveEdge.pieces.length}`
-        ).join("");
+        const MANNER = cloned.getManner();
         (cloned as unknown as { manner: string }).manner = MANNER;
 
         appendCube(cloned);

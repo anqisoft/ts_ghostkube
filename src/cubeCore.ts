@@ -1132,41 +1132,64 @@ export class Cube implements CubePaperModel, CubeObject {
       });
     });
 
-    const sixFaceOutestCellArray: CellObject[] = [];
+    // const sixFaceOutestCellArray: CellObject[] = [];
+    // const { sixFaces } = this;
+    // sixFaces.forEach((sixFaceInfo) => {
+    //   sixFaceInfo.forEach(([
+    //     firstRowIndex,
+    //     firstColIndex,
+    //     secondRowIndex,
+    //     secondColIndex,
+    //   ]) => {
+    //     sixFaceOutestCellArray.push(
+    //       (typeof secondRowIndex === "undefined" ||
+    //           typeof secondColIndex === "undefined")
+    //         ? cells[firstRowIndex][firstColIndex]
+    //         : cells[secondRowIndex][secondColIndex],
+    //     );
+    //   });
+    // });
+
+    // const sixFaceTwentyFourAngleOfSixFaceOutestCellArray:
+    //   SixFaceTwentyFourAngle[] = [];
+    // sixFaceOutestCellArray.forEach((cell) => {
+    //   sixFaceTwentyFourAngleOfSixFaceOutestCellArray.push(
+    //     convertSixFaceAndDirectionToSixFaceTwentyFourAngle(
+    //       cell.sixFace,
+    //       cell.faceDirection,
+    //     ),
+    //   );
+    // });
+
+    // sixFaceOutestCellArray.forEach((cell, cellIndex) => {
+    //   cell.borderLines.forEach((borderLine, borderLineIndex) => {
+    //     if (borderLine !== CellBorderLine.InnerLine) {
+    //       const twelveEdgeIndex: TwelveEdge =
+    //         getSixFaceTwentyFourAngleRelationTwelveEdge(
+    //           sixFaceTwentyFourAngleOfSixFaceOutestCellArray[cellIndex],
+    //           borderLineIndex,
+    //         );
+
+    //       if (!twelveEdges[twelveEdgeIndex].canBeInserted) {
+    //         twelveEdges[twelveEdgeIndex].canBeInserted = true;
+    //       }
+    //     }
+    //   });
+    // });
+
     const { sixFaces } = this;
-    sixFaces.forEach((sixFaceInfo) => {
-      sixFaceInfo.forEach(([
-        firstRowIndex,
-        firstColIndex,
-        secondRowIndex,
-        secondColIndex,
-      ]) => {
-        sixFaceOutestCellArray.push(
-          (typeof secondRowIndex === "undefined" ||
-              typeof secondColIndex === "undefined")
-            ? cells[firstRowIndex][firstColIndex]
-            : cells[secondRowIndex][secondColIndex],
-        );
-      });
-    });
-
-    const sixFaceTwentyFourAngleOfSixFaceOutestCellArray:
-      SixFaceTwentyFourAngle[] = [];
-    sixFaceOutestCellArray.forEach((cell) => {
-      sixFaceTwentyFourAngleOfSixFaceOutestCellArray.push(
-        convertSixFaceAndDirectionToSixFaceTwentyFourAngle(
-          cell.sixFace,
-          cell.faceDirection,
-        ),
-      );
-    });
-
-    sixFaceOutestCellArray.forEach((cell, cellIndex) => {
-      cell.borderLines.forEach((borderLine, borderLineIndex) => {
+    sixFaces.forEach((sixFaceInfo: FaceMemberOfSixFace) => {
+      const COUNT = sixFaceInfo.length;
+      const [row1, col1, row2, col2] = sixFaceInfo[COUNT - 1];
+      const OUTEST_CELL: CellObject = (typeof row2 === "undefined" ||
+          typeof col2 === "undefined")
+        ? cells[row1][col1]
+        : cells[row2][col2];
+      OUTEST_CELL.borderLines.forEach((borderLine, borderLineIndex) => {
         if (borderLine !== CellBorderLine.InnerLine) {
           const twelveEdgeIndex: TwelveEdge =
             getSixFaceTwentyFourAngleRelationTwelveEdge(
-              sixFaceTwentyFourAngleOfSixFaceOutestCellArray[cellIndex],
+              OUTEST_CELL.sixFaceTwentyFourAngle,
               borderLineIndex,
             );
 
@@ -1365,6 +1388,12 @@ export class Cube implements CubePaperModel, CubeObject {
       colIndex: -1,
       relation: ConnectionRelation.Top,
     };
+  }
+
+  getManner():  string {
+    return this.twelveEdges.map((twelveEdge) =>
+      `${twelveEdge.canBeInserted ? "T" : "F"}${twelveEdge.pieces.length}`
+    ).join("");
   }
 
   private updateIsValid() {

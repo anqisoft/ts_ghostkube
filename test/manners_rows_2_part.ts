@@ -12,7 +12,7 @@ const DATE_BEGIN = performance.now();
 
 showUsedTime("init");
 try {
-  done("E:\\__cube\\240508E\\", GOAL_FILE, true);
+  done("E:\\__cube\\240508E_01\\", GOAL_FILE, true, "PART");
 } catch (error) {
   log("[error]", error);
 }

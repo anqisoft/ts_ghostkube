@@ -892,25 +892,58 @@ var Cube = /** @class */ (function () {
                 }
             });
         });
-        var sixFaceOutestCellArray = [];
+        // const sixFaceOutestCellArray: CellObject[] = [];
+        // const { sixFaces } = this;
+        // sixFaces.forEach((sixFaceInfo) => {
+        //   sixFaceInfo.forEach(([
+        //     firstRowIndex,
+        //     firstColIndex,
+        //     secondRowIndex,
+        //     secondColIndex,
+        //   ]) => {
+        //     sixFaceOutestCellArray.push(
+        //       (typeof secondRowIndex === "undefined" ||
+        //           typeof secondColIndex === "undefined")
+        //         ? cells[firstRowIndex][firstColIndex]
+        //         : cells[secondRowIndex][secondColIndex],
+        //     );
+        //   });
+        // });
+        // const sixFaceTwentyFourAngleOfSixFaceOutestCellArray:
+        //   SixFaceTwentyFourAngle[] = [];
+        // sixFaceOutestCellArray.forEach((cell) => {
+        //   sixFaceTwentyFourAngleOfSixFaceOutestCellArray.push(
+        //     convertSixFaceAndDirectionToSixFaceTwentyFourAngle(
+        //       cell.sixFace,
+        //       cell.faceDirection,
+        //     ),
+        //   );
+        // });
+        // sixFaceOutestCellArray.forEach((cell, cellIndex) => {
+        //   cell.borderLines.forEach((borderLine, borderLineIndex) => {
+        //     if (borderLine !== CellBorderLine.InnerLine) {
+        //       const twelveEdgeIndex: TwelveEdge =
+        //         getSixFaceTwentyFourAngleRelationTwelveEdge(
+        //           sixFaceTwentyFourAngleOfSixFaceOutestCellArray[cellIndex],
+        //           borderLineIndex,
+        //         );
+        //       if (!twelveEdges[twelveEdgeIndex].canBeInserted) {
+        //         twelveEdges[twelveEdgeIndex].canBeInserted = true;
+        //       }
+        //     }
+        //   });
+        // });
         var sixFaces = this.sixFaces;
         sixFaces.forEach(function (sixFaceInfo) {
-            sixFaceInfo.forEach(function (_a) {
-                var firstRowIndex = _a[0], firstColIndex = _a[1], secondRowIndex = _a[2], secondColIndex = _a[3];
-                sixFaceOutestCellArray.push((typeof secondRowIndex === "undefined" ||
-                    typeof secondColIndex === "undefined")
-                    ? cells[firstRowIndex][firstColIndex]
-                    : cells[secondRowIndex][secondColIndex]);
-            });
-        });
-        var sixFaceTwentyFourAngleOfSixFaceOutestCellArray = [];
-        sixFaceOutestCellArray.forEach(function (cell) {
-            sixFaceTwentyFourAngleOfSixFaceOutestCellArray.push(convertSixFaceAndDirectionToSixFaceTwentyFourAngle(cell.sixFace, cell.faceDirection));
-        });
-        sixFaceOutestCellArray.forEach(function (cell, cellIndex) {
-            cell.borderLines.forEach(function (borderLine, borderLineIndex) {
+            var COUNT = sixFaceInfo.length;
+            var _a = sixFaceInfo[COUNT - 1], row1 = _a[0], col1 = _a[1], row2 = _a[2], col2 = _a[3];
+            var OUTEST_CELL = (typeof row2 === "undefined" ||
+                typeof col2 === "undefined")
+                ? cells[row1][col1]
+                : cells[row2][col2];
+            OUTEST_CELL.borderLines.forEach(function (borderLine, borderLineIndex) {
                 if (borderLine !== CellBorderLine.InnerLine) {
-                    var twelveEdgeIndex = getSixFaceTwentyFourAngleRelationTwelveEdge(sixFaceTwentyFourAngleOfSixFaceOutestCellArray[cellIndex], borderLineIndex);
+                    var twelveEdgeIndex = getSixFaceTwentyFourAngleRelationTwelveEdge(OUTEST_CELL.sixFaceTwentyFourAngle, borderLineIndex);
                     if (!twelveEdges[twelveEdgeIndex].canBeInserted) {
                         twelveEdges[twelveEdgeIndex].canBeInserted = true;
                     }
@@ -1038,6 +1071,11 @@ var Cube = /** @class */ (function () {
             colIndex: -1,
             relation: ConnectionRelation.Top
         };
+    };
+    Cube.prototype.getManner = function () {
+        return this.twelveEdges.map(function (twelveEdge) {
+            return "" + (twelveEdge.canBeInserted ? "T" : "F") + twelveEdge.pieces.length;
+        }).join("");
     };
     Cube.prototype.updateIsValid = function () {
         var actCells = this.actCells;
