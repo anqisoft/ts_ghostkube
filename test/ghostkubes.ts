@@ -521,7 +521,7 @@ export async function done(
             // 2. 根据cubeNo与CUBE_LINE_ARRAY，获取边线数据并还原
             // 444442222244444422324433234
             // 44444222222222244444433334432324423234
-            const CUBE_LINE = CUBE_LINE_ARRAY[Math.ceil((cubeNo - 0.5) / 24)];
+            const CUBE_LINE = CUBE_LINE_ARRAY[Math.floor((cubeNo - 0.5) / 24)];
             // // 27 chars or 38 chars
             // const ROW_COUNT = CUBE_LINE.length === 27 ? 2 : 3;
 

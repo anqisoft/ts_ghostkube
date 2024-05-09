@@ -12,7 +12,7 @@ const DATE_BEGIN = performance.now();
 
 showUsedTime("init");
 try {
-  await done("E:\\__cube\\240508D\\test_02\\", GOAL_FILE);
+  done("E:\\__cube\\240508E\\", GOAL_FILE, true);
 } catch (error) {
   log("[error]", error);
 }
@@ -23,7 +23,7 @@ logUsedTime("Total", performance.now() - DATE_BEGIN);
 log("");
 
 /*
-set pwd=P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\test
-cls && deno lint %pwd%\manners_rows_2_part.ts && deno fmt %pwd%\manners_rows_2_part.ts
+set test=P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\test
+cls && deno lint %test%\manners_rows_2_part.ts && deno fmt %test%\manners_rows_2_part.ts
 cls && deno run --v8-flags=--max-old-space-size=20480 -A manners_rows_2_part.ts
 */

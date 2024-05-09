@@ -1,42 +1,12 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
+/* v0.0.1
+  <en_us></en_us>
+  <zh_cn>直接查找manners.txt文件。</zh_cn>
+  <zh_tw></zh_tw>
+*/
 exports.__esModule = true;
 exports.done = void 0;
+var mod_ts_1 = require("https://deno.land/std/fs/mod.ts");
 var cubeCore_ts_1 = require("../src/cubeCore.ts");
 var COL_COUNT = 5;
 function getCubeLineArray(SOURCE_FILE_PATH) {
@@ -182,47 +152,60 @@ function getCubeForDrawing(no, CUBE_LINE, ACT_CELLS) {
         lastRowEmptyCellColIndexBill: lastRowEmptyCellColIndexBill
     };
 }
-function done(SOURCE_FILE_PATH, GOAL_FILE) {
-    return __awaiter(this, void 0, void 0, function () {
-        var codes, SET_ARRAY, SET_ITEM, SET_ITEM_CUBE_ARRAY, CUBE_LINE_ARRAY, CUBES, MANNER_AND_CUBE_NO_BILL_ARRAY, MANNER_AND_CUBE_NO_BILL_COUNT, i, _a, _manner, cubeNoBill, CUBE_NO_ARRAY, cubeNo, CUBE_LINE, CUBE_FILE_NO, CUBE_LINE_INDEX_IN_FILE, ACT_CELLS, CUBE;
-        return __generator(this, function (_b) {
-            codes = "const SET_ARRAY = \n";
-            SET_ARRAY = [];
-            SET_ITEM = {
-                name: "NO-1",
-                cubes: []
-            };
-            SET_ARRAY.push(SET_ITEM);
-            SET_ITEM_CUBE_ARRAY = SET_ITEM.cubes;
-            CUBE_LINE_ARRAY = getCubeLineArray(SOURCE_FILE_PATH);
-            CUBES = [];
-            MANNER_AND_CUBE_NO_BILL_ARRAY = Deno.readTextFileSync(SOURCE_FILE_PATH + "manners.txt").split("\n");
-            MANNER_AND_CUBE_NO_BILL_COUNT = MANNER_AND_CUBE_NO_BILL_ARRAY.length;
-            for (i = 0; i < MANNER_AND_CUBE_NO_BILL_COUNT; ++i) {
-                _a = MANNER_AND_CUBE_NO_BILL_ARRAY[i].split("\t"), _manner = _a[0], cubeNoBill = _a[1];
-                CUBE_NO_ARRAY = cubeNoBill.split(",").map(function (no) { return parseInt(no); });
-                cubeNo = CUBE_NO_ARRAY[0];
-                SET_ITEM_CUBE_ARRAY.push(cubeNo);
-                CUBE_LINE = CUBE_LINE_ARRAY[Math.ceil((cubeNo - 0.5) / 24)];
-                CUBE_FILE_NO = Math.ceil((cubeNo - 0.5) / 30720);
-                CUBE_LINE_INDEX_IN_FILE = Math.floor((cubeNo - 0.5) % 30720);
-                ACT_CELLS = Deno.readTextFileSync(SOURCE_FILE_PATH + "cubes/" + CUBE_FILE_NO.toString().padStart(6, "0") + ".txt")
-                    .split("\n")[CUBE_LINE_INDEX_IN_FILE];
-                CUBE = getCubeForDrawing(cubeNo, CUBE_LINE, ACT_CELLS);
-                CUBES.push(CUBE);
-            }
-            codes += JSON.stringify(SET_ARRAY);
-            codes += "\n;";
-            codes += "\nconst CUBES = " + JSON.stringify(CUBES) + ";";
-            Deno.writeTextFileSync(GOAL_FILE, codes);
-            return [2 /*return*/];
-        });
-    });
+function done(SOURCE_FILE_PATH, GOAL_FILE, OUTPUT_ALONE_CUBE, SET_ITEM_NAME) {
+    if (OUTPUT_ALONE_CUBE === void 0) { OUTPUT_ALONE_CUBE = false; }
+    if (SET_ITEM_NAME === void 0) { SET_ITEM_NAME = '~'; }
+    var END_ALONE_CUBE_PATH = SOURCE_FILE_PATH + "99_AloneCube/";
+    if (OUTPUT_ALONE_CUBE) {
+        mod_ts_1.ensureDirSync(END_ALONE_CUBE_PATH);
+        mod_ts_1.emptyDirSync(END_ALONE_CUBE_PATH);
+    }
+    var codes = "const SET_ARRAY = \n";
+    var SET_ARRAY = [];
+    var SET_ITEM = {
+        name: SET_ITEM_NAME,
+        cubes: []
+    };
+    SET_ARRAY.push(SET_ITEM);
+    var SET_ITEM_CUBE_ARRAY = SET_ITEM.cubes;
+    var CUBE_LINE_ARRAY = getCubeLineArray(SOURCE_FILE_PATH);
+    var CUBES = [];
+    var MANNER_AND_CUBE_NO_BILL_ARRAY = Deno.readTextFileSync(SOURCE_FILE_PATH + "manners.txt").split("\n");
+    var MANNER_AND_CUBE_NO_BILL_COUNT = MANNER_AND_CUBE_NO_BILL_ARRAY.length;
+    for (var i = 0; i < MANNER_AND_CUBE_NO_BILL_COUNT; ++i) {
+        var _a = MANNER_AND_CUBE_NO_BILL_ARRAY[i].split("\t"), _manner = _a[0], cubeNoBill = _a[1];
+        var CUBE_NO_ARRAY = cubeNoBill.split(",").map(function (no) { return parseInt(no); });
+        var cubeNo = CUBE_NO_ARRAY[0];
+        SET_ITEM_CUBE_ARRAY.push(cubeNo);
+        // 根据cube.no直接创建相应cube，追加到CUBES
+        // 2. 根据cubeNo与CUBE_LINE_ARRAY，获取边线数据并还原
+        // 444442222244444422324433234
+        // 44444222222222244444433334432324423234
+        var CUBE_LINE = CUBE_LINE_ARRAY[Math.floor((cubeNo - 0.5) / 24)];
+        // // 27 chars or 38 chars
+        // const ROW_COUNT = CUBE_LINE.length === 27 ? 2 : 3;
+        // 3. 根据cubeNo与cubes/00####.txt（每文件30720行，所以可以直接算出读哪个文件，再读相应行），获取格信息
+        var CUBE_FILE_NO = Math.ceil((cubeNo - 0.5) / 30720);
+        var CUBE_LINE_INDEX_IN_FILE = Math.floor((cubeNo - 0.5) % 30720); // cubeNo % 30720;
+        // 00431011215330504033577267b1702080009713
+        var ACT_CELLS = Deno.readTextFileSync(SOURCE_FILE_PATH + "cubes/" + CUBE_FILE_NO.toString().padStart(6, "0") + ".txt")
+            .split("\n")[CUBE_LINE_INDEX_IN_FILE];
+        // console.log({ cubeNo, CUBE_LINE, ACT_CELLS });
+        var CUBE = getCubeForDrawing(cubeNo, CUBE_LINE, ACT_CELLS);
+        CUBES.push(CUBE);
+        if (OUTPUT_ALONE_CUBE) {
+            Deno.writeTextFileSync("" + END_ALONE_CUBE_PATH + cubeNo + ".js", "const cube_" + cubeNo + " = " + JSON.stringify(CUBE) + ";");
+        }
+    }
+    codes += JSON.stringify(SET_ARRAY);
+    codes += "\n;";
+    codes += "\nconst CUBES = " + JSON.stringify(CUBES) + ";";
+    Deno.writeTextFileSync(GOAL_FILE, codes);
 }
 exports.done = done;
 /*
-set pwd=P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\test
-cls && deno lint %pwd%\manners.ts && deno fmt %pwd%\manners.ts
+set test=P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\test
+cls && deno lint %test%\manners.ts && deno fmt %test%\manners.ts
 */
 /*
 */

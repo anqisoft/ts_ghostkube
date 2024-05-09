@@ -234,6 +234,35 @@ export function convertSixFaceTwentyFourAngleToSixFaceAndDirection(
   const FIXED_VALUE = value + 0.5;
   return [floor(FIXED_VALUE / 4), floor(FIXED_VALUE % 4)];
 }
+/*
+function convertSixFaceTwentyFourAngleToSixFaceAndDirection(value){const FIXED_VALUE = value + 0.5;return [Math.floor(FIXED_VALUE / 4), Math.floor(FIXED_VALUE % 4)];}
+
+[ 0, 0 ]
+[ 0, 1 ]
+[ 0, 2 ]
+[ 0, 3 ]
+[ 1, 0 ]
+[ 1, 1 ]
+[ 1, 2 ]
+[ 1, 3 ]
+[ 2, 0 ]
+[ 2, 1 ]
+[ 2, 2 ]
+[ 2, 3 ]
+[ 3, 0 ]
+[ 3, 1 ]
+[ 3, 2 ]
+[ 3, 3 ]
+[ 4, 0 ]
+[ 4, 1 ]
+[ 4, 2 ]
+[ 4, 3 ]
+[ 5, 0 ]
+[ 5, 1 ]
+[ 5, 2 ]
+[ 5, 3 ]
+*/
+
 export function convertSixFaceTwentyFourAngleToString(
   value: SixFaceTwentyFourAngle,
 ): string {
@@ -324,30 +353,30 @@ export enum ConnectionRelation {
 // 	<zh_cn>在调试窗口直接获得相应结果，不再计算</zh_cn>
 // 	<zh_tw>zh_tw</zh_tw>
 export const SIX_FACE_AND_DIRECTION_RELATIONS: SixFaceTwentyFourAngle[][] = [
-  [20, 12, 16, 8],
-  [9, 21, 13, 17],
-  [18, 10, 22, 14],
-  [15, 19, 11, 23],
-  [22, 8, 18, 12],
-  [13, 23, 9, 19],
-  [16, 14, 20, 10],
-  [11, 17, 15, 21],
-  [23, 0, 17, 4],
-  [5, 20, 1, 18],
-  [19, 6, 21, 2],
-  [3, 16, 7, 22],
-  [21, 4, 19, 0],
-  [1, 22, 5, 16],
-  [17, 2, 23, 6],
-  [7, 18, 3, 20],
-  [0, 13, 6, 11],
-  [8, 1, 14, 7],
-  [4, 9, 2, 15],
-  [12, 5, 10, 3],
-  [6, 15, 0, 9],
-  [10, 7, 12, 1],
-  [2, 11, 4, 13],
-  [14, 3, 8, 5],
+  [20, 12, 16, 8], // 0
+  [9, 21, 13, 17], // 1
+  [18, 10, 22, 14], // 2
+  [15, 19, 11, 23], // 3
+  [22, 8, 18, 12], // 4
+  [13, 23, 9, 19], // 5
+  [16, 14, 20, 10], // 6
+  [11, 17, 15, 21], // 7
+  [23, 0, 17, 4], // 8
+  [5, 20, 1, 18], // 9
+  [19, 6, 21, 2], // 10
+  [3, 16, 7, 22], // 11
+  [21, 4, 19, 0], // 12
+  [1, 22, 5, 16], // 13
+  [17, 2, 23, 6], // 14
+  [7, 18, 3, 20], // 15
+  [0, 13, 6, 11], // 16
+  [8, 1, 14, 7], // 17
+  [4, 9, 2, 15], // 18
+  [12, 5, 10, 3], // 19
+  [6, 15, 0, 9], // 20
+  [10, 7, 12, 1], // 21
+  [2, 11, 4, 13], // 22
+  [14, 3, 8, 5], // 23
 ];
 
 function showSixFaceAndDirectionRelations() {
@@ -1008,7 +1037,16 @@ export class Cube implements CubePaperModel, CubeObject {
 
   syncAndClear(): void {
     this.sync();
-    // clear?......
+    this.clear();
+  }
+
+  clear(): void {
+    this.cells = undefined;
+    this.isValid = undefined;
+    this.emptyCells = undefined;
+
+    this.colCount = undefined;
+    this.coreRowIndex = undefined;
   }
 
   sync(): void {
@@ -1416,12 +1454,15 @@ export class Cube implements CubePaperModel, CubeObject {
               cell.relatedInformationWhenAdding.rowIndex === rowIndex &&
               cell.relatedInformationWhenAdding.colIndex === colIndex
             )[0];
-            let relation = RELATION_CELL.relatedInformationWhenAdding.relation;
-            if (relation % 2 === 0) {
-              relation = 2 - relation;
-            } else {
-              relation = 4 - relation;
-            }
+            // let relation = RELATION_CELL.relatedInformationWhenAdding.relation;
+            // if (relation % 2 === 0) {
+            //   relation = 2 - relation;
+            // } else {
+            //   relation = 4 - relation;
+            // }
+            const relation = getReversedRelation(
+              RELATION_CELL.relatedInformationWhenAdding.relation,
+            );
 
             twelveEdges[
               getSixFaceTwentyFourAngleRelationTwelveEdge(
@@ -2353,6 +2394,15 @@ export function getReversedRelation(
 ): ConnectionRelation {
   return relation % 2 + 2 * (1 - Math.floor(relation / 2));
 }
+/*
+  function getReversedRelation(relation) {return relation % 2 + 2 * (1 - Math.floor(relation / 2));
+  for(let i = 0; i < 4; ++i) {  console.log(getReversedRelation(i)); }
+
+2
+3
+0
+1
+*/
 
 /*
 set pwd=P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\src\

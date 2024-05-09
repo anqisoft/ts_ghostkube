@@ -3,9 +3,8 @@
   <zh_cn>直接查找manners.txt文件。</zh_cn>
   <zh_tw></zh_tw>
 */
-// see: https://www.kickstarter.com/projects/ghostkube/ghostkube
-import { BufReader } from "https://deno.land/std/io/mod.ts";
-import { log, showUsedTime } from "./log.ts";
+
+import { emptyDirSync, ensureDirSync } from "https://deno.land/std/fs/mod.ts";
 
 import {
   CellFeature,
@@ -189,15 +188,23 @@ function getCubeForDrawing(
   } as CubeForDrawing;
 }
 
-export async function done(
+export function done(
   SOURCE_FILE_PATH: string,
   GOAL_FILE: string,
+  OUTPUT_ALONE_CUBE: boolean = false,
+  SET_ITEM_NAME: string = '~',
 ) {
+  const END_ALONE_CUBE_PATH = `${SOURCE_FILE_PATH}99_AloneCube/`;
+  if (OUTPUT_ALONE_CUBE) {
+    ensureDirSync(END_ALONE_CUBE_PATH);
+    emptyDirSync(END_ALONE_CUBE_PATH);
+  }
+
   let codes = "const SET_ARRAY = \n";
 
   const SET_ARRAY: object[] = [];
   const SET_ITEM: { name: string; cubes: number[] } = {
-    name: "NO-1",
+    name: SET_ITEM_NAME,
     cubes: [],
   };
   SET_ARRAY.push(SET_ITEM);
@@ -216,12 +223,12 @@ export async function done(
     const cubeNo = CUBE_NO_ARRAY[0];
     SET_ITEM_CUBE_ARRAY.push(cubeNo);
 
-    // TODO(@anqisoft) 根据cube.no直接创建相应cube，追加到CUBES
+    // 根据cube.no直接创建相应cube，追加到CUBES
 
     // 2. 根据cubeNo与CUBE_LINE_ARRAY，获取边线数据并还原
     // 444442222244444422324433234
     // 44444222222222244444433334432324423234
-    const CUBE_LINE = CUBE_LINE_ARRAY[Math.ceil((cubeNo - 0.5) / 24)];
+    const CUBE_LINE = CUBE_LINE_ARRAY[Math.floor((cubeNo - 0.5) / 24)];
     // // 27 chars or 38 chars
     // const ROW_COUNT = CUBE_LINE.length === 27 ? 2 : 3;
 
@@ -238,8 +245,16 @@ export async function done(
         "\n",
       )[CUBE_LINE_INDEX_IN_FILE];
 
+    // console.log({ cubeNo, CUBE_LINE, ACT_CELLS });
     const CUBE = getCubeForDrawing(cubeNo, CUBE_LINE, ACT_CELLS);
     CUBES.push(CUBE);
+
+    if (OUTPUT_ALONE_CUBE) {
+      Deno.writeTextFileSync(
+        `${END_ALONE_CUBE_PATH}${cubeNo}.js`,
+        `const cube_${cubeNo} = ${JSON.stringify(CUBE)};`,
+      );
+    }
   }
 
   codes += JSON.stringify(SET_ARRAY);
@@ -250,8 +265,8 @@ export async function done(
 }
 
 /*
-set pwd=P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\test
-cls && deno lint %pwd%\manners.ts && deno fmt %pwd%\manners.ts
+set test=P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\test
+cls && deno lint %test%\manners.ts && deno fmt %test%\manners.ts
 */
 
 /*

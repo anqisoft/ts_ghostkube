@@ -104,6 +104,7 @@ const MAX_COL_INDEX = COL_COUNT - 1;
 function step1(
   ROW_COUNT_ARRAY: number[],
   GOAL_FILE_TOP_PATH: string = "./",
+  OUTPUT_CUT_MANNERS_ROW_BY_ROW: boolean = false,
 ) {
   const STEP_FLAG = "step1";
 
@@ -114,9 +115,15 @@ function step1(
   let logFilenamePostfix = "";
   logFilenamePostfix = `_${STEP_FLAG}`;
 
-  // const GOAL_FILE_TOP_PATH = `./${STEP_FLAG}/`;
-  ensureDirSync(GOAL_FILE_TOP_PATH);
-  emptyDirSync(GOAL_FILE_TOP_PATH);
+  const GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH =
+    GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length;
+  const DEBUG_FILE_PREFIX = GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH
+    ? ""
+    : STEP_FLAG.concat("_");
+  if (GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH) {
+    ensureDirSync(GOAL_FILE_TOP_PATH);
+    emptyDirSync(GOAL_FILE_TOP_PATH);
+  }
 
   log(`begin: ${(new Date()).toLocaleString()}`);
   const DATE_BEGIN = performance.now();
@@ -799,11 +806,11 @@ function step1(
 
   if (DEBUG.SHOW_CUT_MANNERS) {
     Deno.writeTextFileSync(
-      `${GOAL_FILE_TOP_PATH}cutMannerArray.ts`,
+      `${GOAL_FILE_TOP_PATH}${DEBUG_FILE_PREFIX}cutMannerArray.ts`,
       `export const cutMannerArray = ${JSON.stringify(CUT_MANNER_ARRAY)};`,
     );
     Deno.writeTextFileSync(
-      `${GOAL_FILE_TOP_PATH}cutMannerCountArray.ts`,
+      `${GOAL_FILE_TOP_PATH}${DEBUG_FILE_PREFIX}cutMannerCountArray.ts`,
       `export const cutMannerCountArray = ${
         JSON.stringify(CUT_MANNER_COUNT_ARRAY)
       };`,
@@ -811,10 +818,16 @@ function step1(
     log(`CUT_MANNER_ARRAY.length:`, CUT_MANNER_ARRAY.length);
     log(`CUT_MANNER_COUNT_ARRAY:`, CUT_MANNER_COUNT_ARRAY);
   }
+  if (OUTPUT_CUT_MANNERS_ROW_BY_ROW) {
+    Deno.writeTextFileSync(
+      `${GOAL_FILE_TOP_PATH}${DEBUG_FILE_PREFIX}cutManners.txt`,
+      CUT_MANNER_ARRAY.join("\n"),
+    );
+  }
 
   showUsedTime("end");
   log(`end: ${(new Date()).toLocaleString()}`);
-  logUsedTime("Total", performance.now() - DATE_BEGIN);
+  logUsedTime(`${STEP_FLAG}: Total`, performance.now() - DATE_BEGIN);
 
   copySync(LOG_FILE_NAME, `log_${STEP_FLAG}.txt`, OVER_WRITE_TRUE_FLAG);
   copySync(
@@ -829,14 +842,26 @@ async function step2(
   ROW_COUNT_ARRAY: number[],
   GOAL_FILE_TOP_PATH: string = "./",
   SOURCE_FILE_TOP_PATH: string = "./",
+  OUTPUT_ALONE_FIRST_CUBE: boolean = false,
+  OUTPUT_CUBE_PASS_CHECK_FACES_LAYER_INDEX: boolean = false,
+  OUTPUT_FIX_HIDDEN_PIECES_DETAILS: boolean = false,
+  OUTPUT_FIX_HIDDEN_PIECES: boolean = false,
+  OUTPUT_MIDDLE_CUBE_TO_FIRST_NO: boolean = false,
+  OUTPUT_CHECK_FACES_LAYER_INDEX_FAILED: boolean = false,
+  OUTPUT_FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT: boolean = false,
+  OUTPUT_FIX_LONELY_FACE_OF_CUBE: boolean = false,
 ) {
   const STEP_FLAG = "step2";
 
   let logFilenamePostfix = "";
   logFilenamePostfix = `_${STEP_FLAG}`;
 
-  // const GOAL_FILE_TOP_PATH = `./${STEP_FLAG}/`;
-  if (GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length) {
+  const GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH =
+    GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length;
+  const DEBUG_FILE_PREFIX = GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH
+    ? ""
+    : STEP_FLAG.concat("_");
+  if (GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH) {
     ensureDirSync(GOAL_FILE_TOP_PATH);
     emptyDirSync(GOAL_FILE_TOP_PATH);
   }
@@ -844,7 +869,27 @@ async function step2(
   log(`begin: ${(new Date()).toLocaleString()}`);
   const DATE_BEGIN = performance.now();
 
-  // const SOURCE_FILE_TOP_PATH = "./step1/";
+  const ALONE_FIRST_CUBE_PATH = `${GOAL_FILE_TOP_PATH}29_aloneFirstCube/`;
+  if (OUTPUT_ALONE_FIRST_CUBE) {
+    ensureDirSync(ALONE_FIRST_CUBE_PATH);
+    emptyDirSync(ALONE_FIRST_CUBE_PATH);
+  }
+
+  let fixHiddenPiecesFileNo = 0;
+  const FIX_HIDDEN_PIECES_DETAILS_PATH =
+    `${GOAL_FILE_TOP_PATH}22_fixHiddenPiecesDetails/`;
+  if (OUTPUT_FIX_HIDDEN_PIECES_DETAILS) {
+    ensureDirSync(FIX_HIDDEN_PIECES_DETAILS_PATH);
+    emptyDirSync(FIX_HIDDEN_PIECES_DETAILS_PATH);
+  }
+
+  const CUBE_PASSED_CHECK_FACES_LAYER_INDEX_PATH =
+    `${GOAL_FILE_TOP_PATH}21_cubePassedCheckFacesLayerIndex/`;
+  if (OUTPUT_CUBE_PASS_CHECK_FACES_LAYER_INDEX) {
+    ensureDirSync(CUBE_PASSED_CHECK_FACES_LAYER_INDEX_PATH);
+    emptyDirSync(CUBE_PASSED_CHECK_FACES_LAYER_INDEX_PATH);
+  }
+  let cubePassCheckFacesLayerIndexFileNo = 0;
 
   const GOAL_CUBE_FILE_PATH =
     `${GOAL_FILE_TOP_PATH}cubesOnlyFirstOfTwentyFour/`;
@@ -852,15 +897,15 @@ async function step2(
   emptyDirSync(GOAL_CUBE_FILE_PATH);
 
   const CHECK_FACES_LAYER_INDEX_FAILED_FILENAME =
-    `${GOAL_FILE_TOP_PATH}${STEP_FLAG}_checkFacesLayerIndexFailed.txt`;
+    `${GOAL_FILE_TOP_PATH}${DEBUG_FILE_PREFIX}checkFacesLayerIndexFailed.txt`;
   const FIX_LONELY_FACE_OF_CUBE_FILENAME =
-    `${GOAL_FILE_TOP_PATH}${STEP_FLAG}_fixLonelyFaceOfCube.txt`;
+    `${GOAL_FILE_TOP_PATH}${DEBUG_FILE_PREFIX}fixLonelyFaceOfCube.txt`;
   const FIX_HIDDEN_PIECES_FILENAME =
-    `${GOAL_FILE_TOP_PATH}${STEP_FLAG}_fixHiddenPieces.txt`;
+    `${GOAL_FILE_TOP_PATH}${DEBUG_FILE_PREFIX}fixHiddenPieces.txt`;
   const FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT_FILENAME =
-    `${GOAL_FILE_TOP_PATH}${STEP_FLAG}_fixLonelyFaceOfCubeAndAppendIt.txt`;
+    `${GOAL_FILE_TOP_PATH}${DEBUG_FILE_PREFIX}fixLonelyFaceOfCubeAndAppendIt.txt`;
   const MIDDLE_CUBE_TO_FIRST_NO_FILENAME =
-    `${GOAL_FILE_TOP_PATH}${STEP_FLAG}_middleCubeToFirstNo.txt`;
+    `${GOAL_FILE_TOP_PATH}${DEBUG_FILE_PREFIX}middleCubeToFirstNo.txt`;
   const MIDDLE_FILENAME_ARRAY = [
     CHECK_FACES_LAYER_INDEX_FAILED_FILENAME,
     FIX_LONELY_FACE_OF_CUBE_FILENAME,
@@ -892,9 +937,23 @@ async function step2(
   }
   const LAST_MIDDLE_CUBE_NO_ARRAY = [0, 0, 0, 0, 0];
   const MIDDLE_FILE_KIND_COUNT = LAST_MIDDLE_CUBE_NO_ARRAY.length;
+  for (
+    let middleFileKindIndex = 0;
+    middleFileKindIndex < MIDDLE_FILE_KIND_COUNT;
+    ++middleFileKindIndex
+  ) {
+    const FILENAME = MIDDLE_FILENAME_ARRAY[middleFileKindIndex];
+    if (existsSync(FILENAME)) {
+      Deno.removeSync(FILENAME);
+    }
+  }
 
   function appendFile(middleFileKind: MiddleFileKind) {
     const CONTENT_ARRAY = MIDDLE_FILE_CONTENT_ARRAY[middleFileKind];
+    if (!CONTENT_ARRAY.length) {
+      return;
+    }
+
     const FILENAME = MIDDLE_FILENAME_ARRAY[middleFileKind];
     Deno.writeTextFileSync(
       FILENAME,
@@ -1396,9 +1455,9 @@ async function step2(
                       pieceCell.feature = CellFeature.Piece;
                       pieceCell.twelveEdge = edgeIndex;
 
-                      // 复位“面属性”
-                      pieceCell.sixFace = SixFace.Up;
-                      pieceCell.faceDirection = FourDirection.Original;
+                      // // 复位“面属性”
+                      // pieceCell.sixFace = SixFace.Up;
+                      // pieceCell.faceDirection = FourDirection.Original;
 
                       const {
                         rowIndex: relatedRowIndex,
@@ -1448,17 +1507,29 @@ async function step2(
 
                   // appendCubeWithoutOneToTwentyFour(cloned);
                   if (cloned.checkFacesLayerIndex()) {
+                    if (OUTPUT_CUBE_PASS_CHECK_FACES_LAYER_INDEX) {
+                      Deno.writeTextFileSync(
+                        `${CUBE_PASSED_CHECK_FACES_LAYER_INDEX_PATH}${
+                          (++cubePassCheckFacesLayerIndexFileNo).toString()
+                        }.js`,
+                        `const cube_${cubePassCheckFacesLayerIndexFileNo} = ${
+                          JSON.stringify(cloned)
+                        };`,
+                      );
+                    }
                     fixLonelyFaceOfCubeAndAppendIt(cloned);
                   } else {
-                    // Deno.writeTextFileSync(
-                    //   CHECK_FACES_LAYER_INDEX_FAILED_FILENAME,
-                    //   JSON.stringify(cloned),
-                    //   APPEND_TRUE_FLAG,
-                    // );
-                    appendContent(
-                      JSON.stringify(cloned),
-                      MiddleFileKind.CheckFacesLayerIndexFailed,
-                    );
+                    if (OUTPUT_CHECK_FACES_LAYER_INDEX_FAILED) {
+                      // Deno.writeTextFileSync(
+                      //   CHECK_FACES_LAYER_INDEX_FAILED_FILENAME,
+                      //   JSON.stringify(cloned),
+                      //   APPEND_TRUE_FLAG,
+                      // );
+                      appendContent(
+                        JSON.stringify(cloned),
+                        MiddleFileKind.CheckFacesLayerIndexFailed,
+                      );
+                    }
                   }
                 });
               });
@@ -1550,30 +1621,35 @@ async function step2(
       }
 
       const CUBE_NO = cube.no;
-      console.log({
-        recursiveTimes,
-        cubeNo: CUBE_NO,
-        LONELY_FACE_CELL_ARRAY_LENGTH,
-      });
-      appendContent(
-        `${recursiveTimes}\t${CUBE_NO}\t${LONELY_FACE_CELL_ARRAY_LENGTH}`,
-        MiddleFileKind.FixLonelyFaceOfCubeAndAppendIt,
-      );
-
       const TAB = "\t".repeat(recursiveTimes - 1);
-      // Deno.writeTextFileSync(
-      //   FIX_LONELY_FACE_OF_CUBE_FILENAME,
-      //   `${TAB}${recursiveTimes}\t${LONELY_FACE_CELL_ARRAY.length}\n${TAB}${
-      //     JSON.stringify(cube)
-      //   }`,
-      //   APPEND_TRUE_FLAG,
-      // );
-      appendContent(
-        `${TAB}${recursiveTimes}\t${LONELY_FACE_CELL_ARRAY.length}\n${TAB}${
-          JSON.stringify(cube)
-        }`,
-        MiddleFileKind.FixLonelyFaceOfCube,
-      );
+
+      if (OUTPUT_FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT) {
+        console.log({
+          recursiveTimes,
+          cubeNo: CUBE_NO,
+          LONELY_FACE_CELL_ARRAY_LENGTH,
+        });
+        appendContent(
+          `${recursiveTimes}\t${CUBE_NO}\t${LONELY_FACE_CELL_ARRAY_LENGTH}`,
+          MiddleFileKind.FixLonelyFaceOfCubeAndAppendIt,
+        );
+      }
+
+      if (OUTPUT_FIX_LONELY_FACE_OF_CUBE) {
+        // Deno.writeTextFileSync(
+        //   FIX_LONELY_FACE_OF_CUBE_FILENAME,
+        //   `${TAB}${recursiveTimes}\t${LONELY_FACE_CELL_ARRAY.length}\n${TAB}${
+        //     JSON.stringify(cube)
+        //   }`,
+        //   APPEND_TRUE_FLAG,
+        // );
+        appendContent(
+          `${TAB}${recursiveTimes}\t${LONELY_FACE_CELL_ARRAY.length}\n${TAB}${
+            JSON.stringify(cube)
+          }`,
+          MiddleFileKind.FixLonelyFaceOfCube,
+        );
+      }
 
       const FIRST_LONELY_FACE_CELL = LONELY_FACE_CELL_ARRAY[0];
       const { sameFacePieceCellArray, relationPieceCellArray } =
@@ -1581,23 +1657,25 @@ async function step2(
           sameFacePieceCellArray: CellObject[];
           relationPieceCellArray: CellObject[];
         };
-      // Deno.writeTextFileSync(
-      //   FIX_LONELY_FACE_OF_CUBE_FILENAME,
-      //   `${TAB}sameFacePieceCellArray: ${
-      //     JSON.stringify(sameFacePieceCellArray)
-      //   }\n${TAB}relationPieceCellArray: ${
-      //     JSON.stringify(relationPieceCellArray)
-      //   }`,
-      //   APPEND_TRUE_FLAG,
-      // );
-      appendContent(
-        `${TAB}sameFacePieceCellArray: ${
-          JSON.stringify(sameFacePieceCellArray)
-        }\n${TAB}relationPieceCellArray: ${
-          JSON.stringify(relationPieceCellArray)
-        }`,
-        MiddleFileKind.FixLonelyFaceOfCube,
-      );
+      if (OUTPUT_FIX_LONELY_FACE_OF_CUBE) {
+        // Deno.writeTextFileSync(
+        //   FIX_LONELY_FACE_OF_CUBE_FILENAME,
+        //   `${TAB}sameFacePieceCellArray: ${
+        //     JSON.stringify(sameFacePieceCellArray)
+        //   }\n${TAB}relationPieceCellArray: ${
+        //     JSON.stringify(relationPieceCellArray)
+        //   }`,
+        //   APPEND_TRUE_FLAG,
+        // );
+        appendContent(
+          `${TAB}sameFacePieceCellArray: ${
+            JSON.stringify(sameFacePieceCellArray)
+          }\n${TAB}relationPieceCellArray: ${
+            JSON.stringify(relationPieceCellArray)
+          }`,
+          MiddleFileKind.FixLonelyFaceOfCube,
+        );
+      }
 
       const {
         layerIndex: LONELY_FACE_LAYER_INDEX,
@@ -1740,7 +1818,8 @@ async function step2(
      * <zh_tw>zh_tw</zh_tw>
      */
     function fixHiddenPiecesOfCubeAndAppendIt(cube: Cube) {
-      // TODO(@anqisoft) 找到相应算法
+      const CUBE_ORIGINAL = cube.clone();
+
       let hidePieceCount = 0;
       const { cells, sixFaces, twelveEdges } = cube;
 
@@ -1757,10 +1836,10 @@ async function step2(
         twelveEdge.pieces.forEach(
           ([pieceRowIndex, pieceColIndex], pieceIndex) => {
             const PIECE_CELL = cells[pieceRowIndex][pieceColIndex];
-            // const {
-            //   sixFace: PIECE_CELL_SIX_FACE,
-            //   faceDirection: PIECE_CELL_FACE_DIRECTION,
-            // } = PIECE_CELL;
+            const {
+              sixFace: PIECE_CELL_SIX_FACE,
+              // faceDirection: PIECE_CELL_FACE_DIRECTION,
+            } = PIECE_CELL;
             const {
               rowIndex: PIECE_CELL_RELATION_CELL_ROW_INDEX,
               colIndex: PIECE_CELL_RELATION_CELL_COL_INDEX,
@@ -1841,8 +1920,63 @@ async function step2(
 
             if (hasOuterFace) {
               REMOVE_INDEX_ARRAY.push(pieceIndex);
+              // CELL_ARRAY.filter((cell) =>
+              //   cell.feature === CellFeature.Face &&
+              //   cell.sixFace === PIECE_CELL_SIX_FACE
+              // ).forEach((cell) => ++cell.layerIndex);
+              const SAME_FACE_CELL_INFO_ARRAY = sixFaces[PIECE_CELL_SIX_FACE];
+              const SAME_FACE_CELL_INFO_COUNT =
+                SAME_FACE_CELL_INFO_ARRAY.length;
+              for (
+                let sameFaceCellInfoIndex = 0;
+                sameFaceCellInfoIndex < SAME_FACE_CELL_INFO_COUNT;
+                ++sameFaceCellInfoIndex
+              ) {
+                const [
+                  firstRowIndex,
+                  firstColIndex,
+                  secondRowIndex,
+                  secondColIndex,
+                ] = SAME_FACE_CELL_INFO_ARRAY[sameFaceCellInfoIndex];
+                const firstCell = cells[firstRowIndex][firstColIndex];
+                ++firstCell.layerIndex;
+
+                if (
+                  typeof secondRowIndex !== "undefined" &&
+                  typeof secondColIndex !== "undefined"
+                ) {
+                  const secondCell = cells[secondRowIndex][secondColIndex];
+                  ++secondCell.layerIndex;
+                }
+              }
+
+              // bug: error array
+              // sixFaces[PIECE_CELL_RELATION_CELL_SIX_FACE].unshift([
+              //   pieceRowIndex,
+              //   pieceColIndex,
+              // ]);
+              // console.log({
+              //   no: cube.no,
+              //   PIECE_CELL_SIX_FACE,
+              //   PIECE_CELL_RELATION_CELL_SIX_FACE,
+              //   old: JSON.stringify(sixFaces[PIECE_CELL_SIX_FACE]),
+              //   pieceRowIndex,
+              //   pieceColIndex,
+              // });
+              sixFaces[PIECE_CELL_SIX_FACE].unshift([
+                pieceRowIndex,
+                pieceColIndex,
+              ]);
+
               PIECE_CELL.feature = CellFeature.Face;
-              PIECE_CELL.layerIndex = 0;
+
+              // 	<en_us>en_us</en_us>
+              // 	<zh_cn>会导致压缩正方体数据时出现负数</zh_cn>
+              // 	<zh_tw>zh_tw</zh_tw>
+              // PIECE_CELL.layerIndex = 0;
+
+              PIECE_CELL.layerIndex = 1;
+
               ++hidePieceCount;
             }
           },
@@ -1859,27 +1993,54 @@ async function step2(
 
       cube.sync();
       if (hidePieceCount) {
-        // Deno.writeTextFileSync(
-        //   FIX_HIDDEN_PIECES_FILENAME,
-        //   JSON.stringify(cube),
-        //   APPEND_TRUE_FLAG,
-        // );
-        appendContent(
-          JSON.stringify(cube),
-          MiddleFileKind.FixHiddenPieces,
-        );
+        if (OUTPUT_FIX_HIDDEN_PIECES) {
+          // Deno.writeTextFileSync(
+          //   FIX_HIDDEN_PIECES_FILENAME,
+          //   JSON.stringify(cube),
+          //   APPEND_TRUE_FLAG,
+          // );
+          // appendContent(
+          //   JSON.stringify(cube),
+          //   MiddleFileKind.FixHiddenPieces,
+          // );
+          appendContent(
+            `${JSON.stringify(CUBE_ORIGINAL)}\nto\n${JSON.stringify(cube)}`,
+            MiddleFileKind.FixHiddenPieces,
+          );
+        }
+        if (OUTPUT_FIX_HIDDEN_PIECES_DETAILS) {
+          Deno.writeTextFileSync(
+            `${FIX_HIDDEN_PIECES_DETAILS_PATH}${cube.no}_${++fixHiddenPiecesFileNo}_from.js`,
+            `const fixHiddenPieces_${cube.no} = ${
+              JSON.stringify(CUBE_ORIGINAL)
+            };`,
+          );
+          Deno.writeTextFileSync(
+            `${FIX_HIDDEN_PIECES_DETAILS_PATH}${cube.no}_${fixHiddenPiecesFileNo}_to.js`,
+            `const fixHiddenPieces_${cube.no} = ${JSON.stringify(cube)};`,
+          );
+        }
       }
       appendCubeWithoutOneToTwentyFour(cube);
     }
 
     function appendCubeWithoutOneToTwentyFour(cube: Cube) {
       nextCubeNo += CUBE_NO_STEP;
-      appendContent(
-        nextCubeNo.toString(),
-        MiddleFileKind.MiddleCubeToFirstNo,
-      );
+      if (OUTPUT_MIDDLE_CUBE_TO_FIRST_NO) {
+        appendContent(
+          nextCubeNo.toString(),
+          MiddleFileKind.MiddleCubeToFirstNo,
+        );
+      }
       cube.no = nextCubeNo;
       CUBES.push(cube);
+
+      if (OUTPUT_ALONE_FIRST_CUBE) {
+        Deno.writeTextFileSync(
+          `${ALONE_FIRST_CUBE_PATH}${nextCubeNo}.js`,
+          `const cube_${nextCubeNo} = ${JSON.stringify(cube)};`,
+        );
+      }
 
       if (CUBES.length >= DEBUG.CUBE_COUNT_PER_FILE) {
         outputCubes();
@@ -1915,7 +2076,7 @@ async function step2(
 
   showUsedTime("end");
   log(`end: ${(new Date()).toLocaleString()}`);
-  logUsedTime("Total", performance.now() - DATE_BEGIN);
+  logUsedTime(`${STEP_FLAG}: Total`, performance.now() - DATE_BEGIN);
 
   copySync(LOG_FILE_NAME, `log_${STEP_FLAG}.txt`, OVER_WRITE_TRUE_FLAG);
   copySync(
@@ -1929,6 +2090,9 @@ async function step2(
 async function step3(
   GOAL_FILE_TOP_PATH: string = "./",
   SOURCE_FILE_TOP_PATH: string = "./cubesOnlyFirstOfTwentyFour/",
+  OUTPUT_FULL_CUBE: boolean = false,
+  OUTPUT_READ_CUBE: boolean = false,
+  SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL: boolean = false,
 ) {
   const STEP_FLAG = "step3";
   const LOG_FILE_NAME = "./log.txt";
@@ -1939,14 +2103,30 @@ async function step3(
   let logFilenamePostfix = "";
   logFilenamePostfix = `_${STEP_FLAG}`;
 
-  // const GOAL_FILE_TOP_PATH = `./${STEP_FLAG}/`;
-  if (GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length) {
+  const GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH =
+    GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length;
+  const DEBUG_FILE_PREFIX = GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH
+    ? ""
+    : STEP_FLAG.concat("_");
+  if (GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH) {
     ensureDirSync(GOAL_FILE_TOP_PATH);
     emptyDirSync(GOAL_FILE_TOP_PATH);
   }
 
   log(`begin: ${(new Date()).toLocaleString()}`);
   const DATE_BEGIN = performance.now();
+
+  const READ_CUBE_PATH = `${GOAL_FILE_TOP_PATH}31_readCube/`;
+  if (OUTPUT_READ_CUBE) {
+    ensureDirSync(READ_CUBE_PATH);
+    emptyDirSync(READ_CUBE_PATH);
+  }
+
+  const FULL_CUBE_PATH = `${GOAL_FILE_TOP_PATH}39_fullCube/`;
+  if (OUTPUT_FULL_CUBE) {
+    ensureDirSync(FULL_CUBE_PATH);
+    emptyDirSync(FULL_CUBE_PATH);
+  }
 
   // const SOURCE_FILE_TOP_PATH = "./step2/cubesOnlyFirstOfTwentyFour/";
 
@@ -2007,6 +2187,17 @@ async function step3(
         colCount,
         gridLines,
       } = cube;
+      if (OUTPUT_READ_CUBE) {
+        const CUBE_NO = cube.no;
+        Deno.writeTextFileSync(
+          `${READ_CUBE_PATH}input.${CUBE_NO}.js`,
+          `const cube_${CUBE_NO} = ${JSON.stringify(cube)};`,
+        );
+        Deno.writeTextFileSync(
+          `${READ_CUBE_PATH}input.${CUBE_NO}.sixFaces.txt`,
+          `${JSON.stringify(OLD_SIX_FACES)}`,
+        );
+      }
 
       // { xStart, xEnd, yStart, yEnd, lineStyle }
       // GridLineStyle: Unknown, None, InnerLine, CutLine, OuterLine
@@ -2023,7 +2214,7 @@ async function step3(
           LINE_ARRAY.push(1);
         }
       }
-      gridLines.forEach(({ xStart, xEnd, yStart, yEnd, lineStyle }) => {
+      gridLines.forEach(({ xStart, _xEnd, yStart, yEnd, lineStyle }) => {
         if (yStart === yEnd) {
           LINE_ARRAY[colCount * yStart + xStart] = lineStyle;
         } else {
@@ -2052,19 +2243,19 @@ async function step3(
           CORE_CELL_IS_PIECE,
         );
         cloned.no = START_NO + mannerIndex;
+        if (OUTPUT_READ_CUBE) {
+          Deno.writeTextFileSync(
+            `${READ_CUBE_PATH}output.${START_NO}.${mannerIndex}.sixFaces.txt`,
+            `${JSON.stringify(cloned.sixFaces)}`,
+          );
+        }
 
         cloned.syncAndClear();
-        cloned.cells = undefined;
-        cloned.isValid = undefined;
-        cloned.emptyCells = undefined;
-
-        cloned.colCount = undefined;
-        cloned.coreRowIndex = undefined;
 
         const MANNER = cloned.twelveEdges.map((twelveEdge) =>
           `${twelveEdge.canBeInserted ? "T" : "F"}${twelveEdge.pieces.length}`
         ).join("");
-        cloned["manner"] = MANNER;
+        (cloned as unknown as { manner: string }).manner = MANNER;
 
         appendCube(cloned);
       }
@@ -2072,6 +2263,13 @@ async function step3(
 
     function appendCube(cube: Cube) {
       CUBES.push(cube);
+      if (OUTPUT_FULL_CUBE) {
+        const CUBE_NO = cube.no;
+        Deno.writeTextFileSync(
+          `${FULL_CUBE_PATH}full_${CUBE_NO}.js`,
+          `const cube_${CUBE_NO} = ${JSON.stringify(cube)};`,
+        );
+      }
 
       if (CUBES.length >= CUBE_COUNT_PER_FILE) {
         outputCubes();
@@ -2257,58 +2455,181 @@ async function step3(
       const cloned = cube.clone();
 
       const { cells, actCells, sixFaces, twelveEdges } = cloned;
+      const CELL_ARRAY = cloned.getCellArray();
 
       const [CORE_CELL_SIX_FACE, CORE_CELL_FOUR_DIRECTION] =
         convertSixFaceTwentyFourAngleToSixFaceAndDirection(mannerIndex);
       const CORE_CELL = cells[CORE_ROW_INDEX][CORE_COL_INDEX];
       CORE_CELL.sixFace = CORE_CELL_SIX_FACE;
       CORE_CELL.faceDirection = CORE_CELL_FOUR_DIRECTION;
+
+      const NEW_SIX_FACE_ARRAY: string[] =
+        SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL
+          ? []
+          : undefined as unknown as string[];
+      if (SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL) {
+        NEW_SIX_FACE_ARRAY.push(
+          `1: ${CORE_ROW_INDEX}${CORE_COL_INDEX}${CORE_CELL_SIX_FACE}${CORE_CELL_FOUR_DIRECTION}`,
+        );
+      }
       for (let addOrder = 2; addOrder <= MAX_ADD_ORDER; ++addOrder) {
-        cells.forEach((cellRow) =>
-          cellRow.filter((cell) => cell.addOrder === addOrder).forEach(
-            (cell) => {
-              const { rowIndex, colIndex, relation: RELATION } =
-                cell.relatedInformationWhenAdding;
-              const RELATED_CELL = cells[rowIndex][colIndex];
-              const [newSixFace, newFaceDirection] =
-                convertSixFaceTwentyFourAngleToSixFaceAndDirection(
-                  SIX_FACE_AND_DIRECTION_RELATIONS[
-                    RELATED_CELL.sixFaceTwentyFourAngle
-                  ][RELATION],
-                );
-              cell.sixFace = newSixFace;
-              cell.faceDirection = newFaceDirection;
-            },
-          )
+        if (SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL) {
+          NEW_SIX_FACE_ARRAY.push(
+            `\n${addOrder}: `,
+          );
+        }
+
+        // cells.forEach((cellRow) =>
+        //   cellRow.filter((cell) => cell.addOrder === addOrder).forEach(
+        //     (cell) => {
+        //       const { rowIndex, colIndex, relation: RELATION } =
+        //         cell.relatedInformationWhenAdding;
+        //       const RELATED_CELL = cells[rowIndex][colIndex];
+        //       const [newSixFace, newFaceDirection] =
+        //         convertSixFaceTwentyFourAngleToSixFaceAndDirection(
+        //           SIX_FACE_AND_DIRECTION_RELATIONS[
+        //             RELATED_CELL.sixFaceTwentyFourAngle
+        //           ][RELATION],
+        //         );
+        //       cell.sixFace = newSixFace;
+        //       cell.faceDirection = newFaceDirection;
+        //     },
+        //   )
+        // );
+
+        CELL_ARRAY.filter((cell) => cell.addOrder === addOrder).forEach(
+          (cell) => {
+            const { rowIndex, colIndex, relation: RELATION } =
+              cell.relatedInformationWhenAdding;
+            const RELATED_CELL = cells[rowIndex][colIndex];
+            const { sixFaceTwentyFourAngle } = RELATED_CELL;
+            // const [newSixFace, newFaceDirection] =
+            //   convertSixFaceTwentyFourAngleToSixFaceAndDirection(
+            //     SIX_FACE_AND_DIRECTION_RELATIONS[
+            //       sixFaceTwentyFourAngle
+            //     ][RELATION],
+            //   );
+            const newSixFaceTwentyFourAngle = SIX_FACE_AND_DIRECTION_RELATIONS[
+              sixFaceTwentyFourAngle
+            ][RELATION];
+            const [newSixFace, newFaceDirection] =
+              convertSixFaceTwentyFourAngleToSixFaceAndDirection(
+                newSixFaceTwentyFourAngle,
+              );
+            cell.sixFace = newSixFace;
+            cell.faceDirection = newFaceDirection;
+
+            cell.twelveEdge = getSixFaceTwentyFourAngleRelationTwelveEdge(
+              sixFaceTwentyFourAngle,
+              RELATION,
+            );
+
+            if (SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL) {
+              NEW_SIX_FACE_ARRAY.push(
+                `${cell.rowIndex}${cell.colIndex}${newSixFace}${newFaceDirection}=${newSixFaceTwentyFourAngle}=${cell.sixFaceTwentyFourAngleStr}<=${rowIndex}${colIndex}[${sixFaceTwentyFourAngle}][${RELATION}],`,
+              );
+            }
+          },
         );
       }
       if (CORE_CELL_IS_PIECE) {
-        const { rowIndex, colIndex } = actCells.filter((cell) =>
+        // console.log("CORE_CELL_IS_PIECE");
+        // const { rowIndex, colIndex } = actCells.filter((cell) =>
+        //   cell.addOrder === 2
+        // )[0];
+        // const RELATED_CELL = cells[rowIndex][colIndex];
+        const RELATED_CELL = CELL_ARRAY.filter((cell) =>
           cell.addOrder === 2
         )[0];
-        const RELATED_CELL = cells[rowIndex][colIndex];
+        const { sixFaceTwentyFourAngle } = RELATED_CELL;
+
         const RELATION = RELATED_CELL.relatedInformationWhenAdding.relation;
+        const REVERSED_RELATION = getReversedRelation(RELATION);
+        // error: 2 - RELATION % 2 + 2 * floor(RELATION / 2),
+        // right: relation % 2 + 2 * (1 - Math.floor(relation / 2));
+
         CORE_CELL.twelveEdge = getSixFaceTwentyFourAngleRelationTwelveEdge(
-          RELATED_CELL.sixFaceTwentyFourAngle,
-          2 - RELATION % 2 + 2 * floor(RELATION / 2),
+          sixFaceTwentyFourAngle,
+          REVERSED_RELATION,
         );
+
+        const [newSixFace, newFaceDirection] =
+          convertSixFaceTwentyFourAngleToSixFaceAndDirection(
+            SIX_FACE_AND_DIRECTION_RELATIONS[sixFaceTwentyFourAngle][
+              REVERSED_RELATION
+            ],
+          );
+        CORE_CELL.sixFace = newSixFace;
+        CORE_CELL.faceDirection = newFaceDirection;
+
+        // if (
+        //   newSixFace !== CORE_CELL_SIX_FACE ||
+        //   newFaceDirection !== CORE_CELL_FOUR_DIRECTION
+        // ) {
+        //   log(
+        //     `[error]${newSixFace}vs${CORE_CELL_SIX_FACE},${newFaceDirection}vs${CORE_CELL_FOUR_DIRECTION}`,
+        //   );
+        // }
+      }
+
+      if (SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL) {
+        log(`\n${NEW_SIX_FACE_ARRAY.join("")}`);
+        NEW_SIX_FACE_ARRAY.length = 0;
       }
 
       sixFaces.forEach((face, faceIndex) => {
         face.length = 0;
 
+        let find = false;
         OLD_SIX_FACES.forEach((oldFaces: FaceMemberOfSixFace) => {
           if (oldFaces.length === 0) {
             Deno.writeTextFileSync(
-              `${GOAL_FILE_TOP_PATH}error_cube_${cube.no}.ts`,
+              `${GOAL_FILE_TOP_PATH}${DEBUG_FILE_PREFIX}error_cube_${cube.no}.ts`,
               `const _error_cube = ${JSON.stringify(cube)};`,
             );
           }
           const [rowIndex, colIndex] = oldFaces[0];
           if (cells[rowIndex][colIndex].sixFace === faceIndex) {
             oldFaces.forEach((item) => face.push(item));
+            find = true;
           }
         });
+
+        if (!find) {
+          log(
+            // .toString().padStart(2, "0")
+            `${cube.no}.${
+              mannerIndex.toString().padStart(2, "0")
+            }.sixFaces[${faceIndex}] not found, and ${cube.no}.old_sixFaces: ${
+              OLD_SIX_FACES.map((oldFaces) => {
+                const [rowIndex, colIndex] = oldFaces[0];
+                return `${rowIndex}${colIndex}${
+                  cells[rowIndex][colIndex].sixFace
+                }`;
+              }).join("_")
+            }, all: ${
+              // actCells.map((cell) => cell.sixFace).join("")
+              actCells.map((cell) =>
+                `${cell.rowIndex}${cell.colIndex}${cell.sixFace}`
+              ).join("_")}, old_sixFaces_full: ${
+              OLD_SIX_FACES.map((oldFaces) =>
+                oldFaces.map((face) => {
+                  const [row1, col1, row2, col2] = face;
+                  // return `${cells[row1][col1].sixFace}${
+                  //   (typeof row2 !== "undefined" && typeof col2 !== "undefined")
+                  //     ? cells[row2][col2].sixFace
+                  //     : ""
+                  // }`;
+                  return `${row1}${col1}${cells[row1][col1].sixFace}${
+                    (typeof row2 !== "undefined" && typeof col2 !== "undefined")
+                      ? `_${row2}${col2}${cells[row2][col2].sixFace}`
+                      : ""
+                  }`;
+                }).join("_")
+              ).join("_")
+            }`,
+          );
+        }
       });
 
       twelveEdges.forEach((edge) => {
@@ -2430,7 +2751,7 @@ async function step3(
 
   showUsedTime("end");
   log(`end: ${(new Date()).toLocaleString()}`);
-  logUsedTime("Total", performance.now() - DATE_BEGIN);
+  logUsedTime(`${STEP_FLAG}: Total`, performance.now() - DATE_BEGIN);
 
   copySync(LOG_FILE_NAME, `log_${STEP_FLAG}.txt`, OVER_WRITE_TRUE_FLAG);
   copySync(
@@ -2455,8 +2776,12 @@ async function step4(
   let logFilenamePostfix = "";
   logFilenamePostfix = `_${STEP_FLAG}`;
 
-  // const GOAL_FILE_TOP_PATH = `./${STEP_FLAG}/`;
-  if (GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length) {
+  const GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH =
+    GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length;
+  const DEBUG_FILE_PREFIX = GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH
+    ? ""
+    : STEP_FLAG.concat("_");
+  if (GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH) {
     ensureDirSync(GOAL_FILE_TOP_PATH);
     emptyDirSync(GOAL_FILE_TOP_PATH);
   }
@@ -2506,7 +2831,8 @@ async function step4(
       logFilenamePostfix += "_compactLineInfo";
       // 1. lines.txt，将4677537行去重，且列出正方体序号段（不知道为什么最后有不连续的序号），
       //    转为lineToCubeNo.txt文件，444442222244444422324433234:1-5,8-10
-      const GOAL_FILE_NAME = `${GOAL_FILE_TOP_PATH}lineToCubeNo.txt`;
+      const GOAL_FILE_NAME =
+        `${GOAL_FILE_TOP_PATH}${DEBUG_FILE_PREFIX}lineToCubeNo.txt`;
 
       const SOURCE_FILE_NAME = `${SOURCE_FILE_TOP_PATH}lines.txt`;
       const DATA_ARRAY = Deno.readTextFileSync(SOURCE_FILE_NAME).split("\n");
@@ -2566,7 +2892,7 @@ async function step4(
             return { manner, cubeNoBill };
           });
         ARRAY.sort((prev, next) => prev.manner.localeCompare(next.manner));
-        console.log("sort it");
+        // console.log("sort it");
 
         Deno.writeTextFileSync(
           GOAL_FILE_NAME,
@@ -2634,7 +2960,7 @@ async function step4(
     }
 
     async function compactMannerFilesForLargeFile() {
-      logFilenamePostfix = "_compactMannerFilesForLargeFile";
+      logFilenamePostfix += "_compactMannerFilesForLargeFile";
       const SOURCE_MANNER_FILE_PATH = `${SOURCE_FILE_TOP_PATH}manners/`;
       const MANNER_ARRAY: string[] = [];
       const CUBE_NO_ARRAY = [];
@@ -2798,10 +3124,11 @@ async function step4(
     }
 
     async function joinCubeFiles() {
-      logFilenamePostfix = "_joinCubeFiles";
+      logFilenamePostfix += "_joinCubeFiles";
       const SOURCE_MANNER_FILE_PATH = `${SOURCE_FILE_TOP_PATH}cubes/`;
 
-      const CUBE_GOAL_FILE_NAME = `${GOAL_FILE_TOP_PATH}cubes.txt`;
+      const CUBE_GOAL_FILE_NAME =
+        `${GOAL_FILE_TOP_PATH}${DEBUG_FILE_PREFIX}cubes.txt`;
       Deno.writeTextFileSync(CUBE_GOAL_FILE_NAME, "");
 
       let readedFileCount = 0;
@@ -2827,7 +3154,7 @@ async function step4(
 
   showUsedTime("end");
   log(`end: ${(new Date()).toLocaleString()}`);
-  logUsedTime("Total", performance.now() - DATE_BEGIN);
+  logUsedTime(`${STEP_FLAG}: Total`, performance.now() - DATE_BEGIN);
 
   copySync(LOG_FILE_NAME, `log_${STEP_FLAG}.txt`, OVER_WRITE_TRUE_FLAG);
   copySync(
@@ -2843,6 +3170,7 @@ interface StepSkipped {
 }
 export interface Step1Option extends StepSkipped {
   GOAL_FILE_TOP_PATH?: string;
+  OUTPUT_CUT_MANNERS_ROW_BY_ROW?: boolean;
 }
 
 export interface BehindStepsOption extends StepSkipped {
@@ -2850,8 +3178,20 @@ export interface BehindStepsOption extends StepSkipped {
   SOURCE_FILE_TOP_PATH?: string;
 }
 export interface Step2Option extends BehindStepsOption {
+  OUTPUT_ALONE_FIRST_CUBE?: boolean;
+  OUTPUT_CUBE_PASS_CHECK_FACES_LAYER_INDEX?: boolean;
+
+  OUTPUT_FIX_HIDDEN_PIECES_DETAILS?: boolean;
+
+  OUTPUT_FIX_HIDDEN_PIECES?: boolean;
+  OUTPUT_MIDDLE_CUBE_TO_FIRST_NO?: boolean;
+  OUTPUT_CHECK_FACES_LAYER_INDEX_FAILED?: boolean;
+  OUTPUT_FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT?: boolean;
+  OUTPUT_FIX_LONELY_FACE_OF_CUBE?: boolean;
 }
 export interface Step3Option extends BehindStepsOption {
+  OUTPUT_FULL_CUBE?: boolean;
+  OUTPUT_READ_CUBE?: boolean;
 }
 export interface Step4Option extends BehindStepsOption {
   USE_LARGE_FILE?: boolean;
@@ -2889,7 +3229,11 @@ export async function main(
 
   if (!step1Option?.skipped) {
     GLOBAL_LOG_CONTENT_ARRAY.push(`step1: ${(new Date()).toLocaleString()}`);
-    step1(ROW_COUNT_ARRAY, step1Option?.GOAL_FILE_TOP_PATH);
+    step1(
+      ROW_COUNT_ARRAY,
+      step1Option?.GOAL_FILE_TOP_PATH,
+      step1Option?.OUTPUT_CUT_MANNERS_ROW_BY_ROW,
+    );
   }
 
   if (!step2Option?.skipped) {
@@ -2898,6 +3242,13 @@ export async function main(
       ROW_COUNT_ARRAY,
       step2Option?.GOAL_FILE_TOP_PATH,
       step2Option?.SOURCE_FILE_TOP_PATH,
+      step2Option?.OUTPUT_ALONE_FIRST_CUBE,
+      step2Option?.OUTPUT_CUBE_PASS_CHECK_FACES_LAYER_INDEX,
+      step2Option?.OUTPUT_FIX_HIDDEN_PIECES,
+      step2Option?.OUTPUT_MIDDLE_CUBE_TO_FIRST_NO,
+      step2Option?.OUTPUT_CHECK_FACES_LAYER_INDEX_FAILED,
+      step2Option?.OUTPUT_FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT,
+      step2Option?.OUTPUT_FIX_LONELY_FACE_OF_CUBE,
     );
   }
 
@@ -2906,6 +3257,8 @@ export async function main(
     await step3(
       step3Option?.GOAL_FILE_TOP_PATH,
       step3Option?.SOURCE_FILE_TOP_PATH,
+      step3Option?.OUTPUT_FULL_CUBE,
+      step3Option?.OUTPUT_READ_CUBE,
     );
   }
 

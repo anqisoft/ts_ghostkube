@@ -20,8 +20,14 @@
  */
 exports.__esModule = true;
 var cubeCompute_ts_1 = require("./cubeCompute.ts");
+// await main({
+//   step1Option: {},
+//   step2Option: {},
+//   step3Option: {},
+//   step4Option: {},
+// }, [2, 3]);
 await cubeCompute_ts_1.main({
-    step1Option: {},
+    step1Option: { OUTPUT_CUT_MANNERS_ROW_BY_ROW: true },
     step2Option: {},
     step3Option: {},
     step4Option: {}

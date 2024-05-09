@@ -81,17 +81,23 @@ var APPEND_TRUE_FLAG = { append: true };
 var LOG_FILE_NAME = "./log.txt";
 var COL_COUNT = 5;
 var MAX_COL_INDEX = COL_COUNT - 1;
-function step1(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH) {
+function step1(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, OUTPUT_CUT_MANNERS_ROW_BY_ROW) {
     if (GOAL_FILE_TOP_PATH === void 0) { GOAL_FILE_TOP_PATH = "./"; }
+    if (OUTPUT_CUT_MANNERS_ROW_BY_ROW === void 0) { OUTPUT_CUT_MANNERS_ROW_BY_ROW = false; }
     var STEP_FLAG = "step1";
     if (mod_ts_1.existsSync(LOG_FILE_NAME)) {
         Deno.removeSync(LOG_FILE_NAME);
     }
     var logFilenamePostfix = "";
     logFilenamePostfix = "_" + STEP_FLAG;
-    // const GOAL_FILE_TOP_PATH = `./${STEP_FLAG}/`;
-    mod_ts_1.ensureDirSync(GOAL_FILE_TOP_PATH);
-    mod_ts_1.emptyDirSync(GOAL_FILE_TOP_PATH);
+    var GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH = GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length;
+    var DEBUG_FILE_PREFIX = GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH
+        ? ""
+        : STEP_FLAG.concat("_");
+    if (GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH) {
+        mod_ts_1.ensureDirSync(GOAL_FILE_TOP_PATH);
+        mod_ts_1.emptyDirSync(GOAL_FILE_TOP_PATH);
+    }
     cubeCore_ts_1.log("begin: " + (new Date()).toLocaleString());
     var DATE_BEGIN = performance.now();
     var DEBUG = {
@@ -569,29 +575,43 @@ function step1(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH) {
         cubeCore_ts_1.log("removed middle cube count:", cubeCore_ts_1.global_removed_middle_cube_count);
     }
     if (DEBUG.SHOW_CUT_MANNERS) {
-        Deno.writeTextFileSync(GOAL_FILE_TOP_PATH + "cutMannerArray.ts", "export const cutMannerArray = " + JSON.stringify(CUT_MANNER_ARRAY) + ";");
-        Deno.writeTextFileSync(GOAL_FILE_TOP_PATH + "cutMannerCountArray.ts", "export const cutMannerCountArray = " + JSON.stringify(CUT_MANNER_COUNT_ARRAY) + ";");
+        Deno.writeTextFileSync("" + GOAL_FILE_TOP_PATH + DEBUG_FILE_PREFIX + "cutMannerArray.ts", "export const cutMannerArray = " + JSON.stringify(CUT_MANNER_ARRAY) + ";");
+        Deno.writeTextFileSync("" + GOAL_FILE_TOP_PATH + DEBUG_FILE_PREFIX + "cutMannerCountArray.ts", "export const cutMannerCountArray = " + JSON.stringify(CUT_MANNER_COUNT_ARRAY) + ";");
         cubeCore_ts_1.log("CUT_MANNER_ARRAY.length:", CUT_MANNER_ARRAY.length);
         cubeCore_ts_1.log("CUT_MANNER_COUNT_ARRAY:", CUT_MANNER_COUNT_ARRAY);
     }
+    if (OUTPUT_CUT_MANNERS_ROW_BY_ROW) {
+        Deno.writeTextFileSync("" + GOAL_FILE_TOP_PATH + DEBUG_FILE_PREFIX + "cutManners.txt", CUT_MANNER_ARRAY.join("\n"));
+    }
     cubeCore_ts_1.showUsedTime("end");
     cubeCore_ts_1.log("end: " + (new Date()).toLocaleString());
-    cubeCore_ts_1.logUsedTime("Total", performance.now() - DATE_BEGIN);
+    cubeCore_ts_1.logUsedTime(STEP_FLAG + ": Total", performance.now() - DATE_BEGIN);
     mod_ts_1.copySync(LOG_FILE_NAME, "log_" + STEP_FLAG + ".txt", OVER_WRITE_TRUE_FLAG);
     mod_ts_1.copySync(LOG_FILE_NAME, GOAL_FILE_TOP_PATH + "log" + logFilenamePostfix + ".txt", OVER_WRITE_TRUE_FLAG);
     Deno.removeSync(LOG_FILE_NAME);
 }
-function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
+function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH, OUTPUT_ALONE_FIRST_CUBE, OUTPUT_CUBE_PASS_CHECK_FACES_LAYER_INDEX, OUTPUT_FIX_HIDDEN_PIECES_DETAILS, OUTPUT_FIX_HIDDEN_PIECES, OUTPUT_MIDDLE_CUBE_TO_FIRST_NO, OUTPUT_CHECK_FACES_LAYER_INDEX_FAILED, OUTPUT_FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT, OUTPUT_FIX_LONELY_FACE_OF_CUBE) {
     if (GOAL_FILE_TOP_PATH === void 0) { GOAL_FILE_TOP_PATH = "./"; }
     if (SOURCE_FILE_TOP_PATH === void 0) { SOURCE_FILE_TOP_PATH = "./"; }
+    if (OUTPUT_ALONE_FIRST_CUBE === void 0) { OUTPUT_ALONE_FIRST_CUBE = false; }
+    if (OUTPUT_CUBE_PASS_CHECK_FACES_LAYER_INDEX === void 0) { OUTPUT_CUBE_PASS_CHECK_FACES_LAYER_INDEX = false; }
+    if (OUTPUT_FIX_HIDDEN_PIECES_DETAILS === void 0) { OUTPUT_FIX_HIDDEN_PIECES_DETAILS = false; }
+    if (OUTPUT_FIX_HIDDEN_PIECES === void 0) { OUTPUT_FIX_HIDDEN_PIECES = false; }
+    if (OUTPUT_MIDDLE_CUBE_TO_FIRST_NO === void 0) { OUTPUT_MIDDLE_CUBE_TO_FIRST_NO = false; }
+    if (OUTPUT_CHECK_FACES_LAYER_INDEX_FAILED === void 0) { OUTPUT_CHECK_FACES_LAYER_INDEX_FAILED = false; }
+    if (OUTPUT_FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT === void 0) { OUTPUT_FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT = false; }
+    if (OUTPUT_FIX_LONELY_FACE_OF_CUBE === void 0) { OUTPUT_FIX_LONELY_FACE_OF_CUBE = false; }
     return __awaiter(this, void 0, void 0, function () {
         function appendFile(middleFileKind) {
             var CONTENT_ARRAY = MIDDLE_FILE_CONTENT_ARRAY[middleFileKind];
+            if (!CONTENT_ARRAY.length) {
+                return;
+            }
             var FILENAME = MIDDLE_FILENAME_ARRAY[middleFileKind];
             Deno.writeTextFileSync(FILENAME, CONTENT_ARRAY.join("\n").concat("\n"), APPEND_TRUE_FLAG);
             CONTENT_ARRAY.length = 0;
         }
-        var STEP_FLAG, logFilenamePostfix, DATE_BEGIN, GOAL_CUBE_FILE_PATH, CHECK_FACES_LAYER_INDEX_FAILED_FILENAME, FIX_LONELY_FACE_OF_CUBE_FILENAME, FIX_HIDDEN_PIECES_FILENAME, FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT_FILENAME, MIDDLE_CUBE_TO_FIRST_NO_FILENAME, MIDDLE_FILENAME_ARRAY, CHECK_FACES_LAYER_INDEX_FAILED_FILE_CONTENT_ARRAY, FIX_LONELY_FACE_OF_CUBE_FILE_CONTENT_ARRAY, FIX_HIDDEN_PIECES_FILE_CONTENT_ARRAY, FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT_FILE_CONTENT_ARRAY, MIDDLE_CUBE_TO_FIRST_NO_FILE_CONTENT_ARRAY, MIDDLE_FILE_CONTENT_ARRAY, MiddleFileKind, LAST_MIDDLE_CUBE_NO_ARRAY, MIDDLE_FILE_KIND_COUNT, CUBE_NO_STEP, DEBUG, middleFileKindIndex;
+        var STEP_FLAG, logFilenamePostfix, GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH, DEBUG_FILE_PREFIX, DATE_BEGIN, ALONE_FIRST_CUBE_PATH, fixHiddenPiecesFileNo, FIX_HIDDEN_PIECES_DETAILS_PATH, CUBE_PASSED_CHECK_FACES_LAYER_INDEX_PATH, cubePassCheckFacesLayerIndexFileNo, GOAL_CUBE_FILE_PATH, CHECK_FACES_LAYER_INDEX_FAILED_FILENAME, FIX_LONELY_FACE_OF_CUBE_FILENAME, FIX_HIDDEN_PIECES_FILENAME, FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT_FILENAME, MIDDLE_CUBE_TO_FIRST_NO_FILENAME, MIDDLE_FILENAME_ARRAY, CHECK_FACES_LAYER_INDEX_FAILED_FILE_CONTENT_ARRAY, FIX_LONELY_FACE_OF_CUBE_FILE_CONTENT_ARRAY, FIX_HIDDEN_PIECES_FILE_CONTENT_ARRAY, FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT_FILE_CONTENT_ARRAY, MIDDLE_CUBE_TO_FIRST_NO_FILE_CONTENT_ARRAY, MIDDLE_FILE_CONTENT_ARRAY, MiddleFileKind, LAST_MIDDLE_CUBE_NO_ARRAY, MIDDLE_FILE_KIND_COUNT, middleFileKindIndex, FILENAME, CUBE_NO_STEP, DEBUG, middleFileKindIndex;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -599,21 +619,41 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                     STEP_FLAG = "step2";
                     logFilenamePostfix = "";
                     logFilenamePostfix = "_" + STEP_FLAG;
-                    // const GOAL_FILE_TOP_PATH = `./${STEP_FLAG}/`;
-                    if (GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length) {
+                    GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH = GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length;
+                    DEBUG_FILE_PREFIX = GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH
+                        ? ""
+                        : STEP_FLAG.concat("_");
+                    if (GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH) {
                         mod_ts_1.ensureDirSync(GOAL_FILE_TOP_PATH);
                         mod_ts_1.emptyDirSync(GOAL_FILE_TOP_PATH);
                     }
                     cubeCore_ts_1.log("begin: " + (new Date()).toLocaleString());
                     DATE_BEGIN = performance.now();
+                    ALONE_FIRST_CUBE_PATH = GOAL_FILE_TOP_PATH + "29_aloneFirstCube/";
+                    if (OUTPUT_ALONE_FIRST_CUBE) {
+                        mod_ts_1.ensureDirSync(ALONE_FIRST_CUBE_PATH);
+                        mod_ts_1.emptyDirSync(ALONE_FIRST_CUBE_PATH);
+                    }
+                    fixHiddenPiecesFileNo = 0;
+                    FIX_HIDDEN_PIECES_DETAILS_PATH = GOAL_FILE_TOP_PATH + "22_fixHiddenPiecesDetails/";
+                    if (OUTPUT_FIX_HIDDEN_PIECES_DETAILS) {
+                        mod_ts_1.ensureDirSync(FIX_HIDDEN_PIECES_DETAILS_PATH);
+                        mod_ts_1.emptyDirSync(FIX_HIDDEN_PIECES_DETAILS_PATH);
+                    }
+                    CUBE_PASSED_CHECK_FACES_LAYER_INDEX_PATH = GOAL_FILE_TOP_PATH + "21_cubePassedCheckFacesLayerIndex/";
+                    if (OUTPUT_CUBE_PASS_CHECK_FACES_LAYER_INDEX) {
+                        mod_ts_1.ensureDirSync(CUBE_PASSED_CHECK_FACES_LAYER_INDEX_PATH);
+                        mod_ts_1.emptyDirSync(CUBE_PASSED_CHECK_FACES_LAYER_INDEX_PATH);
+                    }
+                    cubePassCheckFacesLayerIndexFileNo = 0;
                     GOAL_CUBE_FILE_PATH = GOAL_FILE_TOP_PATH + "cubesOnlyFirstOfTwentyFour/";
                     mod_ts_1.ensureDirSync(GOAL_CUBE_FILE_PATH);
                     mod_ts_1.emptyDirSync(GOAL_CUBE_FILE_PATH);
-                    CHECK_FACES_LAYER_INDEX_FAILED_FILENAME = "" + GOAL_FILE_TOP_PATH + STEP_FLAG + "_checkFacesLayerIndexFailed.txt";
-                    FIX_LONELY_FACE_OF_CUBE_FILENAME = "" + GOAL_FILE_TOP_PATH + STEP_FLAG + "_fixLonelyFaceOfCube.txt";
-                    FIX_HIDDEN_PIECES_FILENAME = "" + GOAL_FILE_TOP_PATH + STEP_FLAG + "_fixHiddenPieces.txt";
-                    FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT_FILENAME = "" + GOAL_FILE_TOP_PATH + STEP_FLAG + "_fixLonelyFaceOfCubeAndAppendIt.txt";
-                    MIDDLE_CUBE_TO_FIRST_NO_FILENAME = "" + GOAL_FILE_TOP_PATH + STEP_FLAG + "_middleCubeToFirstNo.txt";
+                    CHECK_FACES_LAYER_INDEX_FAILED_FILENAME = "" + GOAL_FILE_TOP_PATH + DEBUG_FILE_PREFIX + "checkFacesLayerIndexFailed.txt";
+                    FIX_LONELY_FACE_OF_CUBE_FILENAME = "" + GOAL_FILE_TOP_PATH + DEBUG_FILE_PREFIX + "fixLonelyFaceOfCube.txt";
+                    FIX_HIDDEN_PIECES_FILENAME = "" + GOAL_FILE_TOP_PATH + DEBUG_FILE_PREFIX + "fixHiddenPieces.txt";
+                    FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT_FILENAME = "" + GOAL_FILE_TOP_PATH + DEBUG_FILE_PREFIX + "fixLonelyFaceOfCubeAndAppendIt.txt";
+                    MIDDLE_CUBE_TO_FIRST_NO_FILENAME = "" + GOAL_FILE_TOP_PATH + DEBUG_FILE_PREFIX + "middleCubeToFirstNo.txt";
                     MIDDLE_FILENAME_ARRAY = [
                         CHECK_FACES_LAYER_INDEX_FAILED_FILENAME,
                         FIX_LONELY_FACE_OF_CUBE_FILENAME,
@@ -642,6 +682,12 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                     })(MiddleFileKind || (MiddleFileKind = {}));
                     LAST_MIDDLE_CUBE_NO_ARRAY = [0, 0, 0, 0, 0];
                     MIDDLE_FILE_KIND_COUNT = LAST_MIDDLE_CUBE_NO_ARRAY.length;
+                    for (middleFileKindIndex = 0; middleFileKindIndex < MIDDLE_FILE_KIND_COUNT; ++middleFileKindIndex) {
+                        FILENAME = MIDDLE_FILENAME_ARRAY[middleFileKindIndex];
+                        if (mod_ts_1.existsSync(FILENAME)) {
+                            Deno.removeSync(FILENAME);
+                        }
+                    }
                     CUBE_NO_STEP = 24;
                     DEBUG = {
                         // false true
@@ -985,9 +1031,9 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                                                 var pieceCell = cells[rowIndex][colIndex];
                                                                 pieceCell.feature = cubeCore_ts_1.CellFeature.Piece;
                                                                 pieceCell.twelveEdge = edgeIndex;
-                                                                // 复位“面属性”
-                                                                pieceCell.sixFace = cubeCore_ts_1.SixFace.Up;
-                                                                pieceCell.faceDirection = cubeCore_ts_1.FourDirection.Original;
+                                                                // // 复位“面属性”
+                                                                // pieceCell.sixFace = SixFace.Up;
+                                                                // pieceCell.faceDirection = FourDirection.Original;
                                                                 var _a = pieceCell.relatedInformationWhenAdding, relatedRowIndex = _a.rowIndex, relatedColIndex = _a.colIndex;
                                                                 if (relatedRowIndex === -1) {
                                                                     pieceCell.borderLines.forEach(function (borderLine, borderLineIndex) {
@@ -1029,15 +1075,20 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                                         });
                                                         // appendCubeWithoutOneToTwentyFour(cloned);
                                                         if (cloned.checkFacesLayerIndex()) {
+                                                            if (OUTPUT_CUBE_PASS_CHECK_FACES_LAYER_INDEX) {
+                                                                Deno.writeTextFileSync("" + CUBE_PASSED_CHECK_FACES_LAYER_INDEX_PATH + (++cubePassCheckFacesLayerIndexFileNo).toString() + ".js", "const cube_" + cubePassCheckFacesLayerIndexFileNo + " = " + JSON.stringify(cloned) + ";");
+                                                            }
                                                             fixLonelyFaceOfCubeAndAppendIt(cloned);
                                                         }
                                                         else {
-                                                            // Deno.writeTextFileSync(
-                                                            //   CHECK_FACES_LAYER_INDEX_FAILED_FILENAME,
-                                                            //   JSON.stringify(cloned),
-                                                            //   APPEND_TRUE_FLAG,
-                                                            // );
-                                                            appendContent(JSON.stringify(cloned), MiddleFileKind.CheckFacesLayerIndexFailed);
+                                                            if (OUTPUT_CHECK_FACES_LAYER_INDEX_FAILED) {
+                                                                // Deno.writeTextFileSync(
+                                                                //   CHECK_FACES_LAYER_INDEX_FAILED_FILENAME,
+                                                                //   JSON.stringify(cloned),
+                                                                //   APPEND_TRUE_FLAG,
+                                                                // );
+                                                                appendContent(JSON.stringify(cloned), MiddleFileKind.CheckFacesLayerIndexFailed);
+                                                            }
                                                         }
                                                     });
                                                 });
@@ -1115,33 +1166,39 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                     return;
                                 }
                                 var CUBE_NO = cube.no;
-                                console.log({
-                                    recursiveTimes: recursiveTimes,
-                                    cubeNo: CUBE_NO,
-                                    LONELY_FACE_CELL_ARRAY_LENGTH: LONELY_FACE_CELL_ARRAY_LENGTH
-                                });
-                                appendContent(recursiveTimes + "\t" + CUBE_NO + "\t" + LONELY_FACE_CELL_ARRAY_LENGTH, MiddleFileKind.FixLonelyFaceOfCubeAndAppendIt);
                                 var TAB = "\t".repeat(recursiveTimes - 1);
-                                // Deno.writeTextFileSync(
-                                //   FIX_LONELY_FACE_OF_CUBE_FILENAME,
-                                //   `${TAB}${recursiveTimes}\t${LONELY_FACE_CELL_ARRAY.length}\n${TAB}${
-                                //     JSON.stringify(cube)
-                                //   }`,
-                                //   APPEND_TRUE_FLAG,
-                                // );
-                                appendContent("" + TAB + recursiveTimes + "\t" + LONELY_FACE_CELL_ARRAY.length + "\n" + TAB + JSON.stringify(cube), MiddleFileKind.FixLonelyFaceOfCube);
+                                if (OUTPUT_FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT) {
+                                    console.log({
+                                        recursiveTimes: recursiveTimes,
+                                        cubeNo: CUBE_NO,
+                                        LONELY_FACE_CELL_ARRAY_LENGTH: LONELY_FACE_CELL_ARRAY_LENGTH
+                                    });
+                                    appendContent(recursiveTimes + "\t" + CUBE_NO + "\t" + LONELY_FACE_CELL_ARRAY_LENGTH, MiddleFileKind.FixLonelyFaceOfCubeAndAppendIt);
+                                }
+                                if (OUTPUT_FIX_LONELY_FACE_OF_CUBE) {
+                                    // Deno.writeTextFileSync(
+                                    //   FIX_LONELY_FACE_OF_CUBE_FILENAME,
+                                    //   `${TAB}${recursiveTimes}\t${LONELY_FACE_CELL_ARRAY.length}\n${TAB}${
+                                    //     JSON.stringify(cube)
+                                    //   }`,
+                                    //   APPEND_TRUE_FLAG,
+                                    // );
+                                    appendContent("" + TAB + recursiveTimes + "\t" + LONELY_FACE_CELL_ARRAY.length + "\n" + TAB + JSON.stringify(cube), MiddleFileKind.FixLonelyFaceOfCube);
+                                }
                                 var FIRST_LONELY_FACE_CELL = LONELY_FACE_CELL_ARRAY[0];
                                 var _a = FIRST_LONELY_FACE_CELL, sameFacePieceCellArray = _a.sameFacePieceCellArray, relationPieceCellArray = _a.relationPieceCellArray;
-                                // Deno.writeTextFileSync(
-                                //   FIX_LONELY_FACE_OF_CUBE_FILENAME,
-                                //   `${TAB}sameFacePieceCellArray: ${
-                                //     JSON.stringify(sameFacePieceCellArray)
-                                //   }\n${TAB}relationPieceCellArray: ${
-                                //     JSON.stringify(relationPieceCellArray)
-                                //   }`,
-                                //   APPEND_TRUE_FLAG,
-                                // );
-                                appendContent(TAB + "sameFacePieceCellArray: " + JSON.stringify(sameFacePieceCellArray) + "\n" + TAB + "relationPieceCellArray: " + JSON.stringify(relationPieceCellArray), MiddleFileKind.FixLonelyFaceOfCube);
+                                if (OUTPUT_FIX_LONELY_FACE_OF_CUBE) {
+                                    // Deno.writeTextFileSync(
+                                    //   FIX_LONELY_FACE_OF_CUBE_FILENAME,
+                                    //   `${TAB}sameFacePieceCellArray: ${
+                                    //     JSON.stringify(sameFacePieceCellArray)
+                                    //   }\n${TAB}relationPieceCellArray: ${
+                                    //     JSON.stringify(relationPieceCellArray)
+                                    //   }`,
+                                    //   APPEND_TRUE_FLAG,
+                                    // );
+                                    appendContent(TAB + "sameFacePieceCellArray: " + JSON.stringify(sameFacePieceCellArray) + "\n" + TAB + "relationPieceCellArray: " + JSON.stringify(relationPieceCellArray), MiddleFileKind.FixLonelyFaceOfCube);
+                                }
                                 var LONELY_FACE_LAYER_INDEX = FIRST_LONELY_FACE_CELL.layerIndex, LONELY_FACE_SIX_FACE = FIRST_LONELY_FACE_CELL.sixFace, LONELY_FACE_ROW_INDEX = FIRST_LONELY_FACE_CELL.rowIndex, LONELY_FACE_COL_INDEX = FIRST_LONELY_FACE_CELL.colIndex;
                                 sameFacePieceCellArray.forEach(function (pieceCell) {
                                     var PIECE_CELL_ROW_INDEX = pieceCell.rowIndex, PIECE_CELL_COL_INDEX = pieceCell.colIndex;
@@ -1242,7 +1299,7 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                              * <zh_tw>zh_tw</zh_tw>
                              */
                             function fixHiddenPiecesOfCubeAndAppendIt(cube) {
-                                // TODO(@anqisoft) 找到相应算法
+                                var CUBE_ORIGINAL = cube.clone();
                                 var hidePieceCount = 0;
                                 var cells = cube.cells, sixFaces = cube.sixFaces, twelveEdges = cube.twelveEdges;
                                 var CELL_ARRAY = cube.getCellArray();
@@ -1258,10 +1315,7 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                         var _b, _c;
                                         var pieceRowIndex = _a[0], pieceColIndex = _a[1];
                                         var PIECE_CELL = cells[pieceRowIndex][pieceColIndex];
-                                        // const {
-                                        //   sixFace: PIECE_CELL_SIX_FACE,
-                                        //   faceDirection: PIECE_CELL_FACE_DIRECTION,
-                                        // } = PIECE_CELL;
+                                        var PIECE_CELL_SIX_FACE = PIECE_CELL.sixFace;
                                         var _d = PIECE_CELL.relatedInformationWhenAdding.rowIndex === -1
                                             ? cube.getCoreCellReserveRelatedInformation()
                                             : PIECE_CELL.relatedInformationWhenAdding, PIECE_CELL_RELATION_CELL_ROW_INDEX = _d.rowIndex, PIECE_CELL_RELATION_CELL_COL_INDEX = _d.colIndex, PIECE_CELL_RELATION = _d.relation;
@@ -1307,8 +1361,45 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                         }
                                         if (hasOuterFace) {
                                             REMOVE_INDEX_ARRAY.push(pieceIndex);
+                                            // CELL_ARRAY.filter((cell) =>
+                                            //   cell.feature === CellFeature.Face &&
+                                            //   cell.sixFace === PIECE_CELL_SIX_FACE
+                                            // ).forEach((cell) => ++cell.layerIndex);
+                                            var SAME_FACE_CELL_INFO_ARRAY_1 = sixFaces[PIECE_CELL_SIX_FACE];
+                                            var SAME_FACE_CELL_INFO_COUNT_1 = SAME_FACE_CELL_INFO_ARRAY_1.length;
+                                            for (var sameFaceCellInfoIndex = 0; sameFaceCellInfoIndex < SAME_FACE_CELL_INFO_COUNT_1; ++sameFaceCellInfoIndex) {
+                                                var _f = SAME_FACE_CELL_INFO_ARRAY_1[sameFaceCellInfoIndex], firstRowIndex = _f[0], firstColIndex = _f[1], secondRowIndex = _f[2], secondColIndex = _f[3];
+                                                var firstCell = cells[firstRowIndex][firstColIndex];
+                                                ++firstCell.layerIndex;
+                                                if (typeof secondRowIndex !== "undefined" &&
+                                                    typeof secondColIndex !== "undefined") {
+                                                    var secondCell = cells[secondRowIndex][secondColIndex];
+                                                    ++secondCell.layerIndex;
+                                                }
+                                            }
+                                            // bug: error array
+                                            // sixFaces[PIECE_CELL_RELATION_CELL_SIX_FACE].unshift([
+                                            //   pieceRowIndex,
+                                            //   pieceColIndex,
+                                            // ]);
+                                            // console.log({
+                                            //   no: cube.no,
+                                            //   PIECE_CELL_SIX_FACE,
+                                            //   PIECE_CELL_RELATION_CELL_SIX_FACE,
+                                            //   old: JSON.stringify(sixFaces[PIECE_CELL_SIX_FACE]),
+                                            //   pieceRowIndex,
+                                            //   pieceColIndex,
+                                            // });
+                                            sixFaces[PIECE_CELL_SIX_FACE].unshift([
+                                                pieceRowIndex,
+                                                pieceColIndex,
+                                            ]);
                                             PIECE_CELL.feature = cubeCore_ts_1.CellFeature.Face;
-                                            PIECE_CELL.layerIndex = 0;
+                                            // 	<en_us>en_us</en_us>
+                                            // 	<zh_cn>会导致压缩正方体数据时出现负数</zh_cn>
+                                            // 	<zh_tw>zh_tw</zh_tw>
+                                            // PIECE_CELL.layerIndex = 0;
+                                            PIECE_CELL.layerIndex = 1;
                                             ++hidePieceCount;
                                         }
                                     });
@@ -1321,20 +1412,35 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                 }
                                 cube.sync();
                                 if (hidePieceCount) {
-                                    // Deno.writeTextFileSync(
-                                    //   FIX_HIDDEN_PIECES_FILENAME,
-                                    //   JSON.stringify(cube),
-                                    //   APPEND_TRUE_FLAG,
-                                    // );
-                                    appendContent(JSON.stringify(cube), MiddleFileKind.FixHiddenPieces);
+                                    if (OUTPUT_FIX_HIDDEN_PIECES) {
+                                        // Deno.writeTextFileSync(
+                                        //   FIX_HIDDEN_PIECES_FILENAME,
+                                        //   JSON.stringify(cube),
+                                        //   APPEND_TRUE_FLAG,
+                                        // );
+                                        // appendContent(
+                                        //   JSON.stringify(cube),
+                                        //   MiddleFileKind.FixHiddenPieces,
+                                        // );
+                                        appendContent(JSON.stringify(CUBE_ORIGINAL) + "\nto\n" + JSON.stringify(cube), MiddleFileKind.FixHiddenPieces);
+                                    }
+                                    if (OUTPUT_FIX_HIDDEN_PIECES_DETAILS) {
+                                        Deno.writeTextFileSync("" + FIX_HIDDEN_PIECES_DETAILS_PATH + cube.no + "_" + ++fixHiddenPiecesFileNo + "_from.js", "const fixHiddenPieces_" + cube.no + " = " + JSON.stringify(CUBE_ORIGINAL) + ";");
+                                        Deno.writeTextFileSync("" + FIX_HIDDEN_PIECES_DETAILS_PATH + cube.no + "_" + fixHiddenPiecesFileNo + "_to.js", "const fixHiddenPieces_" + cube.no + " = " + JSON.stringify(cube) + ";");
+                                    }
                                 }
                                 appendCubeWithoutOneToTwentyFour(cube);
                             }
                             function appendCubeWithoutOneToTwentyFour(cube) {
                                 nextCubeNo += CUBE_NO_STEP;
-                                appendContent(nextCubeNo.toString(), MiddleFileKind.MiddleCubeToFirstNo);
+                                if (OUTPUT_MIDDLE_CUBE_TO_FIRST_NO) {
+                                    appendContent(nextCubeNo.toString(), MiddleFileKind.MiddleCubeToFirstNo);
+                                }
                                 cube.no = nextCubeNo;
                                 CUBES.push(cube);
+                                if (OUTPUT_ALONE_FIRST_CUBE) {
+                                    Deno.writeTextFileSync("" + ALONE_FIRST_CUBE_PATH + nextCubeNo + ".js", "const cube_" + nextCubeNo + " = " + JSON.stringify(cube) + ";");
+                                }
                                 if (CUBES.length >= DEBUG.CUBE_COUNT_PER_FILE) {
                                     outputCubes();
                                 }
@@ -1435,7 +1541,7 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                     }
                     cubeCore_ts_1.showUsedTime("end");
                     cubeCore_ts_1.log("end: " + (new Date()).toLocaleString());
-                    cubeCore_ts_1.logUsedTime("Total", performance.now() - DATE_BEGIN);
+                    cubeCore_ts_1.logUsedTime(STEP_FLAG + ": Total", performance.now() - DATE_BEGIN);
                     mod_ts_1.copySync(LOG_FILE_NAME, "log_" + STEP_FLAG + ".txt", OVER_WRITE_TRUE_FLAG);
                     mod_ts_1.copySync(LOG_FILE_NAME, GOAL_FILE_TOP_PATH + "log" + logFilenamePostfix + ".txt", OVER_WRITE_TRUE_FLAG);
                     Deno.removeSync(LOG_FILE_NAME);
@@ -1444,11 +1550,14 @@ function step2(ROW_COUNT_ARRAY, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
         });
     });
 }
-function step3(GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
+function step3(GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH, OUTPUT_FULL_CUBE, OUTPUT_READ_CUBE, SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL) {
     if (GOAL_FILE_TOP_PATH === void 0) { GOAL_FILE_TOP_PATH = "./"; }
     if (SOURCE_FILE_TOP_PATH === void 0) { SOURCE_FILE_TOP_PATH = "./cubesOnlyFirstOfTwentyFour/"; }
+    if (OUTPUT_FULL_CUBE === void 0) { OUTPUT_FULL_CUBE = false; }
+    if (OUTPUT_READ_CUBE === void 0) { OUTPUT_READ_CUBE = false; }
+    if (SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL === void 0) { SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var STEP_FLAG, LOG_FILE_NAME, logFilenamePostfix, DATE_BEGIN, MANNER_COUNT;
+        var STEP_FLAG, LOG_FILE_NAME, logFilenamePostfix, GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH, DEBUG_FILE_PREFIX, DATE_BEGIN, READ_CUBE_PATH, FULL_CUBE_PATH, MANNER_COUNT;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -1460,18 +1569,36 @@ function step3(GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                     }
                     logFilenamePostfix = "";
                     logFilenamePostfix = "_" + STEP_FLAG;
-                    // const GOAL_FILE_TOP_PATH = `./${STEP_FLAG}/`;
-                    if (GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length) {
+                    GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH = GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length;
+                    DEBUG_FILE_PREFIX = GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH
+                        ? ""
+                        : STEP_FLAG.concat("_");
+                    if (GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH) {
                         mod_ts_1.ensureDirSync(GOAL_FILE_TOP_PATH);
                         mod_ts_1.emptyDirSync(GOAL_FILE_TOP_PATH);
                     }
                     cubeCore_ts_1.log("begin: " + (new Date()).toLocaleString());
                     DATE_BEGIN = performance.now();
+                    READ_CUBE_PATH = GOAL_FILE_TOP_PATH + "31_readCube/";
+                    if (OUTPUT_READ_CUBE) {
+                        mod_ts_1.ensureDirSync(READ_CUBE_PATH);
+                        mod_ts_1.emptyDirSync(READ_CUBE_PATH);
+                    }
+                    FULL_CUBE_PATH = GOAL_FILE_TOP_PATH + "39_fullCube/";
+                    if (OUTPUT_FULL_CUBE) {
+                        mod_ts_1.ensureDirSync(FULL_CUBE_PATH);
+                        mod_ts_1.emptyDirSync(FULL_CUBE_PATH);
+                    }
                     MANNER_COUNT = cubeCore_ts_1.ANGLE_COUNT;
                     return [4 /*yield*/, (function () { return __awaiter(_this, void 0, void 0, function () {
                             function batchAppendCubeOneToTwentyFour(cube) {
                                 var CORE_ROW_INDEX = cube.coreRowIndex, CORE_COL_INDEX = cube.coreColIndex;
                                 var OLD_SIX_FACES = cube.sixFaces, OLD_TWELVE_EDGES = cube.twelveEdges, OLD_CELLS = cube.cells, START_NO = cube.no, rowCount = cube.rowCount, colCount = cube.colCount, gridLines = cube.gridLines;
+                                if (OUTPUT_READ_CUBE) {
+                                    var CUBE_NO = cube.no;
+                                    Deno.writeTextFileSync(READ_CUBE_PATH + "input." + CUBE_NO + ".js", "const cube_" + CUBE_NO + " = " + JSON.stringify(cube) + ";");
+                                    Deno.writeTextFileSync(READ_CUBE_PATH + "input." + CUBE_NO + ".sixFaces.txt", "" + JSON.stringify(OLD_SIX_FACES));
+                                }
                                 // { xStart, xEnd, yStart, yEnd, lineStyle }
                                 // GridLineStyle: Unknown, None, InnerLine, CutLine, OuterLine
                                 var LINE_ARRAY = [];
@@ -1487,7 +1614,7 @@ function step3(GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                     }
                                 }
                                 gridLines.forEach(function (_a) {
-                                    var xStart = _a.xStart, xEnd = _a.xEnd, yStart = _a.yStart, yEnd = _a.yEnd, lineStyle = _a.lineStyle;
+                                    var xStart = _a.xStart, _xEnd = _a._xEnd, yStart = _a.yStart, yEnd = _a.yEnd, lineStyle = _a.lineStyle;
                                     if (yStart === yEnd) {
                                         LINE_ARRAY[colCount * yStart + xStart] = lineStyle;
                                     }
@@ -1501,21 +1628,23 @@ function step3(GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                 for (var mannerIndex = 0; mannerIndex < MANNER_COUNT; ++mannerIndex) {
                                     var cloned = getClonedCubeByMannerIndex(cube, mannerIndex, OLD_SIX_FACES, OLD_TWELVE_EDGES, OLD_CELLS, MAX_ADD_ORDER, CORE_CELL_IS_PIECE);
                                     cloned.no = START_NO + mannerIndex;
+                                    if (OUTPUT_READ_CUBE) {
+                                        Deno.writeTextFileSync(READ_CUBE_PATH + "output." + START_NO + "." + mannerIndex + ".sixFaces.txt", "" + JSON.stringify(cloned.sixFaces));
+                                    }
                                     cloned.syncAndClear();
-                                    cloned.cells = undefined;
-                                    cloned.isValid = undefined;
-                                    cloned.emptyCells = undefined;
-                                    cloned.colCount = undefined;
-                                    cloned.coreRowIndex = undefined;
                                     var MANNER = cloned.twelveEdges.map(function (twelveEdge) {
                                         return "" + (twelveEdge.canBeInserted ? "T" : "F") + twelveEdge.pieces.length;
                                     }).join("");
-                                    cloned["manner"] = MANNER;
+                                    cloned.manner = MANNER;
                                     appendCube(cloned);
                                 }
                             }
                             function appendCube(cube) {
                                 CUBES.push(cube);
+                                if (OUTPUT_FULL_CUBE) {
+                                    var CUBE_NO = cube.no;
+                                    Deno.writeTextFileSync(FULL_CUBE_PATH + "full_" + CUBE_NO + ".js", "const cube_" + CUBE_NO + " = " + JSON.stringify(cube) + ";");
+                                }
                                 if (CUBES.length >= CUBE_COUNT_PER_FILE) {
                                     outputCubes();
                                 }
@@ -1652,43 +1781,129 @@ function step3(GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                 var CORE_ROW_INDEX = cube.coreRowIndex, CORE_COL_INDEX = cube.coreColIndex;
                                 var cloned = cube.clone();
                                 var cells = cloned.cells, actCells = cloned.actCells, sixFaces = cloned.sixFaces, twelveEdges = cloned.twelveEdges;
+                                var CELL_ARRAY = cloned.getCellArray();
                                 var _a = cubeCore_ts_1.convertSixFaceTwentyFourAngleToSixFaceAndDirection(mannerIndex), CORE_CELL_SIX_FACE = _a[0], CORE_CELL_FOUR_DIRECTION = _a[1];
                                 var CORE_CELL = cells[CORE_ROW_INDEX][CORE_COL_INDEX];
                                 CORE_CELL.sixFace = CORE_CELL_SIX_FACE;
                                 CORE_CELL.faceDirection = CORE_CELL_FOUR_DIRECTION;
+                                var NEW_SIX_FACE_ARRAY = SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL
+                                    ? []
+                                    : undefined;
+                                if (SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL) {
+                                    NEW_SIX_FACE_ARRAY.push("1: " + CORE_ROW_INDEX + CORE_COL_INDEX + CORE_CELL_SIX_FACE + CORE_CELL_FOUR_DIRECTION);
+                                }
                                 var _loop_10 = function (addOrder) {
-                                    cells.forEach(function (cellRow) {
-                                        return cellRow.filter(function (cell) { return cell.addOrder === addOrder; }).forEach(function (cell) {
-                                            var _a = cell.relatedInformationWhenAdding, rowIndex = _a.rowIndex, colIndex = _a.colIndex, RELATION = _a.relation;
-                                            var RELATED_CELL = cells[rowIndex][colIndex];
-                                            var _b = cubeCore_ts_1.convertSixFaceTwentyFourAngleToSixFaceAndDirection(cubeCore_ts_1.SIX_FACE_AND_DIRECTION_RELATIONS[RELATED_CELL.sixFaceTwentyFourAngle][RELATION]), newSixFace = _b[0], newFaceDirection = _b[1];
-                                            cell.sixFace = newSixFace;
-                                            cell.faceDirection = newFaceDirection;
-                                        });
+                                    if (SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL) {
+                                        NEW_SIX_FACE_ARRAY.push("\n" + addOrder + ": ");
+                                    }
+                                    // cells.forEach((cellRow) =>
+                                    //   cellRow.filter((cell) => cell.addOrder === addOrder).forEach(
+                                    //     (cell) => {
+                                    //       const { rowIndex, colIndex, relation: RELATION } =
+                                    //         cell.relatedInformationWhenAdding;
+                                    //       const RELATED_CELL = cells[rowIndex][colIndex];
+                                    //       const [newSixFace, newFaceDirection] =
+                                    //         convertSixFaceTwentyFourAngleToSixFaceAndDirection(
+                                    //           SIX_FACE_AND_DIRECTION_RELATIONS[
+                                    //             RELATED_CELL.sixFaceTwentyFourAngle
+                                    //           ][RELATION],
+                                    //         );
+                                    //       cell.sixFace = newSixFace;
+                                    //       cell.faceDirection = newFaceDirection;
+                                    //     },
+                                    //   )
+                                    // );
+                                    CELL_ARRAY.filter(function (cell) { return cell.addOrder === addOrder; }).forEach(function (cell) {
+                                        var _a = cell.relatedInformationWhenAdding, rowIndex = _a.rowIndex, colIndex = _a.colIndex, RELATION = _a.relation;
+                                        var RELATED_CELL = cells[rowIndex][colIndex];
+                                        var sixFaceTwentyFourAngle = RELATED_CELL.sixFaceTwentyFourAngle;
+                                        // const [newSixFace, newFaceDirection] =
+                                        //   convertSixFaceTwentyFourAngleToSixFaceAndDirection(
+                                        //     SIX_FACE_AND_DIRECTION_RELATIONS[
+                                        //       sixFaceTwentyFourAngle
+                                        //     ][RELATION],
+                                        //   );
+                                        var newSixFaceTwentyFourAngle = cubeCore_ts_1.SIX_FACE_AND_DIRECTION_RELATIONS[sixFaceTwentyFourAngle][RELATION];
+                                        var _b = cubeCore_ts_1.convertSixFaceTwentyFourAngleToSixFaceAndDirection(newSixFaceTwentyFourAngle), newSixFace = _b[0], newFaceDirection = _b[1];
+                                        cell.sixFace = newSixFace;
+                                        cell.faceDirection = newFaceDirection;
+                                        cell.twelveEdge = cubeCore_ts_1.getSixFaceTwentyFourAngleRelationTwelveEdge(sixFaceTwentyFourAngle, RELATION);
+                                        if (SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL) {
+                                            NEW_SIX_FACE_ARRAY.push("" + cell.rowIndex + cell.colIndex + newSixFace + newFaceDirection + "=" + newSixFaceTwentyFourAngle + "=" + cell.sixFaceTwentyFourAngleStr + "<=" + rowIndex + colIndex + "[" + sixFaceTwentyFourAngle + "][" + RELATION + "],");
+                                        }
                                     });
                                 };
                                 for (var addOrder = 2; addOrder <= MAX_ADD_ORDER; ++addOrder) {
                                     _loop_10(addOrder);
                                 }
                                 if (CORE_CELL_IS_PIECE) {
-                                    var _b = actCells.filter(function (cell) {
+                                    // console.log("CORE_CELL_IS_PIECE");
+                                    // const { rowIndex, colIndex } = actCells.filter((cell) =>
+                                    //   cell.addOrder === 2
+                                    // )[0];
+                                    // const RELATED_CELL = cells[rowIndex][colIndex];
+                                    var RELATED_CELL = CELL_ARRAY.filter(function (cell) {
                                         return cell.addOrder === 2;
-                                    })[0], rowIndex = _b.rowIndex, colIndex = _b.colIndex;
-                                    var RELATED_CELL = cells[rowIndex][colIndex];
+                                    })[0];
+                                    var sixFaceTwentyFourAngle = RELATED_CELL.sixFaceTwentyFourAngle;
                                     var RELATION = RELATED_CELL.relatedInformationWhenAdding.relation;
-                                    CORE_CELL.twelveEdge = cubeCore_ts_1.getSixFaceTwentyFourAngleRelationTwelveEdge(RELATED_CELL.sixFaceTwentyFourAngle, 2 - RELATION % 2 + 2 * floor(RELATION / 2));
+                                    var REVERSED_RELATION = cubeCore_ts_1.getReversedRelation(RELATION);
+                                    // error: 2 - RELATION % 2 + 2 * floor(RELATION / 2),
+                                    // right: relation % 2 + 2 * (1 - Math.floor(relation / 2));
+                                    CORE_CELL.twelveEdge = cubeCore_ts_1.getSixFaceTwentyFourAngleRelationTwelveEdge(sixFaceTwentyFourAngle, REVERSED_RELATION);
+                                    var _b = cubeCore_ts_1.convertSixFaceTwentyFourAngleToSixFaceAndDirection(cubeCore_ts_1.SIX_FACE_AND_DIRECTION_RELATIONS[sixFaceTwentyFourAngle][REVERSED_RELATION]), newSixFace = _b[0], newFaceDirection = _b[1];
+                                    CORE_CELL.sixFace = newSixFace;
+                                    CORE_CELL.faceDirection = newFaceDirection;
+                                    // if (
+                                    //   newSixFace !== CORE_CELL_SIX_FACE ||
+                                    //   newFaceDirection !== CORE_CELL_FOUR_DIRECTION
+                                    // ) {
+                                    //   log(
+                                    //     `[error]${newSixFace}vs${CORE_CELL_SIX_FACE},${newFaceDirection}vs${CORE_CELL_FOUR_DIRECTION}`,
+                                    //   );
+                                    // }
+                                }
+                                if (SHOW_GET_CLONED_CUBE_BY_MANNER_INDEX_DETAIL) {
+                                    cubeCore_ts_1.log("\n" + NEW_SIX_FACE_ARRAY.join(""));
+                                    NEW_SIX_FACE_ARRAY.length = 0;
                                 }
                                 sixFaces.forEach(function (face, faceIndex) {
                                     face.length = 0;
+                                    var find = false;
                                     OLD_SIX_FACES.forEach(function (oldFaces) {
                                         if (oldFaces.length === 0) {
-                                            Deno.writeTextFileSync(GOAL_FILE_TOP_PATH + "error_cube_" + cube.no + ".ts", "const _error_cube = " + JSON.stringify(cube) + ";");
+                                            Deno.writeTextFileSync("" + GOAL_FILE_TOP_PATH + DEBUG_FILE_PREFIX + "error_cube_" + cube.no + ".ts", "const _error_cube = " + JSON.stringify(cube) + ";");
                                         }
                                         var _a = oldFaces[0], rowIndex = _a[0], colIndex = _a[1];
                                         if (cells[rowIndex][colIndex].sixFace === faceIndex) {
                                             oldFaces.forEach(function (item) { return face.push(item); });
+                                            find = true;
                                         }
                                     });
+                                    if (!find) {
+                                        cubeCore_ts_1.log(
+                                        // .toString().padStart(2, "0")
+                                        cube.no + "." + mannerIndex.toString().padStart(2, "0") + ".sixFaces[" + faceIndex + "] not found, and " + cube.no + ".old_sixFaces: " + OLD_SIX_FACES.map(function (oldFaces) {
+                                            var _a = oldFaces[0], rowIndex = _a[0], colIndex = _a[1];
+                                            return "" + rowIndex + colIndex + cells[rowIndex][colIndex].sixFace;
+                                        }).join("_") + ", all: " + 
+                                        // actCells.map((cell) => cell.sixFace).join("")
+                                        actCells.map(function (cell) {
+                                            return "" + cell.rowIndex + cell.colIndex + cell.sixFace;
+                                        }).join("_") + ", old_sixFaces_full: " + OLD_SIX_FACES.map(function (oldFaces) {
+                                            return oldFaces.map(function (face) {
+                                                var row1 = face[0], col1 = face[1], row2 = face[2], col2 = face[3];
+                                                // return `${cells[row1][col1].sixFace}${
+                                                //   (typeof row2 !== "undefined" && typeof col2 !== "undefined")
+                                                //     ? cells[row2][col2].sixFace
+                                                //     : ""
+                                                // }`;
+                                                return "" + row1 + col1 + cells[row1][col1].sixFace + ((typeof row2 !== "undefined" && typeof col2 !== "undefined")
+                                                    ? "_" + row2 + col2 + cells[row2][col2].sixFace
+                                                    : "");
+                                            }).join("_");
+                                        }).join("_"));
+                                    }
                                 });
                                 twelveEdges.forEach(function (edge) {
                                     edge.pieces.forEach(function (_a) {
@@ -1843,7 +2058,7 @@ function step3(GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                     // );
                     cubeCore_ts_1.showUsedTime("end");
                     cubeCore_ts_1.log("end: " + (new Date()).toLocaleString());
-                    cubeCore_ts_1.logUsedTime("Total", performance.now() - DATE_BEGIN);
+                    cubeCore_ts_1.logUsedTime(STEP_FLAG + ": Total", performance.now() - DATE_BEGIN);
                     mod_ts_1.copySync(LOG_FILE_NAME, "log_" + STEP_FLAG + ".txt", OVER_WRITE_TRUE_FLAG);
                     mod_ts_1.copySync(LOG_FILE_NAME, GOAL_FILE_TOP_PATH + "log" + logFilenamePostfix + ".txt", OVER_WRITE_TRUE_FLAG);
                     Deno.removeSync(LOG_FILE_NAME);
@@ -1857,7 +2072,7 @@ function step4(USE_LARGE_FILE, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
     if (GOAL_FILE_TOP_PATH === void 0) { GOAL_FILE_TOP_PATH = "./"; }
     if (SOURCE_FILE_TOP_PATH === void 0) { SOURCE_FILE_TOP_PATH = "./"; }
     return __awaiter(this, void 0, void 0, function () {
-        var STEP_FLAG, LOG_FILE_NAME, logFilenamePostfix, DATE_BEGIN, DEBUG;
+        var STEP_FLAG, LOG_FILE_NAME, logFilenamePostfix, GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH, DEBUG_FILE_PREFIX, DATE_BEGIN, DEBUG;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -1869,8 +2084,11 @@ function step4(USE_LARGE_FILE, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                     }
                     logFilenamePostfix = "";
                     logFilenamePostfix = "_" + STEP_FLAG;
-                    // const GOAL_FILE_TOP_PATH = `./${STEP_FLAG}/`;
-                    if (GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length) {
+                    GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH = GOAL_FILE_TOP_PATH.replace(/[.\/\\]/g, "").length;
+                    DEBUG_FILE_PREFIX = GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH
+                        ? ""
+                        : STEP_FLAG.concat("_");
+                    if (GOAL_FILE_TOP_PATH_IS_NOT_CURRENT_PATH) {
                         mod_ts_1.ensureDirSync(GOAL_FILE_TOP_PATH);
                         mod_ts_1.emptyDirSync(GOAL_FILE_TOP_PATH);
                     }
@@ -1888,7 +2106,7 @@ function step4(USE_LARGE_FILE, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                 logFilenamePostfix += "_compactLineInfo";
                                 // 1. lines.txt，将4677537行去重，且列出正方体序号段（不知道为什么最后有不连续的序号），
                                 //    转为lineToCubeNo.txt文件，444442222244444422324433234:1-5,8-10
-                                var GOAL_FILE_NAME = GOAL_FILE_TOP_PATH + "lineToCubeNo.txt";
+                                var GOAL_FILE_NAME = "" + GOAL_FILE_TOP_PATH + DEBUG_FILE_PREFIX + "lineToCubeNo.txt";
                                 var SOURCE_FILE_NAME = SOURCE_FILE_TOP_PATH + "lines.txt";
                                 var DATA_ARRAY = Deno.readTextFileSync(SOURCE_FILE_NAME).split("\n");
                                 cubeCore_ts_1.showUsedTime("read " + SOURCE_FILE_NAME + " ok");
@@ -1953,7 +2171,7 @@ function step4(USE_LARGE_FILE, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                                     return { manner: manner, cubeNoBill: cubeNoBill };
                                                 });
                                                 ARRAY.sort(function (prev, next) { return prev.manner.localeCompare(next.manner); });
-                                                console.log("sort it");
+                                                // console.log("sort it");
                                                 Deno.writeTextFileSync(GOAL_FILE_NAME, ARRAY.map(function (_a) {
                                                     var manner = _a.manner, cubeNoBill = _a.cubeNoBill;
                                                     return manner + "\t" + cubeNoBill;
@@ -1990,7 +2208,7 @@ function step4(USE_LARGE_FILE, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                     return __generator(this, function (_e) {
                                         switch (_e.label) {
                                             case 0:
-                                                logFilenamePostfix = "_compactMannerFilesForLargeFile";
+                                                logFilenamePostfix += "_compactMannerFilesForLargeFile";
                                                 SOURCE_MANNER_FILE_PATH = SOURCE_FILE_TOP_PATH + "manners/";
                                                 MANNER_ARRAY = [];
                                                 CUBE_NO_ARRAY = [];
@@ -2219,9 +2437,9 @@ function step4(USE_LARGE_FILE, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                                     return __generator(this, function (_d) {
                                         switch (_d.label) {
                                             case 0:
-                                                logFilenamePostfix = "_joinCubeFiles";
+                                                logFilenamePostfix += "_joinCubeFiles";
                                                 SOURCE_MANNER_FILE_PATH = SOURCE_FILE_TOP_PATH + "cubes/";
-                                                CUBE_GOAL_FILE_NAME = GOAL_FILE_TOP_PATH + "cubes.txt";
+                                                CUBE_GOAL_FILE_NAME = "" + GOAL_FILE_TOP_PATH + DEBUG_FILE_PREFIX + "cubes.txt";
                                                 Deno.writeTextFileSync(CUBE_GOAL_FILE_NAME, "");
                                                 readedFileCount = 0;
                                                 _d.label = 1;
@@ -2312,7 +2530,7 @@ function step4(USE_LARGE_FILE, GOAL_FILE_TOP_PATH, SOURCE_FILE_TOP_PATH) {
                     _a.sent();
                     cubeCore_ts_1.showUsedTime("end");
                     cubeCore_ts_1.log("end: " + (new Date()).toLocaleString());
-                    cubeCore_ts_1.logUsedTime("Total", performance.now() - DATE_BEGIN);
+                    cubeCore_ts_1.logUsedTime(STEP_FLAG + ": Total", performance.now() - DATE_BEGIN);
                     mod_ts_1.copySync(LOG_FILE_NAME, "log_" + STEP_FLAG + ".txt", OVER_WRITE_TRUE_FLAG);
                     mod_ts_1.copySync(LOG_FILE_NAME, GOAL_FILE_TOP_PATH + "log" + logFilenamePostfix + ".txt", OVER_WRITE_TRUE_FLAG);
                     Deno.removeSync(LOG_FILE_NAME);
@@ -2337,18 +2555,18 @@ function main(options, ROW_COUNT_ARRAY) {
                     // log("\n");
                     if (!(step1Option === null || step1Option === void 0 ? void 0 : step1Option.skipped)) {
                         GLOBAL_LOG_CONTENT_ARRAY.push("step1: " + (new Date()).toLocaleString());
-                        step1(ROW_COUNT_ARRAY, step1Option === null || step1Option === void 0 ? void 0 : step1Option.GOAL_FILE_TOP_PATH);
+                        step1(ROW_COUNT_ARRAY, step1Option === null || step1Option === void 0 ? void 0 : step1Option.GOAL_FILE_TOP_PATH, step1Option === null || step1Option === void 0 ? void 0 : step1Option.OUTPUT_CUT_MANNERS_ROW_BY_ROW);
                     }
                     if (!!(step2Option === null || step2Option === void 0 ? void 0 : step2Option.skipped)) return [3 /*break*/, 2];
                     GLOBAL_LOG_CONTENT_ARRAY.push("step2: " + (new Date()).toLocaleString());
-                    return [4 /*yield*/, step2(ROW_COUNT_ARRAY, step2Option === null || step2Option === void 0 ? void 0 : step2Option.GOAL_FILE_TOP_PATH, step2Option === null || step2Option === void 0 ? void 0 : step2Option.SOURCE_FILE_TOP_PATH)];
+                    return [4 /*yield*/, step2(ROW_COUNT_ARRAY, step2Option === null || step2Option === void 0 ? void 0 : step2Option.GOAL_FILE_TOP_PATH, step2Option === null || step2Option === void 0 ? void 0 : step2Option.SOURCE_FILE_TOP_PATH, step2Option === null || step2Option === void 0 ? void 0 : step2Option.OUTPUT_ALONE_FIRST_CUBE, step2Option === null || step2Option === void 0 ? void 0 : step2Option.OUTPUT_CUBE_PASS_CHECK_FACES_LAYER_INDEX, step2Option === null || step2Option === void 0 ? void 0 : step2Option.OUTPUT_FIX_HIDDEN_PIECES, step2Option === null || step2Option === void 0 ? void 0 : step2Option.OUTPUT_MIDDLE_CUBE_TO_FIRST_NO, step2Option === null || step2Option === void 0 ? void 0 : step2Option.OUTPUT_CHECK_FACES_LAYER_INDEX_FAILED, step2Option === null || step2Option === void 0 ? void 0 : step2Option.OUTPUT_FIX_LONELY_FACE_OF_CUBE_AND_APPEND_IT, step2Option === null || step2Option === void 0 ? void 0 : step2Option.OUTPUT_FIX_LONELY_FACE_OF_CUBE)];
                 case 1:
                     _a.sent();
                     _a.label = 2;
                 case 2:
                     if (!!(step3Option === null || step3Option === void 0 ? void 0 : step3Option.skipped)) return [3 /*break*/, 4];
                     GLOBAL_LOG_CONTENT_ARRAY.push("step3: " + (new Date()).toLocaleString());
-                    return [4 /*yield*/, step3(step3Option === null || step3Option === void 0 ? void 0 : step3Option.GOAL_FILE_TOP_PATH, step3Option === null || step3Option === void 0 ? void 0 : step3Option.SOURCE_FILE_TOP_PATH)];
+                    return [4 /*yield*/, step3(step3Option === null || step3Option === void 0 ? void 0 : step3Option.GOAL_FILE_TOP_PATH, step3Option === null || step3Option === void 0 ? void 0 : step3Option.SOURCE_FILE_TOP_PATH, step3Option === null || step3Option === void 0 ? void 0 : step3Option.OUTPUT_FULL_CUBE, step3Option === null || step3Option === void 0 ? void 0 : step3Option.OUTPUT_READ_CUBE)];
                 case 3:
                     _a.sent();
                     _a.label = 4;

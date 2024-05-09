@@ -474,7 +474,7 @@ function done(DATAS, GOAL_FILE) {
                                         // 2. 根据cubeNo与CUBE_LINE_ARRAY，获取边线数据并还原
                                         // 444442222244444422324433234
                                         // 44444222222222244444433334432324423234
-                                        var CUBE_LINE = CUBE_LINE_ARRAY_1[Math.ceil((cubeNo - 0.5) / 24)];
+                                        var CUBE_LINE = CUBE_LINE_ARRAY_1[Math.floor((cubeNo - 0.5) / 24)];
                                         // // 27 chars or 38 chars
                                         // const ROW_COUNT = CUBE_LINE.length === 27 ? 2 : 3;
                                         // 3. 根据cubeNo与cubes/00####.txt（每文件30720行，所以可以直接算出读哪个文件，再读相应行），获取格信息

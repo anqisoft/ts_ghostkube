@@ -20,8 +20,15 @@
 
 import { main } from "./cubeCompute.ts";
 
+// await main({
+//   step1Option: {},
+//   step2Option: {},
+//   step3Option: {},
+//   step4Option: {},
+// }, [2, 3]);
+
 await main({
-  step1Option: {},
+  step1Option: { OUTPUT_CUT_MANNERS_ROW_BY_ROW: true },
   step2Option: {},
   step3Option: {},
   step4Option: {},

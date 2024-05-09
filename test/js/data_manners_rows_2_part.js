@@ -1,23 +1,32 @@
 const SET_ARRAY = [{
-    "name": "NO-1",
-    "cubes": [12175, 5455, 19608, 19066, 18586]
+    "name": "~",
+    "cubes": [19, 7, 12, 4, 20, 8, 9, 3, 17, 10, 5, 2, 11, 18, 6, 15, 16, 14, 13, 22, 21, 24, 1, 23]
 }];
 const CUBES = [{
-    "no": 12175,
+    "no": 19,
     "actCells": [{
         "layerIndex": 2,
         "relation": 0,
         "feature": 2,
-        "sixFace": 4,
+        "sixFace": 1,
         "faceDirection": 3,
         "twelveEdge": 12,
         "rowIndex": 0,
         "colIndex": 0
     }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 10,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
         "layerIndex": 1,
         "relation": 0,
         "feature": 2,
-        "sixFace": 4,
+        "sixFace": 1,
         "faceDirection": 1,
         "twelveEdge": 12,
         "rowIndex": 0,
@@ -26,8 +35,8 @@ const CUBES = [{
         "layerIndex": 1,
         "relation": 0,
         "feature": 2,
-        "sixFace": 0,
-        "faceDirection": 1,
+        "sixFace": 5,
+        "faceDirection": 3,
         "twelveEdge": 12,
         "rowIndex": 0,
         "colIndex": 3
@@ -35,8 +44,8 @@ const CUBES = [{
         "layerIndex": 1,
         "relation": 0,
         "feature": 2,
-        "sixFace": 5,
-        "faceDirection": 1,
+        "sixFace": 0,
+        "faceDirection": 3,
         "twelveEdge": 12,
         "rowIndex": 0,
         "colIndex": 4
@@ -44,16 +53,16 @@ const CUBES = [{
         "layerIndex": 1,
         "relation": 0,
         "feature": 2,
-        "sixFace": 2,
-        "faceDirection": 2,
+        "sixFace": 3,
+        "faceDirection": 3,
         "twelveEdge": 12,
         "rowIndex": 1,
         "colIndex": 0
     }, {
-        "layerIndex": 3,
+        "layerIndex": 1,
         "relation": 0,
         "feature": 2,
-        "sixFace": 1,
+        "sixFace": 4,
         "faceDirection": 2,
         "twelveEdge": 12,
         "rowIndex": 1,
@@ -62,17 +71,17 @@ const CUBES = [{
         "layerIndex": 1,
         "relation": 0,
         "feature": 2,
-        "sixFace": 3,
-        "faceDirection": 2,
+        "sixFace": 2,
+        "faceDirection": 1,
         "twelveEdge": 12,
         "rowIndex": 1,
         "colIndex": 2
     }, {
-        "layerIndex": 1,
+        "layerIndex": 2,
         "relation": 0,
         "feature": 2,
-        "sixFace": 3,
-        "faceDirection": 0,
+        "sixFace": 2,
+        "faceDirection": 3,
         "twelveEdge": 12,
         "rowIndex": 1,
         "colIndex": 4
@@ -118,19 +127,19 @@ const CUBES = [{
         "xEnd": 2,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 2,
         "xEnd": 3,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 3,
         "xEnd": 4,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 4
     }, {
         "xStart": 4,
         "xEnd": 5,
@@ -160,7 +169,7 @@ const CUBES = [{
         "xEnd": 4,
         "yStart": 2,
         "yEnd": 2,
-        "lineStyle": 4
+        "lineStyle": 1
     }, {
         "xStart": 4,
         "xEnd": 5,
@@ -178,13 +187,13 @@ const CUBES = [{
         "xEnd": 1,
         "yStart": 0,
         "yEnd": 1,
-        "lineStyle": 2
+        "lineStyle": 3
     }, {
         "xStart": 2,
         "xEnd": 2,
         "yStart": 0,
         "yEnd": 1,
-        "lineStyle": 2
+        "lineStyle": 3
     }, {
         "xStart": 3,
         "xEnd": 3,
@@ -226,13 +235,13 @@ const CUBES = [{
         "xEnd": 3,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 2
+        "lineStyle": 4
     }, {
         "xStart": 4,
         "xEnd": 4,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 2
+        "lineStyle": 4
     }, {
         "xStart": 5,
         "xEnd": 5,
@@ -242,10 +251,10 @@ const CUBES = [{
     }],
     "rowCount": 2,
     "colCount": 5,
-    "firstRowActCellColIndexBill": "0234",
+    "firstRowActCellColIndexBill": "01234",
     "lastRowEmptyCellColIndexBill": "3"
 }, {
-    "no": 5455,
+    "no": 7,
     "actCells": [{
         "layerIndex": 2,
         "relation": 0,
@@ -256,7 +265,7 @@ const CUBES = [{
         "rowIndex": 0,
         "colIndex": 0
     }, {
-        "layerIndex": 4,
+        "layerIndex": 2,
         "relation": 0,
         "feature": 3,
         "sixFace": 0,
@@ -301,7 +310,7 @@ const CUBES = [{
         "rowIndex": 1,
         "colIndex": 0
     }, {
-        "layerIndex": 3,
+        "layerIndex": 1,
         "relation": 0,
         "feature": 2,
         "sixFace": 1,
@@ -319,7 +328,7 @@ const CUBES = [{
         "rowIndex": 1,
         "colIndex": 2
     }, {
-        "layerIndex": 1,
+        "layerIndex": 2,
         "relation": 0,
         "feature": 2,
         "sixFace": 3,
@@ -375,19 +384,19 @@ const CUBES = [{
         "xEnd": 3,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 3,
         "xEnd": 4,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 4
     }, {
         "xStart": 4,
         "xEnd": 5,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 0,
         "xEnd": 1,
@@ -411,7 +420,7 @@ const CUBES = [{
         "xEnd": 4,
         "yStart": 2,
         "yEnd": 2,
-        "lineStyle": 4
+        "lineStyle": 1
     }, {
         "xStart": 4,
         "xEnd": 5,
@@ -429,13 +438,13 @@ const CUBES = [{
         "xEnd": 1,
         "yStart": 0,
         "yEnd": 1,
-        "lineStyle": 2
+        "lineStyle": 3
     }, {
         "xStart": 2,
         "xEnd": 2,
         "yStart": 0,
         "yEnd": 1,
-        "lineStyle": 2
+        "lineStyle": 3
     }, {
         "xStart": 3,
         "xEnd": 3,
@@ -465,7 +474,7 @@ const CUBES = [{
         "xEnd": 1,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 2,
         "xEnd": 2,
@@ -477,13 +486,13 @@ const CUBES = [{
         "xEnd": 3,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 2
+        "lineStyle": 4
     }, {
         "xStart": 4,
         "xEnd": 4,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 2
+        "lineStyle": 4
     }, {
         "xStart": 5,
         "xEnd": 5,
@@ -496,35 +505,8 @@ const CUBES = [{
     "firstRowActCellColIndexBill": "01234",
     "lastRowEmptyCellColIndexBill": "3"
 }, {
-    "no": 19608,
+    "no": 12,
     "actCells": [{
-        "layerIndex": 1,
-        "relation": 0,
-        "feature": 2,
-        "sixFace": 2,
-        "faceDirection": 2,
-        "twelveEdge": 12,
-        "rowIndex": 0,
-        "colIndex": 0
-    }, {
-        "layerIndex": 2,
-        "relation": 0,
-        "feature": 2,
-        "sixFace": 1,
-        "faceDirection": 2,
-        "twelveEdge": 12,
-        "rowIndex": 0,
-        "colIndex": 1
-    }, {
-        "layerIndex": 1,
-        "relation": 0,
-        "feature": 2,
-        "sixFace": 3,
-        "faceDirection": 2,
-        "twelveEdge": 12,
-        "rowIndex": 0,
-        "colIndex": 2
-    }, {
         "layerIndex": 2,
         "relation": 0,
         "feature": 2,
@@ -532,13 +514,40 @@ const CUBES = [{
         "faceDirection": 2,
         "twelveEdge": 12,
         "rowIndex": 0,
-        "colIndex": 3
+        "colIndex": 0
     }, {
         "layerIndex": 2,
         "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 3,
+        "twelveEdge": 3,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
         "feature": 2,
-        "sixFace": 2,
-        "faceDirection": 2,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 0,
         "twelveEdge": 12,
         "rowIndex": 0,
         "colIndex": 4
@@ -546,8 +555,8 @@ const CUBES = [{
         "layerIndex": 1,
         "relation": 0,
         "feature": 2,
-        "sixFace": 4,
-        "faceDirection": 3,
+        "sixFace": 5,
+        "faceDirection": 2,
         "twelveEdge": 12,
         "rowIndex": 1,
         "colIndex": 0
@@ -555,11 +564,244 @@ const CUBES = [{
         "layerIndex": 1,
         "relation": 0,
         "feature": 2,
-        "sixFace": 1,
-        "faceDirection": 1,
+        "sixFace": 2,
+        "faceDirection": 3,
         "twelveEdge": 12,
         "rowIndex": 1,
         "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 4,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 3,
+        "twelveEdge": 3,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
     }, {
         "layerIndex": 1,
         "relation": 0,
@@ -568,7 +810,7 @@ const CUBES = [{
         "faceDirection": 3,
         "twelveEdge": 12,
         "rowIndex": 1,
-        "colIndex": 2
+        "colIndex": 0
     }, {
         "layerIndex": 1,
         "relation": 0,
@@ -577,7 +819,518 @@ const CUBES = [{
         "faceDirection": 3,
         "twelveEdge": 12,
         "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 20,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 6,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
         "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 8,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 3,
+        "twelveEdge": 11,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
     }, {
         "layerIndex": 2,
         "relation": 0,
@@ -623,13 +1376,13 @@ const CUBES = [{
         "xEnd": 1,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 1,
         "xEnd": 2,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 2,
         "xEnd": 3,
@@ -641,13 +1394,13 @@ const CUBES = [{
         "xEnd": 4,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 4
     }, {
         "xStart": 4,
         "xEnd": 5,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 0,
         "xEnd": 1,
@@ -671,7 +1424,7 @@ const CUBES = [{
         "xEnd": 4,
         "yStart": 2,
         "yEnd": 2,
-        "lineStyle": 4
+        "lineStyle": 1
     }, {
         "xStart": 4,
         "xEnd": 5,
@@ -689,13 +1442,13 @@ const CUBES = [{
         "xEnd": 1,
         "yStart": 0,
         "yEnd": 1,
-        "lineStyle": 2
+        "lineStyle": 3
     }, {
         "xStart": 2,
         "xEnd": 2,
         "yStart": 0,
         "yEnd": 1,
-        "lineStyle": 2
+        "lineStyle": 3
     }, {
         "xStart": 3,
         "xEnd": 3,
@@ -737,13 +1490,13 @@ const CUBES = [{
         "xEnd": 3,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 2
+        "lineStyle": 4
     }, {
         "xStart": 4,
         "xEnd": 4,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 2
+        "lineStyle": 4
     }, {
         "xStart": 5,
         "xEnd": 5,
@@ -754,25 +1507,276 @@ const CUBES = [{
     "rowCount": 2,
     "colCount": 5,
     "firstRowActCellColIndexBill": "01234",
-    "lastRowEmptyCellColIndexBill": ""
+    "lastRowEmptyCellColIndexBill": "3"
 }, {
-    "no": 19066,
+    "no": 9,
     "actCells": [{
         "layerIndex": 2,
-        "relation": 3,
-        "feature": 3,
-        "sixFace": 0,
-        "faceDirection": 1,
-        "twelveEdge": 8,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 2,
+        "twelveEdge": 12,
         "rowIndex": 0,
         "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 3,
+        "twelveEdge": 4,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
     }, {
         "layerIndex": 1,
         "relation": 0,
         "feature": 2,
         "sixFace": 1,
-        "faceDirection": 3,
+        "faceDirection": 0,
         "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 3,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 2,
         "rowIndex": 0,
         "colIndex": 1
     }, {
@@ -780,6 +1784,257 @@ const CUBES = [{
         "relation": 0,
         "feature": 2,
         "sixFace": 4,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 17,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 2,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
         "faceDirection": 1,
         "twelveEdge": 12,
         "rowIndex": 0,
@@ -788,12 +2043,478 @@ const CUBES = [{
         "layerIndex": 1,
         "relation": 0,
         "feature": 2,
-        "sixFace": 0,
+        "sixFace": 5,
         "faceDirection": 1,
         "twelveEdge": 12,
         "rowIndex": 0,
         "colIndex": 3
     }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 10,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 1,
+        "twelveEdge": 11,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 5,
+    "actCells": [{
         "layerIndex": 2,
         "relation": 0,
         "feature": 2,
@@ -801,7 +2522,1558 @@ const CUBES = [{
         "faceDirection": 1,
         "twelveEdge": 12,
         "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 8,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
         "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 2,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 1,
+        "twelveEdge": 1,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 11,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 3,
+        "twelveEdge": 7,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 18,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 7,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 6,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 1,
+        "twelveEdge": 9,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 15,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 1,
+        "twelveEdge": 6,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 16,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 3,
+        "twelveEdge": 9,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
     }, {
         "layerIndex": 1,
         "relation": 0,
@@ -812,7 +4084,7 @@ const CUBES = [{
         "rowIndex": 1,
         "colIndex": 1
     }, {
-        "layerIndex": 2,
+        "layerIndex": 1,
         "relation": 0,
         "feature": 2,
         "sixFace": 4,
@@ -821,16 +4093,258 @@ const CUBES = [{
         "rowIndex": 1,
         "colIndex": 2
     }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 14,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 1,
+        "twelveEdge": 1,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
         "layerIndex": 1,
         "relation": 0,
         "feature": 2,
         "sixFace": 2,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
         "faceDirection": 1,
         "twelveEdge": 12,
         "rowIndex": 1,
-        "colIndex": 3
+        "colIndex": 1
     }, {
-        "layerIndex": 3,
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
         "relation": 0,
         "feature": 2,
         "sixFace": 5,
@@ -874,7 +4388,7 @@ const CUBES = [{
         "xEnd": 1,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 4
+        "lineStyle": 2
     }, {
         "xStart": 1,
         "xEnd": 2,
@@ -886,25 +4400,25 @@ const CUBES = [{
         "xEnd": 3,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 3,
         "xEnd": 4,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 4
     }, {
         "xStart": 4,
         "xEnd": 5,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 0,
         "xEnd": 1,
         "yStart": 2,
         "yEnd": 2,
-        "lineStyle": 1
+        "lineStyle": 4
     }, {
         "xStart": 1,
         "xEnd": 2,
@@ -922,7 +4436,7 @@ const CUBES = [{
         "xEnd": 4,
         "yStart": 2,
         "yEnd": 2,
-        "lineStyle": 4
+        "lineStyle": 1
     }, {
         "xStart": 4,
         "xEnd": 5,
@@ -940,13 +4454,13 @@ const CUBES = [{
         "xEnd": 1,
         "yStart": 0,
         "yEnd": 1,
-        "lineStyle": 2
+        "lineStyle": 3
     }, {
         "xStart": 2,
         "xEnd": 2,
         "yStart": 0,
         "yEnd": 1,
-        "lineStyle": 2
+        "lineStyle": 3
     }, {
         "xStart": 3,
         "xEnd": 3,
@@ -970,13 +4484,13 @@ const CUBES = [{
         "xEnd": 0,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 1
+        "lineStyle": 4
     }, {
         "xStart": 1,
         "xEnd": 1,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 4
+        "lineStyle": 2
     }, {
         "xStart": 2,
         "xEnd": 2,
@@ -988,13 +4502,13 @@ const CUBES = [{
         "xEnd": 3,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 2
+        "lineStyle": 4
     }, {
         "xStart": 4,
         "xEnd": 4,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 2
+        "lineStyle": 4
     }, {
         "xStart": 5,
         "xEnd": 5,
@@ -1005,61 +4519,61 @@ const CUBES = [{
     "rowCount": 2,
     "colCount": 5,
     "firstRowActCellColIndexBill": "01234",
-    "lastRowEmptyCellColIndexBill": "0"
+    "lastRowEmptyCellColIndexBill": "3"
 }, {
-    "no": 18586,
+    "no": 13,
     "actCells": [{
-        "layerIndex": 2,
-        "relation": 3,
-        "feature": 3,
-        "sixFace": 0,
-        "faceDirection": 1,
-        "twelveEdge": 8,
-        "rowIndex": 0,
-        "colIndex": 0
-    }, {
-        "layerIndex": 1,
-        "relation": 0,
-        "feature": 2,
-        "sixFace": 1,
-        "faceDirection": 3,
-        "twelveEdge": 12,
-        "rowIndex": 0,
-        "colIndex": 1
-    }, {
-        "layerIndex": 1,
-        "relation": 0,
-        "feature": 2,
-        "sixFace": 4,
-        "faceDirection": 1,
-        "twelveEdge": 12,
-        "rowIndex": 0,
-        "colIndex": 2
-    }, {
-        "layerIndex": 1,
-        "relation": 0,
-        "feature": 2,
-        "sixFace": 0,
-        "faceDirection": 1,
-        "twelveEdge": 12,
-        "rowIndex": 0,
-        "colIndex": 3
-    }, {
         "layerIndex": 2,
         "relation": 0,
         "feature": 2,
         "sixFace": 5,
-        "faceDirection": 1,
+        "faceDirection": 0,
         "twelveEdge": 12,
         "rowIndex": 0,
-        "colIndex": 4
+        "colIndex": 0
     }, {
         "layerIndex": 2,
-        "relation": 3,
+        "relation": 0,
         "feature": 3,
         "sixFace": 0,
-        "faceDirection": 0,
+        "faceDirection": 1,
         "twelveEdge": 5,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 12,
         "rowIndex": 1,
         "colIndex": 0
     }, {
@@ -1067,34 +4581,25 @@ const CUBES = [{
         "relation": 0,
         "feature": 2,
         "sixFace": 3,
-        "faceDirection": 3,
+        "faceDirection": 0,
         "twelveEdge": 12,
         "rowIndex": 1,
         "colIndex": 1
     }, {
-        "layerIndex": 2,
+        "layerIndex": 1,
         "relation": 0,
         "feature": 2,
-        "sixFace": 4,
-        "faceDirection": 2,
+        "sixFace": 1,
+        "faceDirection": 0,
         "twelveEdge": 12,
         "rowIndex": 1,
         "colIndex": 2
     }, {
-        "layerIndex": 1,
+        "layerIndex": 2,
         "relation": 0,
         "feature": 2,
-        "sixFace": 2,
-        "faceDirection": 1,
-        "twelveEdge": 12,
-        "rowIndex": 1,
-        "colIndex": 3
-    }, {
-        "layerIndex": 4,
-        "relation": 0,
-        "feature": 2,
-        "sixFace": 5,
-        "faceDirection": 0,
+        "sixFace": 1,
+        "faceDirection": 2,
         "twelveEdge": 12,
         "rowIndex": 1,
         "colIndex": 4
@@ -1134,7 +4639,7 @@ const CUBES = [{
         "xEnd": 1,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 1,
         "xEnd": 2,
@@ -1146,19 +4651,19 @@ const CUBES = [{
         "xEnd": 3,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 3,
         "xEnd": 4,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 4
     }, {
         "xStart": 4,
         "xEnd": 5,
         "yStart": 1,
         "yEnd": 1,
-        "lineStyle": 3
+        "lineStyle": 2
     }, {
         "xStart": 0,
         "xEnd": 1,
@@ -1182,7 +4687,7 @@ const CUBES = [{
         "xEnd": 4,
         "yStart": 2,
         "yEnd": 2,
-        "lineStyle": 4
+        "lineStyle": 1
     }, {
         "xStart": 4,
         "xEnd": 5,
@@ -1200,13 +4705,13 @@ const CUBES = [{
         "xEnd": 1,
         "yStart": 0,
         "yEnd": 1,
-        "lineStyle": 2
+        "lineStyle": 3
     }, {
         "xStart": 2,
         "xEnd": 2,
         "yStart": 0,
         "yEnd": 1,
-        "lineStyle": 2
+        "lineStyle": 3
     }, {
         "xStart": 3,
         "xEnd": 3,
@@ -1248,13 +4753,13 @@ const CUBES = [{
         "xEnd": 3,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 2
+        "lineStyle": 4
     }, {
         "xStart": 4,
         "xEnd": 4,
         "yStart": 1,
         "yEnd": 2,
-        "lineStyle": 2
+        "lineStyle": 4
     }, {
         "xStart": 5,
         "xEnd": 5,
@@ -1265,5 +4770,1260 @@ const CUBES = [{
     "rowCount": 2,
     "colCount": 5,
     "firstRowActCellColIndexBill": "01234",
-    "lastRowEmptyCellColIndexBill": ""
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 22,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 4,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 21,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 8,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 24,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 5,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 1,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 0,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 0,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
+}, {
+    "no": 23,
+    "actCells": [{
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 0
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 3,
+        "sixFace": 0,
+        "faceDirection": 2,
+        "twelveEdge": 0,
+        "rowIndex": 0,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 0,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 2
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 4,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 3
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 1,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 0,
+        "colIndex": 4
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 3,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 0
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 5,
+        "faceDirection": 2,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 1
+    }, {
+        "layerIndex": 1,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 3,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 2
+    }, {
+        "layerIndex": 2,
+        "relation": 0,
+        "feature": 2,
+        "sixFace": 2,
+        "faceDirection": 1,
+        "twelveEdge": 12,
+        "rowIndex": 1,
+        "colIndex": 4
+    }],
+    "gridLines": [{
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 0,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 0,
+        "xEnd": 1,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 2,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 2,
+        "xEnd": 3,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 3,
+        "xEnd": 4,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 1
+    }, {
+        "xStart": 4,
+        "xEnd": 5,
+        "yStart": 2,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 3
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 2
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 0,
+        "yEnd": 1,
+        "lineStyle": 4
+    }, {
+        "xStart": 0,
+        "xEnd": 0,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 1,
+        "xEnd": 1,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 2,
+        "xEnd": 2,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 2
+    }, {
+        "xStart": 3,
+        "xEnd": 3,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 4,
+        "xEnd": 4,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }, {
+        "xStart": 5,
+        "xEnd": 5,
+        "yStart": 1,
+        "yEnd": 2,
+        "lineStyle": 4
+    }],
+    "rowCount": 2,
+    "colCount": 5,
+    "firstRowActCellColIndexBill": "01234",
+    "lastRowEmptyCellColIndexBill": "3"
 }];
