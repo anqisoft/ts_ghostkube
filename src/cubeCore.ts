@@ -23,7 +23,7 @@
 */
 
 export const Globals = globalThis as unknown as {
-  logFilename: "./log.txt";
+  LOG_FILE_NAME: string;
 };
 
 const COL_COUNT = 5;
@@ -52,7 +52,7 @@ export function log(...dataArray: any[]) {
     LOG_STRING = LOG_STRING.substring(1, LOG_STRING.length - 1);
   }
   Deno.writeTextFileSync(
-    Globals.logFilename,
+    Globals.LOG_FILE_NAME,
     // LOG_STRING.substring(1, LOG_STRING.length - 1).replace(/\\n/g, "\n").concat(
     //   "\n",
     // ),
@@ -1022,55 +1022,8 @@ export class Cube implements CubePaperModel, CubeObject {
    */
   get lines(): string {
     const ROW_COUNT = this.rowCount;
-    const MAX_ROW_INDEX = ROW_COUNT - 1;
-
     const { gridLines } = this;
-    const GRID_LINES_COUNT = gridLines.length;
-
-    const HORIZONTAL_LINE_COUNT = COL_COUNT * MAX_ROW_INDEX;
-    const HORIZONTAL_LINE_ARRAY: number[] = [];
-    for (let i = 0; i < HORIZONTAL_LINE_COUNT; ++i) {
-      HORIZONTAL_LINE_ARRAY.push(4);
-    }
-
-    const VERTICAL_LINE_COUNT = MAX_COL_INDEX * ROW_COUNT;
-    const VERTICAL_LINE_ARRAY: number[] = [];
-    for (let i = 0; i < VERTICAL_LINE_COUNT; ++i) {
-      VERTICAL_LINE_ARRAY.push(4);
-    }
-
-    let debug = "";
-    for (
-      let gridLineIndex = 0;
-      gridLineIndex < GRID_LINES_COUNT;
-      ++gridLineIndex
-    ) {
-      const {
-        xStart,
-        xEnd,
-        yStart,
-        yEnd,
-        lineStyle,
-      } = gridLines[gridLineIndex];
-
-      if (lineStyle === GridLineStyle.OuterLine) {
-        continue;
-      }
-
-      if (yStart === yEnd) {
-        const index = COL_COUNT * (yStart - 1) + xStart;
-        if (index >= 0 && index < HORIZONTAL_LINE_COUNT) {
-          HORIZONTAL_LINE_ARRAY[index] = lineStyle;
-        }
-      } else if (xStart === xEnd) {
-        const index = MAX_COL_INDEX * yStart + (xStart - 1);
-        if (index >= 0 && index < VERTICAL_LINE_COUNT) {
-          VERTICAL_LINE_ARRAY[index] = lineStyle;
-        }
-      }
-    }
-
-    return `${HORIZONTAL_LINE_ARRAY.join("")}${VERTICAL_LINE_ARRAY.join("")}`;
+    return convertRowCountAndGridLinesToSimplestLine(ROW_COUNT, gridLines);
   }
   // get lines(): string {
   //   const ROW_COUNT = this.rowCount;
@@ -2239,6 +2192,59 @@ export interface CellAppendInfoManner {
   siblingsAppendInfoArray: SiblingsAppendInfo[];
 }
 
+export function convertRowCountAndGridLinesToSimplestLine(
+  ROW_COUNT: number,
+  gridLines: GridLine[],
+) {
+  const MAX_ROW_INDEX = ROW_COUNT - 1;
+
+  const GRID_LINES_COUNT = gridLines.length;
+
+  const HORIZONTAL_LINE_COUNT = COL_COUNT * MAX_ROW_INDEX;
+  const HORIZONTAL_LINE_ARRAY: number[] = [];
+  for (let i = 0; i < HORIZONTAL_LINE_COUNT; ++i) {
+    HORIZONTAL_LINE_ARRAY.push(GridLineStyle.OuterLine);
+  }
+
+  const VERTICAL_LINE_COUNT = MAX_COL_INDEX * ROW_COUNT;
+  const VERTICAL_LINE_ARRAY: number[] = [];
+  for (let i = 0; i < VERTICAL_LINE_COUNT; ++i) {
+    VERTICAL_LINE_ARRAY.push(GridLineStyle.OuterLine);
+  }
+
+  for (
+    let gridLineIndex = 0;
+    gridLineIndex < GRID_LINES_COUNT;
+    ++gridLineIndex
+  ) {
+    const {
+      xStart,
+      xEnd,
+      yStart,
+      yEnd,
+      lineStyle,
+    } = gridLines[gridLineIndex];
+
+    if (lineStyle === GridLineStyle.OuterLine) {
+      continue;
+    }
+
+    if (yStart === yEnd) {
+      const index = COL_COUNT * (yStart - 1) + xStart;
+      if (index >= 0 && index < HORIZONTAL_LINE_COUNT) {
+        HORIZONTAL_LINE_ARRAY[index] = lineStyle;
+      }
+    } else if (xStart === xEnd) {
+      const index = MAX_COL_INDEX * yStart + (xStart - 1);
+      if (index >= 0 && index < VERTICAL_LINE_COUNT) {
+        VERTICAL_LINE_ARRAY[index] = lineStyle;
+      }
+    }
+  }
+
+  return `${HORIZONTAL_LINE_ARRAY.join("")}${VERTICAL_LINE_ARRAY.join("")}`;
+}
+
 export function showCubeCoreInfo(cube: Cube) {
   return cube.cells.map((cellsRow) =>
     cellsRow.filter((cell) => cell.feature === CellFeature.Face).map(
@@ -2746,6 +2752,139 @@ export interface CubeForDrawing {
 
   rowCount: number;
   colCount: number;
+}
+
+/* data sample and zip codes:
+  16804:2_0032221,4|0131250,5|0201233,1|0311242,6|0411221,7|1032211,8|1132253,0|1201203,12|1312243,2|1411211,10_3323344444222422224
+
+  const {
+    no,
+    rowCount,
+    actCells,
+    lines,
+  } = cube;
+
+  // ${COL_COUNT}
+  MANNER_TO_CUBE_MAP_ARRAY.push(
+    `${MANNNER}\t${no}:${rowCount}_${
+      actCells.map((cell) => {
+        const {
+          layerIndex,
+          // relation,
+          relatedInformationWhenAdding: { relation },
+          feature,
+          sixFace,
+          faceDirection,
+          twelveEdge,
+          rowIndex,
+          colIndex,
+        } = cell;
+        // const relation = relatedInformationWhenAdding;
+        return `${rowIndex}${colIndex}${relation}${layerIndex}${feature}${sixFace}${faceDirection},${twelveEdge}`;
+      }).join("|")
+    }_${lines}`,
+  );
+*/
+
+export function getCubeForDrawingFromString(info: string): CubeForDrawing {
+  const [CUBE_NO_STRING, CUBE_ZIPPED_INFO] = info.split(":");
+  const CUBE_NO = parseInt(CUBE_NO_STRING);
+
+  // 2_0032221,4|0131250,5|0201233,1|0311242,6|0411221,7|1032211,8|1132253,0|1201203,12|1312243,2|1411211,10_3323344444222422224
+  const [
+    ROW_COUNT_STRING,
+    // _WILL_BE_REMOVED,
+    ACT_CELLS_INFO,
+    // GRID_LINES_INFO,
+    lines,
+  ] = CUBE_ZIPPED_INFO.split("_");
+  const ROW_COUNT = parseInt(ROW_COUNT_STRING);
+  const MAX_ROW_INDEX = ROW_COUNT - 1;
+
+  // // let firstRowActCellColIndexBill: string = "";
+  // // let lastRowEmptyCellColIndexBill: string = "01234";
+  // // 	<en_us>en_us</en_us>
+  // // 	<zh_cn>之前忘了加|分隔符，导致下面这个未成功压缩！</zh_cn>
+  // // 	<zh_tw>zh_tw</zh_tw>
+  // const [firstRowActCellColIndexBill, lastRowEmptyCellColIndexBill] =
+  //   FIRST_ROW_ACT_CELL_COL_INDEX_BILL__LAST_ROW_EMPTY_CELL_COL_INDEX_BILL.split(
+  //     "|",
+  //   );
+
+  // 2_0032221,4|0131250,5|0201233,1|0311242,6|0411221,7|1032211,8|1132253,0|1201203,12|1312243,2|1411211,10_3323344444222422224
+
+  const actCells: CubeForDrawingActCell[] = [];
+  const ACT_CELLS_ARRAY = ACT_CELLS_INFO.split("|");
+  const ACT_CELLS_COUNT = ACT_CELLS_ARRAY.length;
+  for (let i = 0; i < ACT_CELLS_COUNT; ++i) {
+    // 0032221,4
+    // const  {
+    //     layerIndex,
+    //     // relation,
+    //     relatedInformationWhenAdding: { relation },
+    //     feature,
+    //     sixFace,
+    //     faceDirection,
+    //     twelveEdge,
+    //     rowIndex,
+    //     colIndex,
+    //   } = cell;
+    //   // const relation = relatedInformationWhenAdding;
+    //   return `${rowIndex}${colIndex}${relation}${layerIndex}${feature}${sixFace}${faceDirection},${twelveEdge}`;
+    // }
+
+    const [OTHERS, TWELVE_EDGE_STRING] = ACT_CELLS_ARRAY[i].split(",");
+    const [
+      rowIndex,
+      colIndex,
+      relation,
+      layerIndex,
+      feature,
+      sixFace,
+      faceDirection,
+    ] = OTHERS.split("").map((value) => parseInt(value));
+    const twelveEdge = parseInt(TWELVE_EDGE_STRING);
+
+    actCells.push({
+      layerIndex,
+      relation,
+      feature,
+      sixFace,
+      faceDirection,
+      twelveEdge,
+      rowIndex,
+      colIndex,
+    });
+  }
+
+  const firstRowActCellColIndexBill = actCells.filter((cell) =>
+    cell.rowIndex === 0
+  ).map((cell) => cell.colIndex).join("");
+  // const lastRowEmptyCellColIndexBill = actCells.filter((cell) =>
+  //   cell.rowIndex === MAX_ROW_INDEX
+  // ).map((cell) => cell.colIndex).join("");
+  let lastRowEmptyCellColIndexBill = "01234";
+  actCells.filter((cell) => cell.rowIndex === MAX_ROW_INDEX).forEach((cell) => {
+    lastRowEmptyCellColIndexBill = lastRowEmptyCellColIndexBill.replace(
+      `${cell.colIndex}`,
+      "",
+    );
+  });
+
+  return {
+    no: CUBE_NO,
+    actCells,
+
+    // gridLines,
+    // 3323344444222422224
+    lines,
+
+    rowCount: ROW_COUNT,
+    colCount: COL_COUNT,
+
+    firstRowActCellColIndexBill,
+    lastRowEmptyCellColIndexBill,
+  } as CubeForDrawing;
 }
 
 export function getReversedRelation(

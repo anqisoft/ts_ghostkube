@@ -1,9 +1,8 @@
-// declare const LOG_FILE_NAME: string;
-// export let LOG_FILE_NAME: string = 'log.txt';
-// declare function done(): void;
+export const APPEND_TRUE = { append: true };
 
-const DATE_BEGIN = performance.now();
-const APPEND_TRUE = { append: true };
+export const Globals = globalThis as unknown as {
+  LOG_FILE_NAME: string
+};
 
 let dateBegin = performance.now();
 export function logUsedTime(functionName: string, duration: number) {
@@ -40,7 +39,6 @@ export function log(...dataArray: any[]) {
     LOG_STRING = LOG_STRING.substring(1, LOG_STRING.length - 1);
   }
   Deno.writeTextFileSync(
-    // LOG_FILE_NAME, // "./log.txt"
     globalThis.LOG_FILE_NAME, // "./log.txt"
     // LOG_STRING.substring(1, LOG_STRING.length - 1).replace(/\\n/g, "\n").concat(
     //   "\n",

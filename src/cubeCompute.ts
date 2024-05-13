@@ -53,6 +53,8 @@ import {
   getSixFaceTwentyFourAngleRelationTwelveEdge,
   getUsedTimeString,
   global_removed_middle_cube_count,
+  // TwoCellRowColIndex,
+  Globals,
   log,
   logUsedTime,
   // NewAppendSiblingsOptions,
@@ -75,7 +77,6 @@ import {
   // SixFaceTwentyFourAngleToTwelveEdge,
   TwelveEdge,
   TwelveEdges,
-  // TwoCellRowColIndex,
 } from "./cubeCore.ts";
 
 interface PrepareJoinCellToCubeResult {
@@ -92,9 +93,6 @@ interface PrepareJoinCellToCubeResult {
   twelveEdge: TwelveEdge;
 }
 
-const Globals = globalThis as unknown as {
-  logFilename: string;
-};
 const EXISTS_CUBE_COUNT = {
   row3: 20064,
   row5: 200000000, // TODO(@anqisoft) change it.
@@ -105,7 +103,7 @@ const APPEND_TRUE_FLAG = { append: true };
 // const EMPTY_OBJECT = {};
 
 const LOG_FILE_NAME = "./log.txt";
-Globals.logFilename = LOG_FILE_NAME;
+Globals.LOG_FILE_NAME = LOG_FILE_NAME;
 
 const COL_COUNT = 5;
 const MAX_COL_INDEX = COL_COUNT - 1;

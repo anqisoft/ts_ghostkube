@@ -1,10 +1,9 @@
 // v0.0.5
 
-import { log, logUsedTime, showUsedTime } from "./log.ts";
-import { done } from "./ghostkubes.ts";
+import { Globals, log, logUsedTime, showUsedTime } from "./log.ts";
+import { main } from "./ghostkubes.ts";
 
-(globalThis as unknown as { LOG_FILE_NAME: string }).LOG_FILE_NAME =
-  "./ghostkubes_01.log.txt";
+Globals.LOG_FILE_NAME = "./ghostkubes_01.log.txt";
 const GOAL_FILE = "./js/data_ghostkubes_01.js";
 
 const DATAS: {
@@ -248,7 +247,7 @@ const DATE_BEGIN = performance.now();
 
 showUsedTime("init");
 try {
-  await done(DATAS, GOAL_FILE);
+  await main(DATAS, GOAL_FILE);
 } catch (error) {
   log("[error]", error);
 }
@@ -259,7 +258,9 @@ logUsedTime("Total", performance.now() - DATE_BEGIN);
 log("");
 
 /*
-set pwd=P:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\test
-cls && deno lint %pwd%\ghostkubes_01.ts && deno fmt %pwd%\ghostkubes_01.ts
+cd /d p:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\test
+cls && deno lint ghostkubes_01.ts && deno fmt ghostkubes_01.ts
 cls && deno run --v8-flags=--max-old-space-size=20480 -A ghostkubes_01.ts
+
+deno run --v8-flags=--max-old-space-size=20480 -A p:\anqi\Desktop\tech\ts\projects\203_ts_ghostkube\test\ghostkubes_01.ts
 */

@@ -34,7 +34,7 @@ const OUTPUT_LINE_COUNT_PER_TIME = 1024000;
 const COUNT_PER_SHOW_USED_TIME = 1024000;
 const LINE_OFFSET_WHEN_SHOW_USED_TIME = COUNT_PER_SHOW_USED_TIME - 1;
 
-const END_GOAL_FILENAME = "manners.txt";
+const END_GOAL_FILENAME = "_ok/mannerToCubeMap.txt";
 
 async function dealFileByStream(
   SOURCE_FILENAME: string,
