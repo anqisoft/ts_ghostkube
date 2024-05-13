@@ -164,25 +164,6 @@ globalThis.onload = () => {
   SET_ARRAY.forEach(({ name, cubes }) => {
     cubes.forEach((no, cubeIndex) => {
       const cube = CUBES.filter((o) => o.no === no)[0];
-      // const {
-      //   cells, // CellObject[][] = [];
-      //   actCells, // CellObject[] = [];
-      //   emptyCells, // CellObject[] = [];
-      //   gridLines, // GridLine[] = [];
-
-      //   firstRowActCellColIndexBill, // string = '';
-      //   lastRowEmptyCellColIndexBill, // string = '';
-
-      //   sixFaces, // SixFaces = getEmptySixFaces();
-      //   twelveEdges, // TwelveEdges = getEmptyTwelveEdges();
-      //   isValid, // boolean = false;
-
-      //   no, // number,
-      //   rowCount, // number,
-      //   colCount, // number,
-      //   coreRowIndex, // number,
-      //   coreColIndex, // number,
-      // } = cube;
       const {
         firstRowActCellColIndexBill, // string = '';
         lastRowEmptyCellColIndexBill, // string = '';

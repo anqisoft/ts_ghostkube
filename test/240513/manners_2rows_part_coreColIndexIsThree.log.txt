@@ -1,0 +1,12 @@
+begin: 5/13/2024, 3:15:35 PM
+init used 20.29 milliseconds, or 0.020 seconds
+done used 116.40 milliseconds, or 0.116 seconds
+end: 5/13/2024, 3:15:35 PM
+Total used 118.12 milliseconds, or 0.118 seconds
+
+begin: 5/13/2024, 3:24:16 PM
+init used 18.83 milliseconds, or 0.019 seconds
+done used 76.68 milliseconds, or 0.077 seconds
+end: 5/13/2024, 3:24:16 PM
+Total used 78.80 milliseconds, or 0.079 seconds
+

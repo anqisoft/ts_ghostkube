@@ -152,9 +152,10 @@ function getCubeForDrawing(no, CUBE_LINE, ACT_CELLS) {
         lastRowEmptyCellColIndexBill: lastRowEmptyCellColIndexBill
     };
 }
-function done(SOURCE_FILE_PATH, GOAL_FILE, OUTPUT_ALONE_CUBE, SET_ITEM_NAME) {
+function done(SOURCE_FILE_PATH, GOAL_FILE, OUTPUT_ALONE_CUBE, SET_ITEM_NAME, SORT_CUBES) {
     if (OUTPUT_ALONE_CUBE === void 0) { OUTPUT_ALONE_CUBE = false; }
-    if (SET_ITEM_NAME === void 0) { SET_ITEM_NAME = '~'; }
+    if (SET_ITEM_NAME === void 0) { SET_ITEM_NAME = "~"; }
+    if (SORT_CUBES === void 0) { SORT_CUBES = false; }
     var END_ALONE_CUBE_PATH = SOURCE_FILE_PATH + "99_AloneCube/";
     if (OUTPUT_ALONE_CUBE) {
         mod_ts_1.ensureDirSync(END_ALONE_CUBE_PATH);
@@ -196,6 +197,10 @@ function done(SOURCE_FILE_PATH, GOAL_FILE, OUTPUT_ALONE_CUBE, SET_ITEM_NAME) {
         if (OUTPUT_ALONE_CUBE) {
             Deno.writeTextFileSync("" + END_ALONE_CUBE_PATH + cubeNo + ".js", "const cube_" + cubeNo + " = " + JSON.stringify(CUBE) + ";");
         }
+    }
+    if (SORT_CUBES) {
+        SET_ITEM_CUBE_ARRAY.sort(function (prev, next) { return prev - next; });
+        CUBES.sort(function (prev, next) { return prev.no - next.no; });
     }
     codes += JSON.stringify(SET_ARRAY);
     codes += "\n;";

@@ -10,7 +10,6 @@ body{font-family: 'Times New Roman', 'Kaiti', 'PingFang';}
 page {width: ${MAX_X}mm; height: ${MAX_Y}mm;padding-left:${PAGE_LEFT}mm;padding-top:${PAGE_TOP}mm;}
 page {display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;}
 page:not(:last-of-type){page-break-after:always;}
-tspan{text-decoration:underline;}
 `;
     document.getElementById("dynamicStyle").innerText = css;
 }
@@ -48,32 +47,60 @@ function getSvg(options) {
     const CUBE = CUBES.filter((cube) => cube.no === CUBE_NO)[0];
     const {
         actCells: ACT_CELLS,
-        gridLines: GRID_LINES
+        gridLines: GRID_LINES,
+        lines: LINES
     } = CUBE;
     const {
         style
     } = svg;
     const {
-        rowCount: CELL_ROW_COUNT,
-        colCount: CELL_COL_COUNT
+        rowCount: ROW_COUNT,
+        colCount: COL_COUNT
     } = CUBE;
-    const SVG_WIDTH = SIDE_LENGTH * CELL_COL_COUNT;
-    const SVG_HEIGHT = SIDE_LENGTH * CELL_ROW_COUNT;
+    const MAX_COL_INDEX = COL_COUNT - 1;
+    const SVG_WIDTH = SIDE_LENGTH * COL_COUNT;
+    const SVG_HEIGHT = SIDE_LENGTH * ROW_COUNT;
     style.width = `${SVG_WIDTH}mm`;
     style.height = `${SVG_HEIGHT}mm`;
-    GRID_LINES.forEach(({
-        xStart,
-        xEnd,
-        yStart,
-        yEnd,
-        lineStyle
-    }) => {
-        SvgHelper.appendLine(svg, lineStyle === CellBorderLine.InnerLine ? INNER_LINE_CSS : lineStyle === CellBorderLine.OuterLine ? OUTER_LINE_CSS : CUT_LINE_CSS, SIDE_LENGTH * xStart, SIDE_LENGTH * xEnd, SIDE_LENGTH * yStart, SIDE_LENGTH * yEnd, null);
-    });
-    let maxUpFaceLayerIndex = 0;
-    ACT_CELLS.filter((cell) => cell.feature === CellFeature.Face && cell.sixFace === SixFace.Up).forEach((cell) => maxUpFaceLayerIndex = Math.max(maxUpFaceLayerIndex, cell.layerIndex));
-    const MAX_UP_FACE_LAYER_INDEX = maxUpFaceLayerIndex;
-    // console.log(MAX_UP_FACE_LAYER_INDEX);
+    if (GRID_LINES) {
+        GRID_LINES.forEach(({
+            xStart,
+            xEnd,
+            yStart,
+            yEnd,
+            lineStyle
+        }) => {
+            SvgHelper.appendLine(svg, lineStyle === CellBorderLine.InnerLine ? INNER_LINE_CSS : lineStyle === CellBorderLine.OuterLine ? OUTER_LINE_CSS : CUT_LINE_CSS, SIDE_LENGTH * xStart, SIDE_LENGTH * xEnd, SIDE_LENGTH * yStart, SIDE_LENGTH * yEnd, null);
+        });
+    } else {
+        SvgHelper.appendLine(svg, OUTER_LINE_CSS, 0, SVG_WIDTH, 0, 0, null);
+        SvgHelper.appendLine(svg, OUTER_LINE_CSS, 0, SVG_WIDTH, SVG_HEIGHT, SVG_HEIGHT, null);
+        SvgHelper.appendLine(svg, OUTER_LINE_CSS, SVG_WIDTH, SVG_WIDTH, 0, SVG_HEIGHT, null);
+        SvgHelper.appendLine(svg, OUTER_LINE_CSS, SVG_WIDTH, SVG_WIDTH, 0, SVG_HEIGHT, null);
+        const HORIZONRAL_LINE_COUNT = COL_COUNT * (ROW_COUNT - 1);
+
+        const HORIZONTAL_LINES_ARRAY = [];
+        LINES.substring(0, HORIZONRAL_LINE_COUNT).split("").map(value => parseInt(value)).forEach((lineStyle, index) => {
+            const xStart = index % COL_COUNT;
+            const xEnd = xStart + 1;
+            const yStart = Math.floor(index / COL_COUNT) + 1;
+            const yEnd = yStart;
+            SvgHelper.appendLine(svg, lineStyle === CellBorderLine.InnerLine ? INNER_LINE_CSS : lineStyle === CellBorderLine.OuterLine ? OUTER_LINE_CSS : CUT_LINE_CSS, SIDE_LENGTH * xStart, SIDE_LENGTH * xEnd, SIDE_LENGTH * yStart, SIDE_LENGTH * yEnd, null);
+
+            HORIZONTAL_LINES_ARRAY.push(`${xStart}${xEnd}${yStart}${yEnd}${lineStyle}`);
+        });
+        const VERTICAL_LINES_ARRAY = [];
+        LINES.substring(HORIZONRAL_LINE_COUNT, LINES.length).split("").map(value => parseInt(value)).forEach((lineStyle, index) => {
+            const xStart = index % MAX_COL_INDEX + 1;
+            const xEnd = xStart;
+            const yStart = Math.floor(index / MAX_COL_INDEX);
+            const yEnd = yStart + 1;
+            SvgHelper.appendLine(svg, lineStyle === CellBorderLine.InnerLine ? INNER_LINE_CSS : lineStyle === CellBorderLine.OuterLine ? OUTER_LINE_CSS : CUT_LINE_CSS, SIDE_LENGTH * xStart, SIDE_LENGTH * xEnd, SIDE_LENGTH * yStart, SIDE_LENGTH * yEnd, null);
+            VERTICAL_LINES_ARRAY.push(`${xStart}${xEnd}${yStart}${yEnd}${lineStyle}`);
+        });
+        console.log(HORIZONTAL_LINES_ARRAY, VERTICAL_LINES_ARRAY);
+    }
+    const MAX_UP_FACE_LAYER_INDEX = ACT_CELLS.filter((cell) => cell.feature === CellFeature.Face && cell.sixFace === SixFace.Up).map((cell) => cell.layerIndex).sort((prev, next) => prev - next).reverse()[0];
     ACT_CELLS.forEach((cell) => {
         const {
             layerIndex: LAYER_INDEX,
@@ -95,7 +122,7 @@ function getSvg(options) {
         if (FEATURE === CellFeature.Face) {
             let xTextOfSetInfo = 0;
             let yTextOfSetInfo = 0;
-            text = `${SIX_FACE_NAME_CHARS[SIX_FACE]}${LAYER_INDEX}`;
+            text = `${SIX_FACE_NAME_CHARS[SIX_FACE]}${ACT_CELLS.filter((cell)=>cell.feature === CellFeature.Face && cell.sixFace === SIX_FACE).length > 1 ? LAYER_INDEX : ""}`;
             switch (FACE_DIRECTION) {
                 case FourDirection.Original:
                     xText = X1 + SIDE_LENGTH * 0.5;
@@ -125,11 +152,9 @@ function getSvg(options) {
                     break;
             }
             if (SIX_FACE === SixFace.Up && MAX_UP_FACE_LAYER_INDEX === LAYER_INDEX) {
-                // console.log('ok');
                 SvgHelper.appendText(svg, SET_TEXT_CSS, `${SET_NAME}.${SET_NO}`, xTextOfSetInfo, yTextOfSetInfo, TextDirections[FACE_DIRECTION], "", null, false);
             }
         } else if (FEATURE === CellFeature.Piece) {
-            // text = `${TWELVE_EDGE_NAME_CHARS[TWELVE_EDGE]}${LAYER_INDEX}`;
             text = `${TWELVE_EDGE + 1}#${LAYER_INDEX}`;
             const X_ARRAY = [];
             const Y_ARRAY = [];

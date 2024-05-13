@@ -22,7 +22,12 @@
  * </zh_tw>
 */
 
+export const Globals = globalThis as unknown as {
+  logFilename: "./log.txt";
+};
+
 const COL_COUNT = 5;
+const MAX_COL_INDEX = COL_COUNT - 1;
 const { floor } = Math;
 const SETTINGS = {
   mustContainEveryColumn: true,
@@ -47,7 +52,7 @@ export function log(...dataArray: any[]) {
     LOG_STRING = LOG_STRING.substring(1, LOG_STRING.length - 1);
   }
   Deno.writeTextFileSync(
-    "./log.txt",
+    Globals.logFilename,
     // LOG_STRING.substring(1, LOG_STRING.length - 1).replace(/\\n/g, "\n").concat(
     //   "\n",
     // ),
@@ -65,22 +70,26 @@ export function log(...dataArray: any[]) {
 }
 
 let dateBegin = performance.now();
+export function getUsedTimeString(
+  functionName: string,
+  duration: number,
+): string {
+  return `${functionName} used ${duration.toFixed(2)} milliseconds, or ${
+    (duration / 1000).toFixed(3)
+  } seconds${
+    duration > 60000
+      ? `, or ${(duration / 60000).toFixed(1)} minutes, ${
+        duration > 3600000
+          ? `, or ${Math.floor(duration / 3600000)}hours${
+            Math.floor(duration % 3600000 / 60000)
+          }minutes${(Math.floor(duration % 60000) / 1000).toFixed(0)}seconds`
+          : ""
+      }`
+      : ""
+  }`;
+}
 export function logUsedTime(functionName: string, duration: number) {
-  log(
-    `${functionName} used ${duration.toFixed(2)} milliseconds, or ${
-      (duration / 1000).toFixed(3)
-    } seconds${
-      duration > 60000
-        ? `, or ${(duration / 60000).toFixed(1)} minutes, ${
-          duration > 3600000
-            ? `, or ${Math.floor(duration / 3600000)}hours${
-              Math.floor(duration % 3600000 / 60000)
-            }minutes${(Math.floor(duration % 60000) / 1000).toFixed(0)}seconds`
-            : ""
-        }`
-        : ""
-    }`,
-  );
+  log(getUsedTimeString(functionName, duration));
 }
 export function showUsedTime(functionName: string) {
   const end = performance.now();
@@ -421,10 +430,10 @@ export const SixFaceTwentyFourAngleToTwelveEdge: TwelveEdge[][] = [
     TwelveEdge.UpLeft,
   ],
   [
-    TwelveEdge.UpRight,
-    TwelveEdge.UpBottom,
     TwelveEdge.UpLeft,
     TwelveEdge.UpTop,
+    TwelveEdge.UpRight,
+    TwelveEdge.UpBottom,
   ],
   [
     TwelveEdge.UpBottom,
@@ -433,10 +442,10 @@ export const SixFaceTwentyFourAngleToTwelveEdge: TwelveEdge[][] = [
     TwelveEdge.UpRight,
   ],
   [
-    TwelveEdge.UpLeft,
-    TwelveEdge.UpTop,
     TwelveEdge.UpRight,
     TwelveEdge.UpBottom,
+    TwelveEdge.UpLeft,
+    TwelveEdge.UpTop,
   ],
 
   // D
@@ -569,6 +578,163 @@ export const SixFaceTwentyFourAngleToTwelveEdge: TwelveEdge[][] = [
     TwelveEdge.DownTop,
   ],
 ];
+// export const SixFaceTwentyFourAngleToTwelveEdge: TwelveEdge[][] = [
+//   // U
+//   [
+//     TwelveEdge.UpTop,
+//     TwelveEdge.UpRight,
+//     TwelveEdge.UpBottom,
+//     TwelveEdge.UpLeft,
+//   ],
+//   [
+//     TwelveEdge.UpRight,
+//     TwelveEdge.UpBottom,
+//     TwelveEdge.UpLeft,
+//     TwelveEdge.UpTop,
+//   ],
+//   [
+//     TwelveEdge.UpBottom,
+//     TwelveEdge.UpLeft,
+//     TwelveEdge.UpTop,
+//     TwelveEdge.UpRight,
+//   ],
+//   [
+//     TwelveEdge.UpLeft,
+//     TwelveEdge.UpTop,
+//     TwelveEdge.UpRight,
+//     TwelveEdge.UpBottom,
+//   ],
+
+//   // D
+//   [
+//     TwelveEdge.DownTop,
+//     TwelveEdge.DownLeft,
+//     TwelveEdge.DownBottom,
+//     TwelveEdge.DownRight,
+//   ],
+//   [
+//     TwelveEdge.DownRight,
+//     TwelveEdge.DownTop,
+//     TwelveEdge.DownLeft,
+//     TwelveEdge.DownBottom,
+//   ],
+//   [
+//     TwelveEdge.DownBottom,
+//     TwelveEdge.DownRight,
+//     TwelveEdge.DownTop,
+//     TwelveEdge.DownLeft,
+//   ],
+//   [
+//     TwelveEdge.DownLeft,
+//     TwelveEdge.DownBottom,
+//     TwelveEdge.DownRight,
+//     TwelveEdge.DownTop,
+//   ],
+
+//   // L
+//   [
+//     TwelveEdge.BackLeft,
+//     TwelveEdge.UpLeft,
+//     TwelveEdge.FrontLeft,
+//     TwelveEdge.DownLeft,
+//   ],
+//   [
+//     TwelveEdge.DownLeft,
+//     TwelveEdge.BackLeft,
+//     TwelveEdge.UpLeft,
+//     TwelveEdge.FrontLeft,
+//   ],
+//   [
+//     TwelveEdge.FrontLeft,
+//     TwelveEdge.DownLeft,
+//     TwelveEdge.BackLeft,
+//     TwelveEdge.UpLeft,
+//   ],
+//   [
+//     TwelveEdge.UpLeft,
+//     TwelveEdge.FrontLeft,
+//     TwelveEdge.DownLeft,
+//     TwelveEdge.BackLeft,
+//   ],
+
+//   // R
+//   [
+//     TwelveEdge.BackRight,
+//     TwelveEdge.DownRight,
+//     TwelveEdge.FrontRight,
+//     TwelveEdge.UpRight,
+//   ],
+//   [
+//     TwelveEdge.UpRight,
+//     TwelveEdge.BackRight,
+//     TwelveEdge.DownRight,
+//     TwelveEdge.FrontRight,
+//   ],
+//   [
+//     TwelveEdge.FrontRight,
+//     TwelveEdge.UpRight,
+//     TwelveEdge.BackRight,
+//     TwelveEdge.DownRight,
+//   ],
+//   [
+//     TwelveEdge.DownRight,
+//     TwelveEdge.FrontRight,
+//     TwelveEdge.UpRight,
+//     TwelveEdge.BackRight,
+//   ],
+
+//   // F
+//   [
+//     TwelveEdge.UpBottom,
+//     TwelveEdge.FrontRight,
+//     TwelveEdge.DownBottom,
+//     TwelveEdge.FrontLeft,
+//   ],
+//   [
+//     TwelveEdge.FrontLeft,
+//     TwelveEdge.UpBottom,
+//     TwelveEdge.FrontRight,
+//     TwelveEdge.DownBottom,
+//   ],
+//   [
+//     TwelveEdge.DownBottom,
+//     TwelveEdge.FrontLeft,
+//     TwelveEdge.UpBottom,
+//     TwelveEdge.FrontRight,
+//   ],
+//   [
+//     TwelveEdge.FrontRight,
+//     TwelveEdge.DownBottom,
+//     TwelveEdge.FrontLeft,
+//     TwelveEdge.UpBottom,
+//   ],
+
+//   // B
+//   [
+//     TwelveEdge.DownTop,
+//     TwelveEdge.BackRight,
+//     TwelveEdge.UpTop,
+//     TwelveEdge.BackLeft,
+//   ],
+//   [
+//     TwelveEdge.BackLeft,
+//     TwelveEdge.DownTop,
+//     TwelveEdge.BackRight,
+//     TwelveEdge.UpTop,
+//   ],
+//   [
+//     TwelveEdge.UpTop,
+//     TwelveEdge.BackLeft,
+//     TwelveEdge.DownTop,
+//     TwelveEdge.BackRight,
+//   ],
+//   [
+//     TwelveEdge.BackRight,
+//     TwelveEdge.UpTop,
+//     TwelveEdge.BackLeft,
+//     TwelveEdge.DownTop,
+//   ],
+// ];
 export function convertTwelveEdgeToString(value: TwelveEdge): string {
   return [
     "UpTop",
@@ -849,6 +1015,146 @@ export class Cube implements CubePaperModel, CubeObject {
     }
   }
 
+  /**
+   * <en_us>en_us</en_us>
+   * <zh_cn>根据gridLines获取不包括外框之外的线（如果没有，则默认为外框线）</zh_cn>
+   * <zh_tw>zh_tw</zh_tw>
+   */
+  get lines(): string {
+    const ROW_COUNT = this.rowCount;
+    const MAX_ROW_INDEX = ROW_COUNT - 1;
+
+    const { gridLines } = this;
+    const GRID_LINES_COUNT = gridLines.length;
+
+    const HORIZONTAL_LINE_COUNT = COL_COUNT * MAX_ROW_INDEX;
+    const HORIZONTAL_LINE_ARRAY: number[] = [];
+    for (let i = 0; i < HORIZONTAL_LINE_COUNT; ++i) {
+      HORIZONTAL_LINE_ARRAY.push(4);
+    }
+
+    const VERTICAL_LINE_COUNT = MAX_COL_INDEX * ROW_COUNT;
+    const VERTICAL_LINE_ARRAY: number[] = [];
+    for (let i = 0; i < VERTICAL_LINE_COUNT; ++i) {
+      VERTICAL_LINE_ARRAY.push(4);
+    }
+
+    let debug = "";
+    for (
+      let gridLineIndex = 0;
+      gridLineIndex < GRID_LINES_COUNT;
+      ++gridLineIndex
+    ) {
+      const {
+        xStart,
+        xEnd,
+        yStart,
+        yEnd,
+        lineStyle,
+      } = gridLines[gridLineIndex];
+
+      if (lineStyle === GridLineStyle.OuterLine) {
+        continue;
+      }
+
+      if (yStart === yEnd) {
+        const index = COL_COUNT * (yStart - 1) + xStart;
+        if (index >= 0 && index < HORIZONTAL_LINE_COUNT) {
+          HORIZONTAL_LINE_ARRAY[index] = lineStyle;
+        }
+      } else if (xStart === xEnd) {
+        const index = MAX_COL_INDEX * yStart + (xStart - 1);
+        if (index >= 0 && index < VERTICAL_LINE_COUNT) {
+          VERTICAL_LINE_ARRAY[index] = lineStyle;
+        }
+      }
+    }
+
+    return `${HORIZONTAL_LINE_ARRAY.join("")}${VERTICAL_LINE_ARRAY.join("")}`;
+  }
+  // get lines(): string {
+  //   const ROW_COUNT = this.rowCount;
+  //   const MAX_ROW_INDEX = ROW_COUNT - 1;
+
+  //   const { gridLines } = this;
+  //   const GRID_LINES_COUNT = gridLines.length;
+
+  //   const HORIZONTAL_LINE_COUNT = COL_COUNT * MAX_ROW_INDEX;
+  //   const HORIZONTAL_LINE_ARRAY: number[] = [];
+  //   for (let i = 0; i < HORIZONTAL_LINE_COUNT; ++i) {
+  //     HORIZONTAL_LINE_ARRAY.push(4);
+  //   }
+
+  //   const VERTICAL_LINE_COUNT = MAX_COL_INDEX * ROW_COUNT;
+  //   const VERTICAL_LINE_ARRAY: number[] = [];
+  //   for (let i = 0; i < VERTICAL_LINE_COUNT; ++i) {
+  //     VERTICAL_LINE_ARRAY.push(4);
+  //   }
+
+  //   let debug = "";
+  //   for (
+  //     let gridLineIndex = 0;
+  //     gridLineIndex < GRID_LINES_COUNT;
+  //     ++gridLineIndex
+  //   ) {
+  //     // const {
+  //     //   xStart,
+  //     //   xEnd,
+  //     //   yStart,
+  //     //   yEnd,
+  //     //   lineStyle,
+  //     // } = gridLines[gridLineIndex];
+  //     const gridLine = gridLines[gridLineIndex];
+  //     const {
+  //       xStart,
+  //       xEnd,
+  //       yStart,
+  //       yEnd,
+  //       lineStyle,
+  //     } = gridLine;
+
+  //     if (lineStyle === GridLineStyle.OuterLine) {
+  //       continue;
+  //     }
+
+  //     if (yStart === yEnd) {
+  //       const index = COL_COUNT * (yStart - 1) + xStart;
+  //       if (index >= 0 && index < HORIZONTAL_LINE_COUNT) {
+  //         debug += `H[${index}] = ${lineStyle} <= ${
+  //           JSON.stringify(gridLine)
+  //         }\n`;
+  //         HORIZONTAL_LINE_ARRAY[index] = lineStyle;
+  //       }
+  //     } else if (xStart === xEnd) {
+  //       const index = MAX_COL_INDEX * yStart + (xStart - 1);
+  //       if (index >= 0 && index < VERTICAL_LINE_COUNT) {
+  //         debug += `V[${index}] = ${lineStyle} <= ${
+  //           JSON.stringify(gridLine)
+  //         }\n`;
+  //         VERTICAL_LINE_ARRAY[index] = lineStyle;
+  //       }
+  //     }
+  //   }
+
+  //   if (this.no === 1) {
+  //     console.log(
+  //       `${HORIZONTAL_LINE_COUNT} => ${HORIZONTAL_LINE_ARRAY.length}`,
+  //       `${VERTICAL_LINE_COUNT} => ${VERTICAL_LINE_ARRAY.length}`,
+  //       `${HORIZONTAL_LINE_ARRAY.join("")}${VERTICAL_LINE_ARRAY.join("")}`,
+  //       "\n",
+  //       gridLines.map(({
+  //         xStart,
+  //         xEnd,
+  //         yStart,
+  //         yEnd,
+  //         lineStyle,
+  //       }) => `${xStart}${xEnd}${yStart}${yEnd}${lineStyle}`).join("|"),
+  //       `\n\n${debug}`,
+  //     );
+  //   }
+  //   return `${HORIZONTAL_LINE_ARRAY.join("")}${VERTICAL_LINE_ARRAY.join("")}`;
+  // }
+
   clone(): Cube {
     const {
       no,
@@ -990,11 +1296,11 @@ export class Cube implements CubePaperModel, CubeObject {
         pieceCell.feature = CellFeature.Piece;
         pieceCell.twelveEdge = edgeIndex;
 
-        // 	<en_us>en_us</en_us>
-        // 	<zh_cn>复位“面属性”</zh_cn>
-        // 	<zh_tw>zh_tw</zh_tw>
-        pieceCell.sixFace = SixFace.Up;
-        pieceCell.faceDirection = FourDirection.Original;
+        // // 	<en_us>en_us</en_us>
+        // // 	<zh_cn>复位“面属性”</zh_cn>
+        // // 	<zh_tw>zh_tw</zh_tw>
+        // pieceCell.sixFace = SixFace.Up;
+        // pieceCell.faceDirection = FourDirection.Original;
 
         const {
           rowIndex: relatedRowIndex,
@@ -1177,28 +1483,44 @@ export class Cube implements CubePaperModel, CubeObject {
     //   });
     // });
 
-    const { sixFaces } = this;
-    sixFaces.forEach((sixFaceInfo: FaceMemberOfSixFace) => {
-      const COUNT = sixFaceInfo.length;
-      const [row1, col1, row2, col2] = sixFaceInfo[COUNT - 1];
-      const OUTEST_CELL: CellObject = (typeof row2 === "undefined" ||
-          typeof col2 === "undefined")
-        ? cells[row1][col1]
-        : cells[row2][col2];
-      OUTEST_CELL.borderLines.forEach((borderLine, borderLineIndex) => {
-        if (borderLine !== CellBorderLine.InnerLine) {
-          const twelveEdgeIndex: TwelveEdge =
-            getSixFaceTwentyFourAngleRelationTwelveEdge(
-              OUTEST_CELL.sixFaceTwentyFourAngle,
-              borderLineIndex,
-            );
-
-          if (!twelveEdges[twelveEdgeIndex].canBeInserted) {
-            twelveEdges[twelveEdgeIndex].canBeInserted = true;
-          }
+    // const { sixFaces } = this;
+    const sixFaces = this.sixFaces as FaceMemberOfSixFace[];
+    sixFaces.forEach(
+      (sixFaceInfo: FaceMemberOfSixFace, sixFaceInfoIndex: number) => {
+        if (typeof sixFaceInfo === "undefined") {
+          log(
+            `[error] ${this.no}.sixFaces, undefined is not iterable (cannot read property Symbol(Symbol.iterator)).`,
+          );
+          return;
         }
-      });
-    });
+        const COUNT = sixFaceInfo.length;
+        if (!COUNT) {
+          log(
+            `[error] ${this.no}.sixFaces[${sixFaceInfoIndex}].length is zero.`,
+          );
+          return;
+        }
+
+        const [row1, col1, row2, col2] = sixFaceInfo[COUNT - 1];
+        const OUTEST_CELL: CellObject = (typeof row2 === "undefined" ||
+            typeof col2 === "undefined")
+          ? cells[row1][col1]
+          : cells[row2][col2];
+        OUTEST_CELL.borderLines.forEach((borderLine, borderLineIndex) => {
+          if (borderLine !== CellBorderLine.InnerLine) {
+            const twelveEdgeIndex: TwelveEdge =
+              getSixFaceTwentyFourAngleRelationTwelveEdge(
+                OUTEST_CELL.sixFaceTwentyFourAngle,
+                borderLineIndex,
+              );
+
+            if (!twelveEdges[twelveEdgeIndex].canBeInserted) {
+              twelveEdges[twelveEdgeIndex].canBeInserted = true;
+            }
+          }
+        });
+      },
+    );
 
     return this;
   }
@@ -1224,13 +1546,18 @@ export class Cube implements CubePaperModel, CubeObject {
         const ARRAY: CellObject[] = [];
         faceInfo.forEach(
           ([firstRowIndex, firstColIndex, secondRowIndex, secondColIndex]) => {
-            ARRAY.push(cells[firstRowIndex][firstColIndex]);
+            const firstCell = cells[firstRowIndex][firstColIndex];
+            ARRAY.push(firstCell);
 
             if (
               typeof secondRowIndex !== "undefined" &&
               typeof secondColIndex !== "undefined"
             ) {
-              ARRAY.push(cells[secondRowIndex][secondColIndex]);
+              const secondCell = cells[secondRowIndex][secondColIndex];
+              ARRAY.push(secondCell);
+
+              // (firstCell as unknown as { outerCell: CellObject }).outerCell =
+              //   secondCell;
             }
           },
         );
@@ -1390,7 +1717,7 @@ export class Cube implements CubePaperModel, CubeObject {
     };
   }
 
-  getManner():  string {
+  getManner(): string {
     return this.twelveEdges.map((twelveEdge) =>
       `${twelveEdge.canBeInserted ? "T" : "F"}${twelveEdge.pieces.length}`
     ).join("");
@@ -2408,8 +2735,11 @@ export interface CubeForDrawingActCell {
 export interface CubeForDrawing {
   no: number;
   actCells: CubeForDrawingActCell[];
-  // { xStart: number, xEnd: number, yStart: number, yEnd: number, lineStyle: GridLineStyle }[],
-  gridLines: GridLine[];
+
+  // // { xStart: number, xEnd: number, yStart: number, yEnd: number, lineStyle: GridLineStyle }[],
+  // gridLines: GridLine[];
+
+  lines: string;
 
   firstRowActCellColIndexBill: string;
   lastRowEmptyCellColIndexBill: string;

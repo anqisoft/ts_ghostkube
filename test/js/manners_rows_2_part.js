@@ -10,7 +10,7 @@ log_ts_1.log("begin: " + (new Date()).toLocaleString());
 var DATE_BEGIN = performance.now();
 log_ts_1.showUsedTime("init");
 try {
-    manners_ts_1.done("E:\\__cube\\240508E_01\\", GOAL_FILE, true, "PART");
+    manners_ts_1.done("E:\\__cube\\240508E_01\\", GOAL_FILE, true, "NO", true);
 }
 catch (error) {
     log_ts_1.log("[error]", error);
