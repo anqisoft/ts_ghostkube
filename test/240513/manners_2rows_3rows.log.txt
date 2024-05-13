@@ -1,0 +1,6 @@
+begin: 5/13/2024, 8:20:46 PM
+init used 335.79 milliseconds, or 0.336 seconds
+begin: 5/13/2024, 8:22:59 PM
+init used 20.66 milliseconds, or 0.021 seconds
+begin: 5/13/2024, 8:29:33 PM
+init used 49.21 milliseconds, or 0.049 seconds

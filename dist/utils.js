@@ -78,19 +78,17 @@ function getSvg(options) {
         SvgHelper.appendLine(svg, OUTER_LINE_CSS, SVG_WIDTH, SVG_WIDTH, 0, SVG_HEIGHT, null);
         SvgHelper.appendLine(svg, OUTER_LINE_CSS, SVG_WIDTH, SVG_WIDTH, 0, SVG_HEIGHT, null);
         const HORIZONRAL_LINE_COUNT = COL_COUNT * (ROW_COUNT - 1);
-
         const HORIZONTAL_LINES_ARRAY = [];
-        LINES.substring(0, HORIZONRAL_LINE_COUNT).split("").map(value => parseInt(value)).forEach((lineStyle, index) => {
+        LINES.substring(0, HORIZONRAL_LINE_COUNT).split("").map((value) => parseInt(value)).forEach((lineStyle, index) => {
             const xStart = index % COL_COUNT;
             const xEnd = xStart + 1;
             const yStart = Math.floor(index / COL_COUNT) + 1;
             const yEnd = yStart;
             SvgHelper.appendLine(svg, lineStyle === CellBorderLine.InnerLine ? INNER_LINE_CSS : lineStyle === CellBorderLine.OuterLine ? OUTER_LINE_CSS : CUT_LINE_CSS, SIDE_LENGTH * xStart, SIDE_LENGTH * xEnd, SIDE_LENGTH * yStart, SIDE_LENGTH * yEnd, null);
-
             HORIZONTAL_LINES_ARRAY.push(`${xStart}${xEnd}${yStart}${yEnd}${lineStyle}`);
         });
         const VERTICAL_LINES_ARRAY = [];
-        LINES.substring(HORIZONRAL_LINE_COUNT, LINES.length).split("").map(value => parseInt(value)).forEach((lineStyle, index) => {
+        LINES.substring(HORIZONRAL_LINE_COUNT, LINES.length).split("").map((value) => parseInt(value)).forEach((lineStyle, index) => {
             const xStart = index % MAX_COL_INDEX + 1;
             const xEnd = xStart;
             const yStart = Math.floor(index / MAX_COL_INDEX);
@@ -192,7 +190,7 @@ function getSvg(options) {
                     Y_ARRAY.push(Y2 - THICKNESS * 2);
                     X_ARRAY.push(X2);
                     Y_ARRAY.push(Y2 - THICKNESS);
-                    xText = X1 + SIDE_LENGTH * 0.5 - TEXT_OFFSET;
+                    xText = X1 + SIDE_LENGTH * 0.5 + TEXT_OFFSET;
                     yText = Y1 + SIDE_LENGTH * 0.5;
                     break;
                 case ConnectionRelation.Right:
@@ -204,7 +202,7 @@ function getSvg(options) {
                     Y_ARRAY.push(Y2 - THICKNESS * 2);
                     X_ARRAY.push(X1);
                     Y_ARRAY.push(Y2 - THICKNESS);
-                    xText = X1 + SIDE_LENGTH * 0.5 + TEXT_OFFSET;
+                    xText = X1 + SIDE_LENGTH * 0.5 - TEXT_OFFSET;
                     yText = Y1 + SIDE_LENGTH * 0.5;
                     break;
                 default:

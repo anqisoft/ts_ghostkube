@@ -476,7 +476,7 @@ export function getSvg(options: CubePaperModelSvgParameter): SVGElement {
           X_ARRAY.push(X2);
           Y_ARRAY.push(Y2 - THICKNESS);
 
-          xText = X1 + SIDE_LENGTH * 0.5 - TEXT_OFFSET;
+          xText = X1 + SIDE_LENGTH * 0.5 + TEXT_OFFSET;
           yText = Y1 + SIDE_LENGTH * 0.5;
           break;
         case ConnectionRelation.Right:
@@ -492,7 +492,7 @@ export function getSvg(options: CubePaperModelSvgParameter): SVGElement {
           X_ARRAY.push(X1);
           Y_ARRAY.push(Y2 - THICKNESS);
 
-          xText = X1 + SIDE_LENGTH * 0.5 + TEXT_OFFSET;
+          xText = X1 + SIDE_LENGTH * 0.5 - TEXT_OFFSET;
           yText = Y1 + SIDE_LENGTH * 0.5;
           break;
         default:
