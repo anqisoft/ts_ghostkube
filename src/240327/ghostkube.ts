@@ -107,18 +107,18 @@ export interface CubeManner {
 }
 export type CubeMannerSets = CubeManner[];
 
-// 	<en_us>en_us</en_us>
+// 	<en_us>square, form a one -to -one correspondence with the corresponding model</en_us>
 // 	<zh_cn>正方体，与相应模型形成一一对应关系</zh_cn>
-// 	<zh_tw>zh_tw</zh_tw>
+// 	<zh_tw>正方體，與相應模型形成一一對應關係</zh_tw>
 export interface Cube {
-	// 	<en_us>en_us</en_us>
+	// 	<en_us>Crystal model number</en_us>
 	// 	<zh_cn>正方体模型编号</zh_cn>
-	// 	<zh_tw>zh_tw</zh_tw>
+	// 	<zh_tw>正方體模型編號</zh_tw>
 	modelNo: number;
 
-	// 	<en_us>en_us</en_us>
+	// 	<en_us>Multi -group placement method</en_us>
 	// 	<zh_cn>多组摆放方式</zh_cn>
-	// 	<zh_tw>zh_tw</zh_tw>
+	// 	<zh_tw>多組擺放方式</zh_tw>
 	manners: CubeMannerSets[];
 }
 
@@ -2789,9 +2789,11 @@ Models.forEach((model) => {
 		}
 	}
 
-	// 	<en_us>en_us</en_us>
+	// 	<en_us> Each square model corresponds to one square. This square has multiple sets of different folding and paste schemes. There are 24 different ways of placement in each group (six planes can be transformed into top surfaces, and the top surface can be turned into the top surface, and the top surface can be turned into the top surface, and the top surface can
+ You can rotate 4 different directions in the plane: 0 degrees, 90 degrees, 180 degrees, 270 degrees) </en_us>
 	// 	<zh_cn>每个正方体模型对应一个正方体，这个正方体有多组不同的折叠与粘贴方案，每组方案有24种不同的摆放方式（六个面都可以经旋转变成顶面，而顶面可以在平面内旋转出4个不同的方向：0度、90度、180度、270度）</zh_cn>
-	// 	<zh_tw>zh_tw</zh_tw>
+	// 	<zh_tw>每個正方體模型對應一個正方體，這個正方體有多組不同的折疊與粘貼方案，每組方案有24種不同的擺放方式（六個面都可以經旋轉變成頂面，而頂面
+ 可以在平面內旋轉出4個不同的方向：0度、90度、180度、270度）</zh_tw>
 	const CUBE: Cube = {
 		modelNo: no,
 		manners: [],
@@ -2813,21 +2815,21 @@ Models.forEach((model) => {
 	}
 
 	const { manners } = CUBE;
-	// 	<en_us>en_us</en_us>
+	// 	<en_us>verified</en_us>
 	// 	<zh_cn>已核验</zh_cn>
-	// 	<zh_tw>zh_tw</zh_tw>
+	// 	<zh_tw>已核驗</zh_tw>
 	const TOP_FACE_ITEMS = [TOP_CELL];
 
-	// 	<en_us>en_us</en_us>
+	// 	<en_us> </en_us>
 	// 	<zh_cn></zh_cn>
-	// 	<zh_tw>zh_tw</zh_tw>
+	// 	<zh_tw></zh_tw>
 	const RIGHT_FACE_ITEMS = [];
 
 	const BACK_FACE_ITEMS = [];
 
-	// 	<en_us>en_us</en_us>
+	// 	<en_us> </en_us>
 	// 	<zh_cn></zh_cn>
-	// 	<zh_tw>zh_tw</zh_tw>
+	// 	<zh_tw></zh_tw>
 	const LEFT_FACE_ITEMS = [];
 
 	const FRONT_FACE_ITEMS = [];

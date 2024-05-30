@@ -1,17 +1,17 @@
-begin: 5/13/2024, 7:50:47 PM
-complete 0 item used 113.41 milliseconds, or 0.113 seconds
-complete 1 item used 4.85 milliseconds, or 0.005 seconds
-complete 2 item used 4.32 milliseconds, or 0.004 seconds
-complete 3 item used 4.51 milliseconds, or 0.005 seconds
-complete 4 item used 3.28 milliseconds, or 0.003 seconds
-complete 5 item used 6.02 milliseconds, or 0.006 seconds
-complete 6 item used 6.81 milliseconds, or 0.007 seconds
-complete 7 item used 8.87 milliseconds, or 0.009 seconds
-complete 8 item used 6.65 milliseconds, or 0.007 seconds
+begin: 5/20/2024, 5:52:54 PM
+complete 0 item used 196.69 milliseconds, or 0.197 seconds
+complete 1 item used 6.09 milliseconds, or 0.006 seconds
+complete 2 item used 9.21 milliseconds, or 0.009 seconds
+complete 3 item used 4.30 milliseconds, or 0.004 seconds
+complete 4 item used 6.28 milliseconds, or 0.006 seconds
+complete 5 item used 6.71 milliseconds, or 0.007 seconds
+complete 6 item used 17.27 milliseconds, or 0.017 seconds
+complete 7 item used 17.41 milliseconds, or 0.017 seconds
+complete 8 item used 17.51 milliseconds, or 0.018 seconds
 complete 9 item used 2.40 milliseconds, or 0.002 seconds
-end: 5/13/2024, 7:50:47 PM
-Total used 164.46 milliseconds, or 0.164 seconds
-done used 8.88 milliseconds, or 0.009 seconds
-end: 5/13/2024, 7:50:47 PM
-Total used 196.43 milliseconds, or 0.196 seconds
+end: 5/20/2024, 5:52:54 PM
+Total used 281.20 milliseconds, or 0.281 seconds
+done used 6.31 milliseconds, or 0.006 seconds
+end: 5/20/2024, 5:52:54 PM
+Total used 293.08 milliseconds, or 0.293 seconds
 

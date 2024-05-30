@@ -42,7 +42,7 @@
 declare const SIMPLEST: boolean;
 declare const CUBES: CubeForDrawing[];
 
-export function setDynamicCss(
+function setDynamicCss(
 	PAGE_WIDTH: number,
 	PAGE_HEIGHT: number,
 	MAX_X: number,
@@ -64,7 +64,7 @@ page:not(:last-of-type){page-break-after:always;}
 		.innerText = css;
 }
 
-export function setDocumentTitle(
+function setDocumentTitle(
 	PAGE_WIDTH: number,
 	PAGE_HEIGHT: number,
 	SIDE_LENGTH: number,
@@ -113,7 +113,7 @@ export function setDocumentTitle(
 		: title;
 }
 
-export interface CubePaperModelSvgParameter {
+interface CubePaperModelSvgParameter {
 	id: string;
 
 	setName: string;
@@ -136,7 +136,7 @@ export interface CubePaperModelSvgParameter {
 	setTextCss: string;
 }
 
-export function getSvg(options: CubePaperModelSvgParameter): SVGElement {
+function getSvg(options: CubePaperModelSvgParameter): SVGElement {
 	const {
 		id: ID, // : string;
 
@@ -186,6 +186,26 @@ export function getSvg(options: CubePaperModelSvgParameter): SVGElement {
 	// 	SVG_WIDTH,
 	// 	SVG_HEIGHT,
 	// });
+
+	const HALF_SIDE_LENGTH = SIDE_LENGTH * 0.5;
+	const EMPTY_CELL_HOLE_RADIUS = Math.min(CIRCLE_RADIUS * 2, HALF_SIDE_LENGTH * 0.75);
+	for (let rowIndex = 0; rowIndex < ROW_COUNT; ++rowIndex) {
+		const Y = SIDE_LENGTH * rowIndex + HALF_SIDE_LENGTH;
+		for (let colIndex = 0; colIndex < COL_COUNT; ++colIndex) {
+			if (
+				!ACT_CELLS.filter((cell) => cell.rowIndex === rowIndex && cell.colIndex === colIndex).length
+			) {
+				SvgHelper.appendCircle(
+					svg,
+					CUT_LINE_CSS,
+					SIDE_LENGTH * colIndex + HALF_SIDE_LENGTH,
+					Y,
+					EMPTY_CELL_HOLE_RADIUS,
+					null,
+				);
+			}
+		}
+	}
 
 	if (GRID_LINES) {
 		GRID_LINES.forEach(({ xStart, xEnd, yStart, yEnd, lineStyle }) => {
@@ -369,9 +389,9 @@ export function getSvg(options: CubePaperModelSvgParameter): SVGElement {
 			// 		: ''
 			// }`;
 
-			// 	<en_us>en_us</en_us>
+			// 	<en_us>240514, new algorithm: If the streamlined mode is used, the top layer of omitted text (except for set information)</en_us>
 			// 	<zh_cn>240514，新算法：若使用精简模式，则最上面的层省略文字（除套装信息外）</zh_cn>
-			// 	<zh_tw>zh_tw</zh_tw>
+			// 	<zh_tw>240514，新算法：若使用精簡模式，則最上面的層省略文字（除套裝信息外）</zh_tw>
 			if (SIMPLEST) {
 				if (
 					LAYER_INDEX < ACT_CELLS.filter(

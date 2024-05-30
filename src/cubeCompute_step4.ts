@@ -4,9 +4,14 @@
  * deno 1.42.1 + VSCode 1.88.0
  *
  * <en_us>
- * Created on Sun Apr 29 2024 08:47:00
- * Feature:
- * </en_us>
+  * Creation: April 29, 2024 08:47:00
+  * Function: Starting from the third step, perform a series of mergers and analysis operations:
+  * 1. LINES.TXT, weigh 4677537, and list the square serial number segment (I don’t know why there are discontinuous serial numbers in the end),
+  * Turn to Linetocubeno.txt file, 44444222222244444444433234: 1-5, 8-10
+  ?
+  * Math.ceil ((CUBE.NO -0.5) / 30720) .tring (). Padstart (6, '0'). Concat ('. Txt')
+  * 3. Manners/*. TXT (3655 Files): merge into memory, and finally output a single file
+  * </en_us>
  *
  * <zh_cn>
  * 创建：2024年4月29日 08:47:00
@@ -19,9 +24,14 @@
  * </zh_cn>
  *
  * <zh_tw>
- * 創建：2024年4月29日 08:47:00
- * 功能：
- * </zh_tw>
+  * 創建：2024年4月29日 08:47:00
+  * 功能：從第三步結果開始，進行一系列合併與分析操作：
+  *       1. lines.txt，將4677537行去重，且列出正方體序號段（不知道為什麼最後有不連續的序號），
+  *          轉為lineToCubeNo.txt文件，444442222244444422324433234:1-5,8-10
+  *       2. cubes/*.txt（3655 files），每文件30720個正方體，此文件夾不需處理，可直接反算文件名
+  *          Math.ceil((cube.no - 0.5) / 30720).toString().padStart(6, '0').concat('.txt')
+  *       3. manners/*.txt（3655 files）：合併到內存中，最後再排序後輸出單個文件
+  * </zh_tw>
  */
 
 import { main } from "./cubeCompute.ts";

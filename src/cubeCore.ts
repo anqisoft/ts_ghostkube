@@ -5,9 +5,9 @@
  */
 
 /* <en_us>
- * Created on Wed Apr 10 2024 11:20:29
- * Feature:
- * </en_us>
+  * Creation: April 10, 2024 11:20:29
+  * Function: Provide a square definition, but does not provide any calculations, and does not provide webpage related methods.
+  * </en_us>
 */
 
 /* <zh_cn>
@@ -17,9 +17,9 @@
 */
 
 /* <zh_tw>
- * 創建：2024年4月10日 11:20:29
- * 功能：
- * </zh_tw>
+  * 創建：2024年4月10日 11:20:29
+  * 功能：提供正方體相關定義，但不提供任何計算，也不提供網頁相關方法。
+  * </zh_tw>
 */
 
 export const Globals = globalThis as unknown as {
@@ -358,9 +358,9 @@ export enum ConnectionRelation {
 // 	SIX_FACE_AND_DIRECTION_RELATIONS.push(RELATIONS);
 // }
 
-// 	<en_us>en_us</en_us>
+// 	<en_us>get the corresponding results directly at the debug window, no longer calculate</en_us>
 // 	<zh_cn>在调试窗口直接获得相应结果，不再计算</zh_cn>
-// 	<zh_tw>zh_tw</zh_tw>
+// 	<zh_tw>在調試窗口直接獲得相應結果，不再計算</zh_tw>
 export const SIX_FACE_AND_DIRECTION_RELATIONS: SixFaceTwentyFourAngle[][] = [
   [20, 12, 16, 8], // 0
   [9, 21, 13, 17], // 1
@@ -885,16 +885,16 @@ export interface GridLine {
 }
 
 /**
- * <en_us>en_us</en_us>
+ * <en_us>One of the most outer sides of the square on one side, the corresponding unit grid number (in the paper mold)</en_us>
  * <zh_cn>一个面形成正方体最外面六面之一时，对应的单元格行列序号（在纸模中）</zh_cn>
- * <zh_tw>zh_tw</zh_tw>
+ * <zh_tw>一個面形成正方體最外面六面之一時，對應的單元格行列序號（在紙模中）</zh_tw>
  */
 export type OneCellRowColIndex = [number, number];
 
 /**
- * <en_us>en_us</en_us>
+ * <en_us>The two planes are pasted into one of the outer six sides of the square, and the corresponding two cell number (in the paper mold)</en_us>
  * <zh_cn>两个面粘贴成正方体最外面六面之一时，对应的两个单元格行列序号（在纸模中）</zh_cn>
- * <zh_tw>zh_tw</zh_tw>
+ * <zh_tw>兩個面粘貼成正方體最外面六面之一時，對應的兩個單元格行列序號（在紙模中）</zh_tw>
  */
 export type TwoCellRowColIndex = [number, number, number, number];
 export type OneOrTwoCellRowColIndex = OneCellRowColIndex | TwoCellRowColIndex;
@@ -1016,9 +1016,9 @@ export class Cube implements CubePaperModel, CubeObject {
   }
 
   /**
-   * <en_us>en_us</en_us>
+   * <en_us>Obtain lines that do not include in the outer frame according to Gridlines (if not, the default is the outer line line)</en_us>
    * <zh_cn>根据gridLines获取不包括外框之外的线（如果没有，则默认为外框线）</zh_cn>
-   * <zh_tw>zh_tw</zh_tw>
+   * <zh_tw>根據gridLines獲取不包括外框之外的線（如果沒有，則默認為外框線）</zh_tw>
    */
   get lines(): string {
     const ROW_COUNT = this.rowCount;
@@ -1249,9 +1249,9 @@ export class Cube implements CubePaperModel, CubeObject {
         pieceCell.feature = CellFeature.Piece;
         pieceCell.twelveEdge = edgeIndex;
 
-        // // 	<en_us>en_us</en_us>
+        // // 	<en_us>reset "face attribute"</en_us>
         // // 	<zh_cn>复位“面属性”</zh_cn>
-        // // 	<zh_tw>zh_tw</zh_tw>
+        // // 	<zh_tw>復位“面屬性”</zh_tw>
         // pieceCell.sixFace = SixFace.Up;
         // pieceCell.faceDirection = FourDirection.Original;
 
@@ -1713,15 +1713,15 @@ export class Cube implements CubePaperModel, CubeObject {
     const OLD_IS_VALID = this.isValid;
     const { sixFaces, twelveEdges, cells } = this;
 
-    // 	<en_us>en_us</en_us>
+    // 	<en_us>When solving multiple corrections multiple times, the BUG</en_us>
     // 	<zh_cn>解决多次修正正确性时，被附加多次的Bug</zh_cn>
-    // 	<zh_tw>zh_tw</zh_tw>
+    // 	<zh_tw>解決多次修正正確性時，被附加多次的Bug</zh_tw>
     sixFaces.forEach((array) => array.length = 0);
     twelveEdges.forEach((twelveEdge) => twelveEdge.pieces.length = 0);
 
-    // 	<en_us>en_us</en_us>
+    // 	<en_us>Check whether the six faces are complete (at least one cell with a "multi -in -line", or at least two cells with "single -in -line lines")</en_us>
     // 	<zh_cn>检查六个面是否齐全（每个面至少有一个带“多内联线”的单元格，或至少两个带“单内联线”的单元格）</zh_cn>
-    // 	<zh_tw>zh_tw</zh_tw>
+    // 	<zh_tw>檢查六個面是否齊全（每個面至少有一個帶“多內聯線”的單元格，或至少兩個帶“單內聯線”的單元格）</zh_tw>
     const SIX_FACE_POINT_ARRAY = [0, 0, 0, 0, 0, 0];
     const ONE_INNER_LINE_CELL_TWENTY_FOUR_ANGEL_COUNT_ARRAY =
       (0 as unknown as NumberRepeatFunction)
@@ -1756,9 +1756,9 @@ export class Cube implements CubePaperModel, CubeObject {
             4 * sixFace + (twelveEdge % 4)
           ] += 1;
           if (cell.relatedInformationWhenAdding.rowIndex === -1) {
-            // 	<en_us>en_us</en_us>
+            // 	<en_us>Find the unique inner line, then deeper the corresponding cell number column sequence, and then determine the serial number when the cell is used as a dough</en_us>
             // 	<zh_cn>找到唯一的内联线，然后反算相应单元格行号列序，再确定本单元格作为面片时的序号</zh_cn>
-            // 	<zh_tw>zh_tw</zh_tw>
+            // 	<zh_tw>找到唯一的內聯線，然後反算相應單元格行號列序，再確定本單元格作為面片時的序號</zh_tw>
             const RELATION_CELL = actCells.filter((cell) =>
               cell.relatedInformationWhenAdding.rowIndex === rowIndex &&
               cell.relatedInformationWhenAdding.colIndex === colIndex
@@ -1927,9 +1927,15 @@ export class Cube implements CubePaperModel, CubeObject {
           case CellBorderLine.InnerLine:
             // Attention: only change to OuterLine. If you change it to CutLine, all cells will be connected by only one another cell. So, changed the else branch to comments.
 
-            // 	<en_us>en_us</en_us>
+            // 	<en_us> Note: Only "outer frames" can be modified.
+ If it is changed to the "cutting line", all grids will only connect one grid.
+ So, remove the original ELSE branch!
+ </en_us>
             // 	<zh_cn>注意：仅可修改为“外框线”。如果更改为“裁剪线”，所有格都将只连接一格。所以，移除原来的else分支！</zh_cn>
-            // 	<zh_tw>zh_tw</zh_tw>
+            // 	<zh_tw>注意：僅可修改為“外框線”。
+ 如果更改為“裁剪線”，所有格都將只連接一格。
+ 所以，移除原來的else分支！
+ </zh_tw>
 
             // => OuterLine
             if (HAS_NOT_SIBLING_CELL) {
@@ -2042,9 +2048,9 @@ export const COL_INDEX_ARRAY_LESS_THAN_OR_EQUALS_THREE_ROW: number[][] = [[
 // }
 // fillColIndexArrayMoreThanThreeRow();
 
-// 	<en_us>en_us</en_us>
+// 	<en_us>get the calculation result directly in the debug window, no longer calculate</en_us>
 // 	<zh_cn>直接在调试窗口获得计算结果，不再计算</zh_cn>
-// 	<zh_tw>zh_tw</zh_tw>
+// 	<zh_tw>直接在調試窗口獲得計算結果，不再計算</zh_tw>
 // export const COL_INDEX_ARRAY_MORE_THAN_THREE_ROW: number[][] = [
 // [0],
 // [1],
@@ -2099,9 +2105,9 @@ export const COL_INDEX_ARRAY_LESS_THAN_OR_EQUALS_THREE_ROW: number[][] = [[
 // [0, 1, 2, 3, 4],
 // ];
 
-// 	<en_us>en_us</en_us>
+// 	<en_us>Sorting</en_us>
 // 	<zh_cn>排序</zh_cn>
-// 	<zh_tw>zh_tw</zh_tw>
+// 	<zh_tw>排序</zh_tw>
 export const COL_INDEX_ARRAY_MORE_THAN_THREE_ROW: number[][] = [
   [0],
   [1],
@@ -2475,14 +2481,14 @@ export class SimpleCube {
         }
       }
 
-      // 	<en_us>en_us</en_us>
+      // 	<en_us>When solving multiple corrections multiple times, the BUG</en_us>
       // 	<zh_cn>解决多次修正正确性时，被附加多次的Bug</zh_cn>
-      // 	<zh_tw>zh_tw</zh_tw>
+      // 	<zh_tw>解決多次修正正確性時，被附加多次的Bug</zh_tw>
       sixFaces.forEach((array) => array.length = 0);
 
-      // 	<en_us>en_us</en_us>
+      // 	<en_us>Check whether the six faces are complete (at least one cell with a "multi -in -line", or at least two cells with "single -in -line lines")</en_us>
       // 	<zh_cn>检查六个面是否齐全（每个面至少有一个带“多内联线”的单元格，或至少两个带“单内联线”的单元格）</zh_cn>
-      // 	<zh_tw>zh_tw</zh_tw>
+      // 	<zh_tw>檢查六個面是否齊全（每個面至少有一個帶“多內聯線”的單元格，或至少兩個帶“單內聯線”的單元格）</zh_tw>
       const SIX_FACE_POINT_ARRAY = [0, 0, 0, 0, 0, 0];
 
       const ONE_INNER_LINE_CELL_TWENTY_FOUR_ANGEL_COUNT_ARRAY =
@@ -2598,9 +2604,15 @@ export class SimpleCube {
               case CellBorderLine.InnerLine:
                 // Attention: only change to OuterLine. If you change it to CutLine, all cells will be connected by only one another cell. So, changed the else branch to comments.
 
-                // 	<en_us>en_us</en_us>
+                // 	<en_us> Note: Only "outer frames" can be modified.
+ If it is changed to the "cutting line", all grids will only connect one grid.
+ So, remove the original ELSE branch!
+ </en_us>
                 // 	<zh_cn>注意：仅可修改为“外框线”。如果更改为“裁剪线”，所有格都将只连接一格。所以，移除原来的else分支！</zh_cn>
-                // 	<zh_tw>zh_tw</zh_tw>
+                // 	<zh_tw>注意：僅可修改為“外框線”。
+ 如果更改為“裁剪線”，所有格都將只連接一格。
+ 所以，移除原來的else分支！
+ </zh_tw>
 
                 // => OuterLine
                 if (HAS_NOT_SIBLING_CELL) {
@@ -2686,9 +2698,9 @@ export function getCubeFromJson(json: string): Cube {
     }));
   });
 
-  // 	<en_us>en_us</en_us>
+  // 	<en_us>After testing, you need to count first, and then assign value SIXFACES and Twelveedges, otherwise the SixFaces may lose part of the value after the count</en_us>
   // 	<zh_cn>经测试，需先count，再赋值sixFaces、twelveEdges，否则count后sixFaces可能丢失部分值</zh_cn>
-  // 	<zh_tw>zh_tw</zh_tw>
+  // 	<zh_tw>經測試，需先count，再賦值sixFaces、twelveEdges，否則count後sixFaces可能丟失部分值</zh_tw>
   // {
   //   cloned.sixFaces = sixFaces;
   //   cloned.twelveEdges = twelveEdges;
@@ -2803,9 +2815,11 @@ export function getCubeForDrawingFromString(info: string): CubeForDrawing {
 
   // // let firstRowActCellColIndexBill: string = "";
   // // let lastRowEmptyCellColIndexBill: string = "01234";
-  // // 	<en_us>en_us</en_us>
+  // // 	<en_us> I forgot to add | separators before, resulting in the unsuccessful compression below!
+ </en_us>
   // // 	<zh_cn>之前忘了加|分隔符，导致下面这个未成功压缩！</zh_cn>
-  // // 	<zh_tw>zh_tw</zh_tw>
+  // // 	<zh_tw>之前忘了加|分隔符，導致下面這個未成功壓縮！
+ </zh_tw>
   // const [firstRowActCellColIndexBill, lastRowEmptyCellColIndexBill] =
   //   FIRST_ROW_ACT_CELL_COL_INDEX_BILL__LAST_ROW_EMPTY_CELL_COL_INDEX_BILL.split(
   //     "|",

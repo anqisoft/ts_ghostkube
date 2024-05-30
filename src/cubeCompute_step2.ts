@@ -4,9 +4,9 @@
  * deno 1.42.1 + VSCode 1.88.0
  *
  * <en_us>
- * Created on Sat Apr 27 2024 23:35:47
- * Feature:
- * </en_us>
+  * Creation: 23:35:47, April 27, 2024
+  * Function: Starting from the intermediate cube obtained in the first step, the cube with no 1 to 24 is generated
+  * </en_us>
  *
  * <zh_cn>
  * 创建：2024年4月27日 23:35:47
@@ -14,9 +14,9 @@
  * </zh_cn>
  *
  * <zh_tw>
- * 創建：2024年4月27日 23:35:47
- * 功能：
- * </zh_tw>
+  * 創建：2024年4月27日 23:35:47
+  * 功能：從第一步所獲取的中間正方體開始，生成未進行1轉24的正方體
+  * </zh_tw>
  */
 
 import { main } from "./cubeCompute.ts";

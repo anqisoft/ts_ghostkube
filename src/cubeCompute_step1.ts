@@ -4,9 +4,9 @@
  * deno 1.42.1 + VSCode 1.88.0
  *
  * <en_us>
- * Created on Tue May 07 2024 09:26:27
- * Feature:
- * </en_us>
+  * Creation: May 7, 2024 09:26:27
+  * Function: Only obtain the intermediate square, only the six sides list the direct six sides, and the surface formed by the "plug" is not listed.
+  * </en_us>
  *
  * <zh_cn>
  * 创建：2024年5月7日 09:26:27
@@ -14,9 +14,9 @@
  * </zh_cn>
  *
  * <zh_tw>
- * 創建：2024年5月7日 09:26:27
- * 功能：
- * </zh_tw>
+  * 創建：2024年5月7日 09:26:27
+  * 功能：僅獲取中間正方體，六面僅列出直接的六面，不列出由“插片”形成的面。
+  * </zh_tw>
  */
 
 import { main } from "./cubeCompute.ts";
